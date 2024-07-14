@@ -5,4 +5,4 @@ edition = "2021"
 license = "MIT-Festival"
 
 [dependencies]
-lazy-regex = { version = "3.1.0", default-features = false, features = ["regex"] }
+lazy-regex = { version = "3.1.0", path = "../../lazy-regex", default-features = false, features = ["regex", "critical-section"] }
