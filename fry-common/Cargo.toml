@@ -5,4 +5,9 @@ edition = "2021"
 license = "MIT-Festival"
 
 [dependencies]
-lazy-regex = { version = "3.1.0", path = "../../lazy-regex", default-features = false, features = ["regex", "critical-section"] }
+lazy-regex = { version = "3.1.0", git = "https://github.com/TTWNO/lazy-regex/", branch = "no-std-support", default-features = false, features = ["regex"] }
+
+[features]
+default = ["std"]
+std = ["lazy-regex/default"]
+critical-section = ["lazy-regex/critical-section"]

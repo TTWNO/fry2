@@ -8,4 +8,7 @@
 #![no_std]
 #![forbid(clippy::all, clippy::pedantic, missing_docs)]
 
+#[cfg(feature = "std")]
+extern crate std;
+
 pub mod regex;
