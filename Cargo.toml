@@ -1,0 +1,3 @@
+[workspace]
+members = ["fry-common"]
+resolver = "2"
