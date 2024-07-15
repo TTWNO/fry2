@@ -159,6 +159,7 @@ pub static ABBR_PATTERN: &Lazy<Regex> = regex!(r"([A-Za-z]\.)+[A-Za-z]\.?");
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("1.000,99"), false);
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("12.99"), false);
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("55"), false);
+/// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("1,2345"), false);
 /// ```
 pub static COMMA_NUMBER_PATTERN: &Lazy<Regex> = regex!(r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?");
 
@@ -189,6 +190,7 @@ pub static PUNCTUATION_PATTERN: &Lazy<Regex> = regex!(r"[,\.\?\!\]\[\)\(]+");
 /// assert_eq!(DECIMAL_PATTERN.match_perfect("one"), false);
 /// // matches "1"
 /// assert_eq!(DECIMAL_PATTERN.match_perfect("one1"), false);
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("1,2345"), false);
 /// ```
 pub static DECIMAL_PATTERN: &Lazy<Regex> = regex!(r"-?(([0-9]+.[0-9]*)|([0-9]+)|(.[0-9]+))([eE][---+]?[0-9]+)?");
 
@@ -250,5 +252,135 @@ pub mod test {
         assert_matches!(DIGIT_PATTERN, REGEX_TESTS[0], true);
         assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[0], true);
         assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[0], false);
+    }
+
+    #[test]
+    fn test_all_whitespace() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[1], false);
+    }
+
+    #[test]
+    fn test_hello() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[2], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[2], true);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[2], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[2], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[2], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[2], true);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[2], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[2], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[2], false);
+    }
+
+    #[test]
+    fn test_title_case_hello() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[3], true);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[3], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[3], true);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[3], false);
+    }
+
+    #[test]
+    fn test_1and2() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[4], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[4], false);
+    }
+
+    #[test]
+    fn test_oneandtwo() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[5], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[5], true);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[5], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[5], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[5], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[5], true);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[5], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[5], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[5], false);
+    }
+
+    #[test]
+    fn test_negative_deciaml_number() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[6], true);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[6], false);
+    }
+
+    #[test]
+    fn test_integer() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[7], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[7], true);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[7], true);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[7], false);
+    }
+
+    #[test]
+    fn test_zero_padd_integer() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[8], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[8], true);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[8], true);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[8], false);
+    }
+
+    #[test]
+    fn test_american_style_digit() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[9], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[9], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[9], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[9], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[9], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[9], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[9], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[9], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[9], true);
+    }
+
+    #[test]
+    fn test_american_style_digit_with_too_many_ending_numbers() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[10], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[10], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[10], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[10], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[10], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[10], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[10], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[10], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[10], false);
     }
 }
