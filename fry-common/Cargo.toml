@@ -5,7 +5,9 @@ edition = "2021"
 license = "MIT-Festival"
 
 [dependencies]
+derive_more = { version = "1.0.0", default-features = false, features = ["deref", "from"] }
 lazy-regex = { version = "3.1.0", git = "https://github.com/TTWNO/lazy-regex/", branch = "no-std-support", default-features = false, features = ["regex"] }
+serde = { version = "1.0.204", default-features = false, features = ["derive"] }
 
 [features]
 default = ["std"]

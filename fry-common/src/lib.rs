@@ -11,4 +11,7 @@
 #[cfg(feature = "std")]
 extern crate std;
 
+extern crate alloc;
+
 pub mod regex;
+pub mod word;
