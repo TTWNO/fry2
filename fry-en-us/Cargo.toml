@@ -1,0 +1,9 @@
+[package]
+name = "fry-en-us"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+const_panic = { version = "0.2.8", default-features = false, features = ["derive"] }
+derive_more = { version = "1.0.0", default-features = false, features = ["display", "error", "from"] }
+strum = { version = "0.26.3", default-features = false, features = ["derive"] }
