@@ -1,5 +1,5 @@
 //! Check is symbol is a pronouncable word or not.
-//! Uses Fconst_inite-State-Machines for checking forward or backwards for the right combinations of vowels.
+//! Uses Finite-State-Machines for checking forward or backwards for the right combinations characters.
 
 use core::num::{
     NonZeroU16,
