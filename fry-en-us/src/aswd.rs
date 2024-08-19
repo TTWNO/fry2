@@ -44,6 +44,7 @@ impl<const LEN: usize> Fsm<LEN> {
     fn is_word_pre(&mut self, word: &str) -> bool {
         // used to move the state machine out of its default state
         // this should not have to happen
+        // TODO: fix by moving all values in the const declaration down two, and remeving the rest.
         self.transition('#');
         for chr in word.chars() {
             let symbol = match chr {
@@ -64,6 +65,7 @@ impl<const LEN: usize> Fsm<LEN> {
     fn is_word_suf(&mut self, word: &str) -> bool {
         // used to move the state machine out of its default state
         // this should not have to happen
+        // TODO: fix by moving all values in the const declaration down two, and remeving the rest.
         self.transition('#');
         for chr in word.chars().rev() {
             let symbol = match chr {
@@ -142,6 +144,8 @@ impl State {
             Ok(state) => state,
         }
     }
+    // TODO: use more const_panic::concat_assert to keep more local errors at compile time
+    // TODO: make all const fns with non-const variations (with logging)
     const fn const_init(state_ref: u16, ascii_chr: char) -> Result<Self, FsmStateError> {
         if !ascii_chr.is_ascii() {
             return Err(FsmStateError::NonAscii(ascii_chr));
