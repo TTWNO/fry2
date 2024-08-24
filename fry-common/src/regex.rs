@@ -2,7 +2,7 @@
 //! TODO: a lot of these are very simple patterns that could be replaced with much simpler
 //! functions that do not require a regex engine (although some still do).
 
-use lazy_regex::{Regex, Lazy, regex};
+use lazy_regex::{regex, Lazy, Regex};
 
 /* Taken and modified from Festival: `src/modules/Text/token.cc`
  * Some of these are right in the source code of Festival, but others were reverse engineered from
@@ -42,7 +42,6 @@ pub static WHITESPACE_PATTERN: &Lazy<Regex> = regex!(r"[ \t\n\r]+");
 /// assert_eq!(ALPHABETIC_PATTERN.match_perfect("99"), false);
 /// ```
 pub static ALPHABETIC_PATTERN: &Lazy<Regex> = regex!("[A-Za-z]+");
-
 
 /// Matches any uppercase letters.
 /// ```
@@ -161,7 +160,8 @@ pub static ABBR_PATTERN: &Lazy<Regex> = regex!(r"([A-Za-z]\.)+[A-Za-z]\.?");
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("55"), false);
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("1,2345"), false);
 /// ```
-pub static COMMA_NUMBER_PATTERN: &Lazy<Regex> = regex!(r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?");
+pub static COMMA_NUMBER_PATTERN: &Lazy<Regex> =
+    regex!(r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?");
 
 /// Matches punctuation clusters
 /// ```
@@ -192,7 +192,8 @@ pub static PUNCTUATION_PATTERN: &Lazy<Regex> = regex!(r"[,\.\?\!\]\[\)\(]+");
 /// assert_eq!(DECIMAL_PATTERN.match_perfect("one1"), false);
 /// assert_eq!(DECIMAL_PATTERN.match_perfect("1,2345"), false);
 /// ```
-pub static DECIMAL_PATTERN: &Lazy<Regex> = regex!(r"-?(([0-9]+.[0-9]*)|([0-9]+)|(.[0-9]+))([eE][---+]?[0-9]+)?");
+pub static DECIMAL_PATTERN: &Lazy<Regex> =
+    regex!(r"-?(([0-9]+.[0-9]*)|([0-9]+)|(.[0-9]+))([eE][---+]?[0-9]+)?");
 
 /// All characters considered punctuation for the purposes of the TTS engine.
 /// Note how these are trimmed down from the list of [all ASCII pronunciation in the standard
@@ -239,7 +240,7 @@ pub mod test {
     macro_rules! assert_matches {
         ($pat:expr, $haystack:expr, $tf:expr) => {
             assert_eq!($pat.match_perfect($haystack), $tf);
-        }
+        };
     }
     #[test]
     fn test_one_number() {
