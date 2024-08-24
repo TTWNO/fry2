@@ -1,4 +1,4 @@
-use derive_more::{Error, Display, From};
+use derive_more::{Display, Error, From};
 
 #[derive(Clone, Copy, Debug, Display, Error, From)]
 pub enum FsmError {
@@ -10,7 +10,9 @@ pub enum FsmError {
 
 #[derive(Clone, Copy, Debug, Display, Error)]
 pub enum FsmStateError {
-    #[display("NonZero: the state must contain a non-zero value for either the next index or ASCII char")]
+    #[display(
+        "NonZero: the state must contain a non-zero value for either the next index or ASCII char"
+    )]
     NonZero,
     #[display("NonAscii: the state must contain a valid ASCII char; invalid char: {_0}")]
     #[error(ignore)]
@@ -25,7 +27,7 @@ pub enum FryError {
 #[derive(Clone, Copy, Debug, Display, Error)]
 #[display("The index: {ref_idx:} refered to at idx: {idx:} was longer than the length: {len:}")]
 pub struct FsmInvalidIndex {
-    pub idx: usize, 
+    pub idx: usize,
     pub ref_idx: usize,
-    pub len: usize, 
+    pub len: usize,
 }

@@ -1,24 +1,21 @@
 //! Check is symbol is a pronouncable word or not.
 //! Uses Finite-State-Machines for checking forward or backwards for the right combinations characters.
 
-use core::num::{
-    NonZeroU16,
-};
-use crate::error::{
-    FsmError,
-    FsmStateError,
-    FsmInvalidIndex,
-};
+use crate::error::{FsmError, FsmInvalidIndex, FsmStateError};
+use core::num::NonZeroU16;
 
 /// From `lang/usenglish/us_aswd.c`
 // fits into 9 bits
 const FSM_ASWD_S_STATE: [u16; 74] = [
-    0, 2, 23, 25, 29, 32, 38, 49, 56, 62, 69, 81, 87, 97, 115, 133, 140, 149, 167, 174, 185, 186, 191, 198, 201, 204, 210, 214, 217, 222, 229, 242, 246, 248, 255, 259, 264, 267, 271, 276, 286, 292, 295, 298, 300, 304, 310, 313, 317, 322, 329, 336, 344, 361, 368, 373, 380, 385, 394, 398, 400, 408, 410, 413, 415, 418, 422, 424, 427, 438, 441, 444, 447, 449,
+    0, 2, 23, 25, 29, 32, 38, 49, 56, 62, 69, 81, 87, 97, 115, 133, 140, 149, 167, 174, 185, 186,
+    191, 198, 201, 204, 210, 214, 217, 222, 229, 242, 246, 248, 255, 259, 264, 267, 271, 276, 286,
+    292, 295, 298, 300, 304, 310, 313, 317, 322, 329, 336, 344, 361, 368, 373, 380, 385, 394, 398,
+    400, 408, 410, 413, 415, 418, 422, 424, 427, 438, 441, 444, 447, 449,
 ];
 
 /// A fconst_inite state machine that represents the letters in a word.
 #[derive(Clone, Debug)]
-struct Fsm<const LEN: usize>{
+struct Fsm<const LEN: usize> {
     fsm: [Option<State>; LEN],
     idx: usize,
     next: usize,
@@ -36,9 +33,13 @@ impl<const LEN: usize> Fsm<LEN> {
             .map_while(|x| *x)
             .enumerate()
             // if the char of the state matches s, yield the offset i
-            .find_map(|(i,x)| if x.chr() == s {
-                Some((i,x.idx()))
-            } else { None })?;
+            .find_map(|(i, x)| {
+                if x.chr() == s {
+                    Some((i, x.idx()))
+                } else {
+                    None
+                }
+            })?;
         self.idx = self.next + diff;
         self.next = next;
         Some(self.next)
@@ -97,9 +98,11 @@ impl<const LEN: usize> Fsm<LEN> {
         }
     }
     /// Add all the states for the FSM in one const_initialization step.
-    /// This function also validates 
+    /// This function also validates
     const fn const_init(start: [Option<(u16, char)>; LEN]) -> Result<Self, FsmError> {
-        if LEN > 0x1FF /* 512 - 1; i.e. uses more than 9 bits */ {
+        if LEN > 0x1FF
+        /* 512 - 1; i.e. uses more than 9 bits */
+        {
             return Err(FsmError::FsmMaxLengthExceeded);
         }
         let mut i = 0;
@@ -113,7 +116,7 @@ impl<const LEN: usize> Fsm<LEN> {
                 continue;
             };
             // if reference is out of bounds
-            if item.0 as usize > start.len()-1 {
+            if item.0 as usize > start.len() - 1 {
                 return Err(FsmError::FsmInvalidIndex(FsmInvalidIndex {
                     idx: i,
                     ref_idx: item.0 as usize,
@@ -164,13 +167,13 @@ impl State {
         }
     }
     /// Get the char contained within the data.
-    #[inline(always)] 
+    #[inline(always)]
     fn chr(&self) -> char {
         // mask for the last 7 bits, cast to u8, then convert into a char
         char::from((self.0.get() & 0x7F) as u8)
     }
     /// Get the index pointed to by the state.
-    #[inline(always)] 
+    #[inline(always)]
     fn idx(&self) -> usize {
         // get the first 9 bits of the inner value, then cast to the native pointer size
         (self.0.get() >> 7) as usize
@@ -646,7 +649,8 @@ const FSM_ASWD_S_TRANS: Fsm<454> = Fsm::const_init_unchecked([
 ]);
 
 const FSM_ASWD_P_STATE: [u16; 35] = [
-    0, 2, 23, 25, 34, 38, 46, 55, 59, 64, 72, 81, 85, 102, 108, 111, 120, 126, 133, 137, 138, 140, 142, 145, 149, 152, 155, 158, 161, 166, 171, 176, 193, 195, 197
+    0, 2, 23, 25, 34, 38, 46, 55, 59, 64, 72, 81, 85, 102, 108, 111, 120, 126, 133, 137, 138, 140,
+    142, 145, 149, 152, 155, 158, 161, 166, 171, 176, 193, 195, 197,
 ];
 
 const FSM_ASWD_P_TRANS: Fsm<203> = Fsm::const_init_unchecked([
