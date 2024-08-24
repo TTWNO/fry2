@@ -15,4 +15,4 @@ fry-common = { version = "0.1.0", path = "../fry-common/", default-features = fa
 const_panic = { version = "0.2.8", git = "https://github.com/TTWNO/const_panic/", branch = "main", default-features = false, features = ["derive"] }
 
 [features]
-std = ["fry-common/std", "derive_more/std"]
+std = ["fry-common/std"]
