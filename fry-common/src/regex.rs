@@ -222,7 +222,7 @@ impl RegexExt for Regex {
 /// A series of tests adapated from flite: `testsuite/regex_test_main.c`
 #[cfg(test)]
 pub mod test {
-    const REGEX_TESTS: [&'static str; 11] = [
+    const REGEX_TESTS: [&str; 11] = [
         "1",
         " \n ",
         "hello",
