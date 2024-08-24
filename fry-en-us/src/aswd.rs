@@ -10,8 +10,6 @@ use crate::error::{
     FsmStateError,
     FsmInvalidIndex,
 };
-extern crate std;
-use std::println;
 
 /// From `lang/usenglish/us_aswd.c`
 // fits into 9 bits
@@ -24,28 +22,27 @@ const FSM_ASWD_S_STATE: [u16; 74] = [
 struct Fsm<const LEN: usize>{
     fsm: [Option<State>; LEN],
     idx: usize,
+    next: usize,
 }
 impl<const LEN: usize> Fsm<LEN> {
     fn state(&self) -> Option<State> {
         self.fsm.get(self.idx).cloned()?
     }
     /// Transision to a new state of the finite-state-machine.
-    /// Returns the relative index change, if the state is moved. 
-    fn transition(&mut self, s: char) -> Option<NonZeroUsize> {
-        let new_idx = self.fsm[self.idx..]
+    /// Returns the new index if it has changed, none otherwise.
+    fn transition(&mut self, s: char) -> Option<usize> {
+        let (diff, next) = self.fsm[self.next..]
             .into_iter()
             // get up until the next None state
             .map_while(|x| *x)
             .enumerate()
             // if the char of the state matches s, yield the offset i
-            .inspect(|state| println!("{:?}", state))
             .find_map(|(i,x)| if x.chr() == s {
-                Some(x.idx())
-            } else { None })
-            // if not found, the offset is 0
-            .unwrap_or_default();
-        self.idx += new_idx;
-        NonZeroUsize::new(new_idx)
+                Some((i,x.idx()))
+            } else { None })?;
+        self.idx = self.next + diff;
+        self.next = next;
+        Some(self.next)
     }
     /// Check if `word` has a word-like prefix
     fn is_word_pre(&mut self, word: &str) -> bool {
@@ -135,7 +132,8 @@ impl<const LEN: usize> Fsm<LEN> {
         }
         Ok(Self {
             fsm: state,
-            idx: 0
+            idx: 0,
+            next: 0,
         })
     }
 }
@@ -183,16 +181,15 @@ impl State {
 /// functions instead of the inner value.
 impl core::fmt::Debug for State {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> Result<(), core::fmt::Error> {
-        let mut d = f.debug_struct("State")
+        f.debug_struct("State")
             .field("char", &self.chr())
             .field("index", &self.idx())
-            .finish();
-        Ok(())
+            .finish()
     }
 }
 
 /// From `lang/usenglish/us_aswd.c`
-const FSM_ASWD_S_TRANS3: Fsm<454> = Fsm::const_init_unchecked([
+const FSM_ASWD_S_TRANS: Fsm<454> = Fsm::const_init_unchecked([
     Some((FSM_ASWD_S_STATE[1], '#')),
     None,
     Some((FSM_ASWD_S_STATE[2], 'j')),
@@ -653,10 +650,10 @@ const FSM_ASWD_P_STATE: [u16; 35] = [
     0, 2, 23, 25, 34, 38, 46, 55, 59, 64, 72, 81, 85, 102, 108, 111, 120, 126, 133, 137, 138, 140, 142, 145, 149, 152, 155, 158, 161, 166, 171, 176, 193, 195, 197
 ];
 
-const FSM_ASWD_P_TRANS3: Fsm<203> = Fsm::const_init_unchecked([
+const FSM_ASWD_P_TRANS: Fsm<203> = Fsm::const_init_unchecked([
     Some((FSM_ASWD_P_STATE[1], '#')),
     None,
-    Some((FSM_ASWD_P_STATE[2], 'x')),
+    Some((FSM_ASWD_P_STATE[2], 'j')),
     Some((FSM_ASWD_P_STATE[2], 'q')),
     Some((FSM_ASWD_P_STATE[3], 'z')),
     Some((FSM_ASWD_P_STATE[2], 'j')),
@@ -866,81 +863,56 @@ mod tests {
     fn test_option_nonzero_optimization() {
         assert_eq!(size_of::<Option<State>>(), size_of::<u16>());
     }
+    /// These tests are based on output from running Flite with a debugging line and then converted
+    /// to these tests.
     #[test]
-    fn test_hello_world_fsm() {
-        let mut fsm = FSM_ASWD_S_TRANS3.clone();
+    fn test_world_fsm_suffix() {
+        let mut fsm = FSM_ASWD_S_TRANS.clone();
+        // must explicitly start the FSM
+        // This should not need to be done
+        assert_ne!(fsm.transition('#'), None);
         assert_eq!(fsm.state().unwrap().chr(), '#');
         assert_eq!(fsm.state().unwrap().idx(), 2);
-        assert_eq!(fsm.state().unwrap().chr(), 'x');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'q');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'z');
-        assert_eq!(fsm.state().unwrap().idx(), 25);
-        assert_eq!(fsm.state().unwrap().chr(), 'j');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'v');
-        assert_eq!(fsm.state().unwrap().idx(), 34);
-        assert_eq!(fsm.state().unwrap().chr(), 'k');
-        assert_eq!(fsm.state().unwrap().idx(), 38);
-        assert_eq!(fsm.state().unwrap().chr(), 't');
-        assert_eq!(fsm.state().unwrap().idx(), 46);
-        assert_eq!(fsm.state().unwrap().chr(), 'w');
-        assert_eq!(fsm.state().unwrap().idx(), 55);
-        assert_eq!(fsm.state().unwrap().chr(), 'h');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'r');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'V');
-        assert_eq!(fsm.state().unwrap().idx(), 137);
-        assert_eq!(fsm.state().unwrap().chr(), '#');
-        assert_eq!(fsm.state().unwrap().idx(), 2);
-        assert_eq!(fsm.state().unwrap().chr(), 'j');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'q');
-        assert_eq!(fsm.state().unwrap().idx(), 25);
-        assert_eq!(fsm.state().unwrap().chr(), 'v');
-        assert_eq!(fsm.state().unwrap().idx(), 29);
-        assert_eq!(fsm.state().unwrap().chr(), 'b');
-        assert_eq!(fsm.state().unwrap().idx(), 32);
-        assert_eq!(fsm.state().unwrap().chr(), 'z');
-        assert_eq!(fsm.state().unwrap().idx(), 38);
-        assert_eq!(fsm.state().unwrap().chr(), 'f');
-        assert_eq!(fsm.state().unwrap().idx(), 49);
-        assert_eq!(fsm.state().unwrap().chr(), 'x');
-        assert_eq!(fsm.state().unwrap().idx(), 56);
-        assert_eq!(fsm.state().unwrap().chr(), 'p');
-        assert_eq!(fsm.state().unwrap().idx(), 62);
-        assert_eq!(fsm.state().unwrap().chr(), 'h');
-        assert_eq!(fsm.state().unwrap().idx(), 69);
-        assert_eq!(fsm.state().unwrap().chr(), 'w');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'c');
-        assert_eq!(fsm.state().unwrap().idx(), 81);
-        assert_eq!(fsm.state().unwrap().chr(), 'k');
-        assert_eq!(fsm.state().unwrap().idx(), 87);
-        assert_eq!(fsm.state().unwrap().chr(), 't');
-        assert_eq!(fsm.state().unwrap().idx(), 97);
-        assert_eq!(fsm.state().unwrap().chr(), 'l');
-        assert_eq!(fsm.state().unwrap().idx(), 115);
-        assert_eq!(fsm.state().unwrap().chr(), 'g');
-        assert_eq!(fsm.state().unwrap().idx(), 133);
+        // start from the back of the string;
+        // last letter of world = d
+        assert_ne!(fsm.transition('d'), None);
         assert_eq!(fsm.state().unwrap().chr(), 'd');
         assert_eq!(fsm.state().unwrap().idx(), 140);
-        assert_eq!(fsm.state().unwrap().chr(), 'z');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'h');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
-        assert_eq!(fsm.state().unwrap().chr(), 'w');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
+        // next back is l
+        assert_ne!(fsm.transition('l'), None);
         assert_eq!(fsm.state().unwrap().chr(), 'l');
         assert_eq!(fsm.state().unwrap().idx(), 313);
-        assert_eq!(fsm.state().unwrap().chr(), 'c');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
+        // and next is r
+        assert_ne!(fsm.transition('r'), None);
         assert_eq!(fsm.state().unwrap().chr(), 'r');
         assert_eq!(fsm.state().unwrap().idx(), 23);
+        // and next is o
+        // V = Vowel
+        assert_ne!(fsm.transition('V'), None);
         assert_eq!(fsm.state().unwrap().chr(), 'V');
         assert_eq!(fsm.state().unwrap().idx(), 185);
+        // this should not find anything
+        assert_eq!(fsm.transition('w'), None);
+    }
+    #[test]
+    fn test_world_fsm_prefix() {
+        let mut fsm = FSM_ASWD_P_TRANS.clone();
+        // must explicitly start the FSM
+        // This should not need to be done
+        assert_ne!(fsm.transition('#'), None);
+        assert_eq!(fsm.state().unwrap().chr(), '#');
+        assert_eq!(fsm.state().unwrap().idx(), 2);
+        // first letter = w
+        assert_ne!(fsm.transition('w'), None);
+        assert_eq!(fsm.state().unwrap().chr(), 'w');
+        assert_eq!(fsm.state().unwrap().idx(), 55);
+        // second letter = o
+        // V = vowel
+        assert_ne!(fsm.transition('V'), None);
+        assert_eq!(fsm.state().unwrap().chr(), 'V');
+        assert_eq!(fsm.state().unwrap().idx(), 137);
+        // third letter = r
+        // this should lead to a None; r is not found
+        assert_eq!(fsm.transition('r'), None);
     }
 }
-
