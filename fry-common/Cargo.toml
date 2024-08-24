@@ -10,7 +10,7 @@ categories = ["tts"]
 description = "Common data structures used in Fry, the embedded text-to-speech engine."
 
 [dependencies]
-derive_more = { version = "1.0.0", default-features = false, features = ["deref", "from"] }
+derive_more = { version = "1.0.0", default-features = false, features = ["deref", "from", "display", "error"] }
 lazy-regex = { version = "3.1.0", git = "https://github.com/TTWNO/lazy-regex/", branch = "no-std-support", default-features = false, features = ["regex"] }
 serde = { version = "1.0.204", default-features = false, features = ["derive"] }
 

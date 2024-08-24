@@ -13,5 +13,7 @@ extern crate std;
 
 extern crate alloc;
 
+pub mod error;
 pub mod regex;
 pub mod word;
+pub use error::Error;
