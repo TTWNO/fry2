@@ -6,7 +6,8 @@
 //! - [flite](https://github.com/festvox/flite)
 //! - [Edinburgh Speech Tools (EST)](https://github.com/festvox/speech_tools)
 #![no_std]
-#![forbid(clippy::all, clippy::pedantic, missing_docs)]
+#![deny(clippy::all, clippy::pedantic, missing_docs)]
+#![allow(clippy::module_name_repetitions)]
 
 #[cfg(feature = "std")]
 extern crate std;
