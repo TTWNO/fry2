@@ -28,13 +28,13 @@ impl State {
         }
     }
     /// Get the char contained within the data.
-    #[inline(always)]
+    #[inline]
     pub fn chr(&self) -> char {
         // mask for the last 7 bits, cast to u8, then convert into a char
         char::from((self.0.get() & 0x7F) as u8)
     }
     /// Get the index pointed to by the state.
-    #[inline(always)]
+    #[inline]
     pub fn idx(&self) -> usize {
         // get the first 9 bits of the inner value, then cast to the native pointer size
         (self.0.get() >> 7) as usize
