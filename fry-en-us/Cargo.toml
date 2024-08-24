@@ -12,7 +12,7 @@ description = "English (US) grammar rules used for Fry, the embedded text-to-spe
 
 [dependencies]
 fry-common = { version = "0.1.0", path = "../fry-common/", default-features = false }
-const_panic = { version = "0.2.8", git = "https://github.com/TTWNO/const_panic/", branch = "main", default-features = false, features = ["derive"] }
+const_panic = { version = "0.2.9", default-features = false, features = ["derive"] }
 
 [features]
 std = ["fry-common/std"]
