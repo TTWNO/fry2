@@ -2,7 +2,7 @@
 name = "fry"
 version = "0.1.0"
 edition = "2021"
-msrv = "1.81.0"
+rust-version = "1.81.0"
 license = "MIT-Festival"
 repository = "https://github.com/TTWNO/fry2/"
 readme = "../README.md"
