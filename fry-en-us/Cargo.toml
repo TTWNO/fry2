@@ -11,5 +11,5 @@ categories = ["tts"]
 description = "English (US) grammar rules used for Fry, the embedded text-to-speech engine."
 
 [dependencies]
-const_panic = { version = "0.2.8", default-features = false, features = ["derive"] }
+const_panic = { version = "0.2.8", git = "https://github.com/TTWNO/const_panic/", branch = "main", default-features = false, features = ["derive"] }
 derive_more = { version = "1.0.0", default-features = false, features = ["display", "error", "from"] }
