@@ -4,5 +4,10 @@ version = "0.1.0"
 edition = "2021"
 msrv = "1.81.0"
 license = "MIT-Festival"
+repository = "https://github.com/TTWNO/fry2/"
+readme = "../README.md"
+keywords = ["tts"]
+categories = ["tts"]
+description = "A re-implementation of Flite, the embedded TTS engine based on Festival."
 
 [dependencies]

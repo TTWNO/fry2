@@ -3,6 +3,11 @@ name = "fry-common"
 version = "0.1.0"
 edition = "2021"
 license = "MIT-Festival"
+repository = "https://github.com/TTWNO/fry2/"
+readme = "README.md"
+keywords = ["tts"]
+categories = ["tts"]
+description = "Common data structures used in Fry, the embedded text-to-speech engine."
 
 [dependencies]
 derive_more = { version = "1.0.0", default-features = false, features = ["deref", "from"] }

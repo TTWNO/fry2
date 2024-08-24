@@ -4,6 +4,11 @@ version = "0.1.0"
 edition = "2021"
 msrv = "1.81.0"
 license = "MIT-Festival"
+repository = "https://github.com/TTWNO/fry2/"
+readme = "README.md"
+keywords = ["tts"]
+categories = ["tts"]
+description = "English (US) grammar rules used for Fry, the embedded text-to-speech engine."
 
 [dependencies]
 const_panic = { version = "0.2.8", default-features = false, features = ["derive"] }
