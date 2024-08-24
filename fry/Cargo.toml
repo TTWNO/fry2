@@ -3,5 +3,6 @@ name = "fry"
 version = "0.1.0"
 edition = "2021"
 msrv = "1.81.0"
+license = "MIT-Festival"
 
 [dependencies]
