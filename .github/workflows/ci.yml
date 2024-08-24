@@ -19,7 +19,7 @@ jobs:
         run: echo "version=`cat Cargo.toml | sed -n 's/rust-version = "\(.*\)"/\1/p'`" >> "$GITHUB_OUTPUT"
   clippy:
     runs-on: ubuntu-latest
-    needs: [rustfmt,no-unused-dependencies,wasm-compatible-common-crate]
+    needs: [rustfmt,no-unused-dependencies]
     name: nightly Clippy
     steps:
       - name: Git checkout
