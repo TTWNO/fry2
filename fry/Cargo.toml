@@ -5,4 +5,3 @@ edition = "2021"
 msrv = "1.81.0"
 
 [dependencies]
-fry-common = { path = "../fry-common/" }
