@@ -3,7 +3,6 @@
 
 use core::num::{
     NonZeroU16,
-    NonZeroUsize,
 };
 use crate::error::{
     FsmError,
@@ -32,7 +31,7 @@ impl<const LEN: usize> Fsm<LEN> {
     /// Returns the new index if it has changed, none otherwise.
     fn transition(&mut self, s: char) -> Option<usize> {
         let (diff, next) = self.fsm[self.next..]
-            .into_iter()
+            .iter()
             // get up until the next None state
             .map_while(|x| *x)
             .enumerate()
@@ -63,7 +62,7 @@ impl<const LEN: usize> Fsm<LEN> {
                 (Some(_), _) => continue,
             }
         }
-        return false;
+        false
     }
     /// Check if `word` has a word-like suffix
     fn is_word_suf(&mut self, word: &str) -> bool {
@@ -84,7 +83,7 @@ impl<const LEN: usize> Fsm<LEN> {
                 (Some(_), _) => continue,
             }
         }
-        return false;
+        false
     }
     /// Same as [`Self::const_init`], but panics of any of the error cases are reached.
     const fn const_init_unchecked(start: [Option<(u16, char)>; LEN]) -> Self {
@@ -157,7 +156,7 @@ impl State {
         }
         // move the index ref to the last 9 bits
         // then, take the last 7 bits of ascii_chr (it must be a valid ascii char)
-        let num = ((state_ref << 7) as u16) | (ascii_chr as u16 & 0x7F);
+        let num = (state_ref << 7) | (ascii_chr as u16 & 0x7F);
         let non0_num = NonZeroU16::new(num);
         match non0_num {
             None => Err(FsmStateError::NonZero),
