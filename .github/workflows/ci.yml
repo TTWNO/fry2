@@ -23,9 +23,9 @@ jobs:
     name: nightly Clippy
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache cargo home
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-cargo-home
         with:
@@ -49,9 +49,9 @@ jobs:
     needs: [clippy,no-unused-dependencies]
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache cargo home
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-cargo-home
         with:
@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
@@ -86,9 +86,9 @@ jobs:
     needs: [clippy,no-unused-dependencies]
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache cargo home
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-cargo-home
         with:
@@ -111,9 +111,9 @@ jobs:
     needs: [rustfmt]
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache cargo home
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-cargo-home
         with:
@@ -142,9 +142,9 @@ jobs:
     needs: [rustfmt]
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache cargo home
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-cargo-home
         with:
@@ -173,7 +173,7 @@ jobs:
         with:
           toolchain: ${{ needs.find-msrv.outputs.version }}
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Check MSRV Compliance
         run: cargo test --workspace --no-run --all-features
   uefi-compatibilithy:
@@ -181,7 +181,7 @@ jobs:
     needs: [rustfmt]
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
@@ -195,7 +195,7 @@ jobs:
     needs: [rustfmt]
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
@@ -211,7 +211,7 @@ jobs:
     needs: [clippy,no-unused-dependencies]
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install nightly
         uses: dtolnay/rust-toolchain@master
         with:
