@@ -2,6 +2,7 @@
 //! engine.
 #![no_std]
 #![deny(clippy::all, clippy::pedantic, clippy::cargo, rustdoc::all)]
+#![allow(clippy::module_name_repetitions, clippy::struct_field_names)]
 #![forbid(unsafe_code)]
 
 pub mod aswd;

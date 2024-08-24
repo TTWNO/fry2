@@ -14,7 +14,7 @@ const FSM_ASWD_S_STATE: [u16; 74] = [
     400, 408, 410, 413, 415, 418, 422, 424, 427, 438, 441, 444, 447, 449,
 ];
 
-/// A fconst_inite state machine that represents the letters in a word.
+/// A finite state machine that represents the letters in a word.
 #[derive(Clone, Debug)]
 struct Fsm<const LEN: usize> {
     fsm: [Option<State>; LEN],
@@ -23,7 +23,7 @@ struct Fsm<const LEN: usize> {
 }
 impl<const LEN: usize> Fsm<LEN> {
     fn state(&self) -> Option<State> {
-        self.fsm.get(self.idx).cloned()?
+        self.fsm.get(self.idx).copied()?
     }
     /// Transision to a new state of the finite-state-machine.
     /// Returns the new index if it has changed, none otherwise.
@@ -54,7 +54,7 @@ impl<const LEN: usize> Fsm<LEN> {
         for chr in word.chars() {
             let symbol = match chr {
                 'n' | 'm' => 'N',
-                _v if "aeiouy".contains(_v) => 'V',
+                v if "aeiouy".contains(v) => 'V',
                 s => s,
             };
             let diff = self.transition(symbol);
@@ -75,7 +75,7 @@ impl<const LEN: usize> Fsm<LEN> {
         for chr in word.chars().rev() {
             let symbol = match chr {
                 'n' | 'm' => 'N',
-                _v if "aeiouy".contains(_v) => 'V',
+                v if "aeiouy".contains(v) => 'V',
                 s => s,
             };
             let diff = self.transition(symbol);
@@ -98,7 +98,7 @@ impl<const LEN: usize> Fsm<LEN> {
             Ok(myself) => myself
         }
     }
-    /// Add all the states for the FSM in one const_initialization step.
+    /// Add all the states for the FSM in one `const_initialization` step.
     /// This function also validates
     const fn const_init(start: [Option<(u16, char)>; LEN]) -> Result<Self, FsmError> {
         if LEN > 0x1FF
