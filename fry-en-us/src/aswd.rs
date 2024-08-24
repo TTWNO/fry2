@@ -2,8 +2,7 @@
 //! Uses Finite-State-Machines for checking forward or backwards for the right combinations characters.
 
 use crate::aswd_state::State;
-use crate::error::{FsmError, FsmInvalidIndex, FsmStateError};
-use core::num::NonZeroU16;
+use fry_common::error::{FsmError, FsmInvalidIndex, FsmStateError};
 
 /// From `lang/usenglish/us_aswd.c`
 // fits into 9 bits

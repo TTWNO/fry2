@@ -7,4 +7,3 @@
 
 pub mod aswd;
 mod aswd_state;
-pub mod error;

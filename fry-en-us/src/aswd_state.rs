@@ -1,4 +1,4 @@
-use crate::error::{FryError as Error, FsmStateError};
+use fry_common::error::FsmStateError;
 use core::num::NonZeroU16;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
