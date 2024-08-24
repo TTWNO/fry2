@@ -5,4 +5,5 @@
 #![forbid(unsafe_code)]
 
 pub mod aswd;
+mod aswd_state;
 pub mod error;
