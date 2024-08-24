@@ -1,5 +1,5 @@
-use fry_common::error::FsmStateError;
 use core::num::NonZeroU16;
+use fry_common::error::FsmStateError;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(transparent)]
