@@ -809,6 +809,16 @@ const FSM_ASWD_P_TRANS: Fsm<203> = Fsm::const_init_unchecked([
     None,
 ]);
 
+/// These tests can be confirmed by opening a file in and enabling logging in Flite.
+/// This can be found in the file in flite at: `/lang/usenglish/us_aswd.rs` in function
+/// `fsm_transition`.
+/// There is a line for debugging. If that line is uncomented, you will be able to verify the
+/// output of the functions.
+/// To determine if the word is being checked forward and backward, it is suggested you add
+/// debugging to the top of the `is_word_pre` and `is_word_suf` functions, like is done in this
+/// library.
+///
+/// The output is interpreted to create many of these tests.
 #[cfg(test)]
 mod tests {
     use super::*;
