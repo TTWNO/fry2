@@ -2,7 +2,7 @@
 //! TODO: a lot of these are very simple patterns that could be replaced with much simpler
 //! functions that do not require a regex engine (although some still do).
 
-use lazy_regex::{regex, Lazy, Regex};
+use regex::Regex;
 
 /* Taken and modified from Festival: `src/modules/Text/token.cc`
  * Some of these are right in the source code of Festival, but others were reverse engineered from
@@ -193,9 +193,6 @@ pub fn ordinal_pattern() -> Regex {
 }
 
 /// Matches any abbreviation which TODO
-pub static ABBR_PATTERN: &Lazy<Regex> = regex!(r"([A-Za-z]\.)+[A-Za-z]\.?");
-
-/// Matches any abbreviation which TODO
 #[must_use]
 pub fn abbr_pattern() -> Regex { 
     Regex::new(r"([A-Za-z]\.)+[A-Za-z]\.?")
@@ -234,9 +231,6 @@ pub fn comma_number_pattern() -> Regex {
 /// assert_eq!(PUNCTUATION_PATTERN.match_perfect("XD"), false);
 /// assert_eq!(PUNCTUATION_PATTERN.match_perfect("(hello)"), false);
 /// ```
-pub static PUNCTUATION_PATTERN: &Lazy<Regex> = regex!(r"[,\.\?\!\]\[\)\(]+");
-
-/// Matches punctuation clusters
 #[must_use]
 pub fn punctuation_pattern() -> Regex { 
     Regex::new(r"[,\.\?\!\]\[\)\(]+")

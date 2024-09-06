@@ -14,6 +14,3 @@ description = "English (US) grammar rules used for Fry, the embedded text-to-spe
 fry-common = { version = "0.1.0", path = "../fry-common/", default-features = false }
 const_panic = { version = "0.2.9", default-features = false, features = ["derive"] }
 tracing = { version = "0.1.40", default-features = false }
-
-[features]
-std = ["fry-common/std"]
