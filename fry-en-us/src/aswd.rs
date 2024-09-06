@@ -6,7 +6,7 @@ use fry_common::error::{FsmError, FsmInvalidIndex, FsmStateError};
 
 /// From `lang/usenglish/us_aswd.c`
 // fits into 9 bits
-const FSM_ASWD_S_STATE: [u16; 74] = [
+const FSM_ASWD_S_STATE: [usize; 74] = [
     0, 2, 23, 25, 29, 32, 38, 49, 56, 62, 69, 81, 87, 97, 115, 133, 140, 149, 167, 174, 185, 186,
     191, 198, 201, 204, 210, 214, 217, 222, 229, 242, 246, 248, 255, 259, 264, 267, 271, 276, 286,
     292, 295, 298, 300, 304, 310, 313, 317, 322, 329, 336, 344, 361, 368, 373, 380, 385, 394, 398,
@@ -34,8 +34,8 @@ impl<const LEN: usize> Fsm<LEN> {
             .enumerate()
             // if the char of the state matches s, yield the offset i
             .find_map(|(i, x)| {
-                if x.chr() == s {
-                    Some((i, x.idx()))
+                if x.character == s {
+                    Some((i, x.next_index))
                 } else {
                     None
                 }
@@ -87,19 +87,18 @@ impl<const LEN: usize> Fsm<LEN> {
         false
     }
     /// Same as [`Self::const_init`], but panics of any of the error cases are reached.
-    const fn const_init_unchecked(start: [Option<(u16, char)>; LEN]) -> Self {
+    const fn const_init_unchecked(start: [Option<(usize, char)>; LEN]) -> Self {
         let res = Self::const_init(start);
         match res {
             Err(FsmError::FsmMaxLengthExceeded) => panic!("The maximum length of the FSM must be <= 511"),
             Err(FsmError::FsmInvalidIndex(fii)) => const_panic::concat_panic!("The index selected: ", fii.ref_idx, " at index ", fii.idx, " is not contained in an array of size ", fii.len),
             Err(FsmError::FsmStateError(FsmStateError::NonAscii(ch))) => const_panic::concat_panic!("NonAscii: the state must contain a non-zero value for either the next index or ASCII char. Invalid char: ", ch),
-            Err(FsmError::FsmStateError(FsmStateError::NonZero)) => panic!("NonZero: the state must contain a valid ASCII char or an index which is not 0"),
             Ok(myself) => myself
         }
     }
     /// Add all the states for the FSM in one `const_initialization` step.
     /// This function also validates
-    const fn const_init(start: [Option<(u16, char)>; LEN]) -> Result<Self, FsmError> {
+    const fn const_init(start: [Option<(usize, char)>; LEN]) -> Result<Self, FsmError> {
         if LEN > 0x1FF
         /* 512 - 1; i.e. uses more than 9 bits */
         {
@@ -598,7 +597,7 @@ const FSM_ASWD_S_TRANS: Fsm<454> = Fsm::const_init_unchecked([
     None,
 ]);
 
-const FSM_ASWD_P_STATE: [u16; 35] = [
+const FSM_ASWD_P_STATE: [usize; 35] = [
     0, 2, 23, 25, 34, 38, 46, 55, 59, 64, 72, 81, 85, 102, 108, 111, 120, 126, 133, 137, 138, 140,
     142, 145, 149, 152, 155, 158, 161, 166, 171, 176, 193, 195, 197,
 ];
@@ -822,10 +821,6 @@ const FSM_ASWD_P_TRANS: Fsm<203> = Fsm::const_init_unchecked([
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[test]
-    fn test_option_nonzero_optimization() {
-        assert_eq!(size_of::<Option<State>>(), size_of::<u16>());
-    }
     /// These tests are based on output from running Flite with a debugging line and then converted
     /// to these tests.
     #[test]
@@ -834,26 +829,26 @@ mod tests {
         // must explicitly start the FSM
         // This should not need to be done
         assert_ne!(fsm.transition('#'), None);
-        assert_eq!(fsm.state().unwrap().chr(), '#');
-        assert_eq!(fsm.state().unwrap().idx(), 2);
+        assert_eq!(fsm.state().unwrap().character, '#');
+        assert_eq!(fsm.state().unwrap().next_index, 2);
         // start from the back of the string;
         // last letter of world = d
         assert_ne!(fsm.transition('d'), None);
-        assert_eq!(fsm.state().unwrap().chr(), 'd');
-        assert_eq!(fsm.state().unwrap().idx(), 140);
+        assert_eq!(fsm.state().unwrap().character, 'd');
+        assert_eq!(fsm.state().unwrap().next_index, 140);
         // next back is l
         assert_ne!(fsm.transition('l'), None);
-        assert_eq!(fsm.state().unwrap().chr(), 'l');
-        assert_eq!(fsm.state().unwrap().idx(), 313);
+        assert_eq!(fsm.state().unwrap().character, 'l');
+        assert_eq!(fsm.state().unwrap().next_index, 313);
         // and next is r
         assert_ne!(fsm.transition('r'), None);
-        assert_eq!(fsm.state().unwrap().chr(), 'r');
-        assert_eq!(fsm.state().unwrap().idx(), 23);
+        assert_eq!(fsm.state().unwrap().character, 'r');
+        assert_eq!(fsm.state().unwrap().next_index, 23);
         // and next is o
         // V = Vowel
         assert_ne!(fsm.transition('V'), None);
-        assert_eq!(fsm.state().unwrap().chr(), 'V');
-        assert_eq!(fsm.state().unwrap().idx(), 185);
+        assert_eq!(fsm.state().unwrap().character, 'V');
+        assert_eq!(fsm.state().unwrap().next_index, 185);
         // this should not find anything
         assert_eq!(fsm.transition('w'), None);
     }
@@ -863,17 +858,17 @@ mod tests {
         // must explicitly start the FSM
         // This should not need to be done
         assert_ne!(fsm.transition('#'), None);
-        assert_eq!(fsm.state().unwrap().chr(), '#');
-        assert_eq!(fsm.state().unwrap().idx(), 2);
+        assert_eq!(fsm.state().unwrap().character, '#');
+        assert_eq!(fsm.state().unwrap().next_index, 2);
         // first letter = w
         assert_ne!(fsm.transition('w'), None);
-        assert_eq!(fsm.state().unwrap().chr(), 'w');
-        assert_eq!(fsm.state().unwrap().idx(), 55);
+        assert_eq!(fsm.state().unwrap().character, 'w');
+        assert_eq!(fsm.state().unwrap().next_index, 55);
         // second letter = o
         // V = vowel
         assert_ne!(fsm.transition('V'), None);
-        assert_eq!(fsm.state().unwrap().chr(), 'V');
-        assert_eq!(fsm.state().unwrap().idx(), 137);
+        assert_eq!(fsm.state().unwrap().character, 'V');
+        assert_eq!(fsm.state().unwrap().next_index, 137);
         // third letter = r
         // this should lead to a None; r is not found
         assert_eq!(fsm.transition('r'), None);

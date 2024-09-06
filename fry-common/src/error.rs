@@ -22,12 +22,6 @@ pub enum FsmError {
 /// An error related to individual states within an FSM.
 #[derive(Clone, Copy, Debug, Display, DeriveError)]
 pub enum FsmStateError {
-    /// The state must not be 0.
-    /// i.e., when initializing the struct, either the ASCII char or the index must have a value
-    #[display(
-        "NonZero: the state must contain a non-zero value for either the next index or ASCII char"
-    )]
-    NonZero,
     /// The char is not ASCII.
     #[display("NonAscii: the state must contain a valid ASCII char; invalid char: {_0}")]
     #[error(ignore)]
