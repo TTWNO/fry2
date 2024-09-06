@@ -90,7 +90,6 @@ impl<const LEN: usize> Fsm<LEN> {
     const fn const_init_unchecked(start: [Option<(usize, char)>; LEN]) -> Self {
         let res = Self::const_init(start);
         match res {
-            Err(FsmError::FsmMaxLengthExceeded) => panic!("The maximum length of the FSM must be <= 511"),
             Err(FsmError::FsmInvalidIndex(fii)) => const_panic::concat_panic!("The index selected: ", fii.ref_idx, " at index ", fii.idx, " is not contained in an array of size ", fii.len),
             Err(FsmError::FsmStateError(FsmStateError::NonAscii(ch))) => const_panic::concat_panic!("NonAscii: the state must contain a non-zero value for either the next index or ASCII char. Invalid char: ", ch),
             Ok(myself) => myself
@@ -99,11 +98,6 @@ impl<const LEN: usize> Fsm<LEN> {
     /// Add all the states for the FSM in one `const_initialization` step.
     /// This function also validates
     const fn const_init(start: [Option<(usize, char)>; LEN]) -> Result<Self, FsmError> {
-        if LEN > 0x1FF
-        /* 512 - 1; i.e. uses more than 9 bits */
-        {
-            return Err(FsmError::FsmMaxLengthExceeded);
-        }
         let mut i = 0;
         // const_initialize array
         let mut state: [Option<State>; LEN] = [None; LEN];

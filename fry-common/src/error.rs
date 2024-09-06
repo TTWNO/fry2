@@ -10,9 +10,6 @@ use derive_more::{Display, Error as DeriveError, From};
 /// An error for the `fry-en-us` FSM (finite state machine).
 #[derive(Clone, Copy, Debug, Display, DeriveError, From)]
 pub enum FsmError {
-    /// The FSM is too long.
-    #[display("FsmMaxLengthExceeded: the FSM may not exceed 512")]
-    FsmMaxLengthExceeded,
     /// The FSM references an index which does not exist.
     FsmInvalidIndex(FsmInvalidIndex),
     /// An error related to an individual state of the FSM.
