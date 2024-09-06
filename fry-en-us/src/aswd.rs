@@ -27,6 +27,7 @@ impl<const LEN: usize> Fsm<LEN> {
     /// Transision to a new state of the finite-state-machine.
     /// Returns the new index if it has changed, none otherwise.
     fn transition(&mut self, s: char) -> Option<usize> {
+        // this will never panic because the indexes are verified upon creation
         let (diff, next) = self.fsm[self.next..]
             .iter()
             // get up until the next None state
