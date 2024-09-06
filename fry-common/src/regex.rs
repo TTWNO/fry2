@@ -14,18 +14,24 @@ use lazy_regex::{regex, Lazy, Regex};
 
 /// Matches sections of text that are contain whitespace.
 /// ```
-/// # use fry_common::regex::{WHITESPACE_PATTERN, RegexExt};
+/// # use fry_common::regex::{whitespace_pattern, RegexExt};
+/// let WHITESPACE_PATTERN = whitespace_pattern();
 /// assert_eq!(WHITESPACE_PATTERN.match_perfect(" \n "), true);
 /// assert_eq!(WHITESPACE_PATTERN.match_perfect(" "), true);
 /// assert_eq!(WHITESPACE_PATTERN.match_perfect("\t\n\n\t"), true);
 /// assert_eq!(WHITESPACE_PATTERN.match_perfect("\tt"), false);
 /// assert_eq!(WHITESPACE_PATTERN.match_perfect("abc"), false);
 /// ```
-pub static WHITESPACE_PATTERN: &Lazy<Regex> = regex!(r"[ \t\n\r]+");
+#[must_use]
+pub fn whitespace_pattern() -> Regex {
+    Regex::new(r"[ \t\n\r]+")
+        .expect("a valid regex pattern")
+}
 
 /// Matches any letters of the alphabet.
 /// ```
-/// # use fry_common::regex::{ALPHABETIC_PATTERN, RegexExt};
+/// # use fry_common::regex::{alphabetic_pattern, RegexExt};
+/// let ALPHABETIC_PATTERN = alphabetic_pattern();
 /// assert_eq!(ALPHABETIC_PATTERN.match_perfect("abc"), true);
 /// assert_eq!(ALPHABETIC_PATTERN.match_perfect("Quantum"), true);
 /// // this matches both 'open' and 'source', but not the entire string
@@ -41,22 +47,32 @@ pub static WHITESPACE_PATTERN: &Lazy<Regex> = regex!(r"[ \t\n\r]+");
 /// assert_eq!(ALPHABETIC_PATTERN.match_perfect("$100,000"), false);
 /// assert_eq!(ALPHABETIC_PATTERN.match_perfect("99"), false);
 /// ```
-pub static ALPHABETIC_PATTERN: &Lazy<Regex> = regex!("[A-Za-z]+");
+#[must_use]
+pub fn alphabetic_pattern() -> Regex {
+    Regex::new(r"[A-Za-z]+")
+        .expect("a valid regex pattern")
+}
 
 /// Matches any uppercase letters.
 /// ```
-/// # use fry_common::regex::{UPPERCASE_PATTERN, RegexExt};
+/// # use fry_common::regex::{uppercase_pattern, RegexExt};
+/// let UPPERCASE_PATTERN = uppercase_pattern();
 /// assert_eq!(UPPERCASE_PATTERN.match_perfect("hello"), false);
 /// assert_eq!(UPPERCASE_PATTERN.match_perfect("Hello"), false);
 /// assert_eq!(UPPERCASE_PATTERN.match_perfect("beep"), false);
 /// assert_eq!(UPPERCASE_PATTERN.match_perfect("BEEP"), true);
 /// assert_eq!(UPPERCASE_PATTERN.match_perfect("123"), false);
 /// ```
-pub static UPPERCASE_PATTERN: &Lazy<Regex> = regex!("[A-Z]+");
+#[must_use]
+pub fn uppercase_pattern() -> Regex {
+    Regex::new(r"[A-Z]+")
+        .expect("a valid regex pattern")
+}
 
 /// Matches any lowercase letters.
 /// ```
-/// # use fry_common::regex::{LOWERCASE_PATTERN, RegexExt};
+/// # use fry_common::regex::{lowercase_pattern, RegexExt};
+/// let LOWERCASE_PATTERN = lowercase_pattern();
 /// assert_eq!(LOWERCASE_PATTERN.match_perfect("hello"), true);
 /// // matches "ello"
 /// assert_eq!(LOWERCASE_PATTERN.match_perfect("Hello"), false);
@@ -64,7 +80,11 @@ pub static UPPERCASE_PATTERN: &Lazy<Regex> = regex!("[A-Z]+");
 /// assert_eq!(LOWERCASE_PATTERN.match_perfect("BEEP"), false);
 /// assert_eq!(LOWERCASE_PATTERN.match_perfect("123"), false);
 /// ```
-pub static LOWERCASE_PATTERN: &Lazy<Regex> = regex!("[a-z]+");
+#[must_use]
+pub fn lowercase_pattern() -> Regex {
+    Regex::new(r"[a-z]+")
+        .expect("a valid regex pattern")
+}
 
 /// Matches any digits.
 /// NOTE: I am unsure of the reason the pattern used is `[0-9][0-9]*`.
@@ -72,7 +92,8 @@ pub static LOWERCASE_PATTERN: &Lazy<Regex> = regex!("[a-z]+");
 /// But for now I don't want to deviate from the pattern used in flite.
 /// As mentioned in the module docs, many of these may be able to be simplified.
 /// ```
-/// # use fry_common::regex::{DIGIT_PATTERN, RegexExt};
+/// # use fry_common::regex::{digit_pattern, RegexExt};
+/// let DIGIT_PATTERN = digit_pattern();
 /// assert_eq!(DIGIT_PATTERN.match_perfect("12"), true);
 /// assert_eq!(DIGIT_PATTERN.match_perfect("9"), true);
 /// // matches "9", but not "9th"
@@ -81,14 +102,19 @@ pub static LOWERCASE_PATTERN: &Lazy<Regex> = regex!("[a-z]+");
 /// // matches "89", and "99", but not "89.99"
 /// assert_eq!(DIGIT_PATTERN.match_perfect("89.99"), false);
 /// ```
-pub static DIGIT_PATTERN: &Lazy<Regex> = regex!("[0-9][0-9]*");
+#[must_use]
+pub fn digit_pattern() -> Regex {
+    Regex::new(r"[0-9][0-9]*")
+        .expect("a valid regex pattern")
+}
 
 /// Matches an "identifier" which has a similar syntax to C varable names:
 ///
 /// - The first character can be an alphabetic character, or `_`
 /// - Any following characters can be any alphanumeric character, or `_`
 /// ```
-/// # use fry_common::regex::{IDENTIFIER_PATTERN, RegexExt};
+/// # use fry_common::regex::{identifier_pattern, RegexExt};
+/// let IDENTIFIER_PATTERN = identifier_pattern();
 /// assert_eq!(IDENTIFIER_PATTERN.match_perfect("x"), false);
 /// assert_eq!(IDENTIFIER_PATTERN.match_perfect("_x"), true);
 /// assert_eq!(IDENTIFIER_PATTERN.match_perfect("_abc"), true);
@@ -99,11 +125,16 @@ pub static DIGIT_PATTERN: &Lazy<Regex> = regex!("[0-9][0-9]*");
 /// // with match on "bb", but not "123bb"
 /// assert_eq!(IDENTIFIER_PATTERN.match_perfect("123bb"), false);
 /// ```
-pub static IDENTIFIER_PATTERN: &Lazy<Regex> = regex!("[A-Za-z_][0-9A-Za-z_]+");
+#[must_use]
+pub fn identifier_pattern() -> Regex { 
+    Regex::new(r"[A-Za-z_][0-9A-Za-z_]+")
+        .expect("a valid regex pattern")
+}
 
 /// Matches any digits or letters of the alphabet.
 /// ```
-/// # use fry_common::regex::{ALPHANUMERIC_PATTERN, RegexExt};
+/// # use fry_common::regex::{alphanumeric_pattern, RegexExt};
+/// let ALPHANUMERIC_PATTERN = alphanumeric_pattern();
 /// assert_eq!(ALPHANUMERIC_PATTERN.match_perfect("Hello"), true);
 /// assert_eq!(ALPHANUMERIC_PATTERN.match_perfect("world"), true);
 /// assert_eq!(ALPHANUMERIC_PATTERN.match_perfect("2nd"), true);
@@ -113,21 +144,32 @@ pub static IDENTIFIER_PATTERN: &Lazy<Regex> = regex!("[A-Za-z_][0-9A-Za-z_]+");
 /// assert_eq!(ALPHANUMERIC_PATTERN.match_perfect(";'"), false);
 /// assert_eq!(ALPHANUMERIC_PATTERN.match_perfect("Parents'"), false);
 /// ```
-pub static ALPHANUMERIC_PATTERN: &Lazy<Regex> = regex!("[0-9A-Za-z]+");
+#[must_use]
+pub fn alphanumeric_pattern() -> Regex { 
+    Regex::new(r"[0-9A-Za-z]+")
+        .expect("a valid regex pattern")
+}
 
 /// Matches a word that ends with either "'s" or "'S"
 /// ```
-/// # use fry_common::regex::{APOSTROPHES_PATTERN, RegexExt};
+/// # use fry_common::regex::{apostrophes_pattern, RegexExt};
+/// let APOSTROPHES_PATTERN = apostrophes_pattern();
 /// assert_eq!(APOSTROPHES_PATTERN.match_perfect("child"), false);
 /// assert_eq!(APOSTROPHES_PATTERN.match_perfect("child's"), true);
 /// assert_eq!(APOSTROPHES_PATTERN.match_perfect("PARENT'S"), true);
 /// assert_eq!(APOSTROPHES_PATTERN.match_perfect("Parent's"), true);
 /// assert_eq!(APOSTROPHES_PATTERN.match_perfect("Parents'"), false);
 /// ```
-pub static APOSTROPHES_PATTERN: &Lazy<Regex> = regex!(r".*'[sS]$");
+#[must_use]
+pub fn apostrophes_pattern() -> Regex { 
+    Regex::new(r".*'[sS]$")
+        .expect("a valid regex pattern")
+}
+
 /// Matches any integer that ends in "1st", "2nd", "3rd", or "th"
 /// ```
-/// # use fry_common::regex::{ORDINAL_PATTERN, RegexExt};
+/// # use fry_common::regex::{ordinal_pattern, RegexExt};
+/// let ORDINAL_PATTERN = ordinal_pattern();
 /// assert_eq!(ORDINAL_PATTERN.match_perfect("1st"), true);
 /// assert_eq!(ORDINAL_PATTERN.match_perfect("2nd"), true);
 /// assert_eq!(ORDINAL_PATTERN.match_perfect("3rd"), true);
@@ -144,13 +186,27 @@ pub static APOSTROPHES_PATTERN: &Lazy<Regex> = regex!(r".*'[sS]$");
 /// assert_eq!(ORDINAL_PATTERN.match_perfect("1nd"), false);
 /// assert_eq!(ORDINAL_PATTERN.match_perfect("1rd"), false);
 /// ```
-pub static ORDINAL_PATTERN: &Lazy<Regex> = regex!("[0-9]*(1st|2nd|3rd|[4-90]th)");
+#[must_use]
+pub fn ordinal_pattern() -> Regex { 
+    Regex::new(r"[0-9]*(1st|2nd|3rd|[4-90]th)")
+        .expect("a valid regex pattern")
+}
+
 /// Matches any abbreviation which TODO
 pub static ABBR_PATTERN: &Lazy<Regex> = regex!(r"([A-Za-z]\.)+[A-Za-z]\.?");
+
+/// Matches any abbreviation which TODO
+#[must_use]
+pub fn abbr_pattern() -> Regex { 
+    Regex::new(r"([A-Za-z]\.)+[A-Za-z]\.?")
+        .expect("a valid regex pattern")
+}
+
 /// Matches American-style numbers, including punctuation (although it will not match just "any"
 /// number)
 /// ```
-/// # use fry_common::regex::{COMMA_NUMBER_PATTERN, RegexExt};
+/// # use fry_common::regex::{comma_number_pattern, RegexExt};
+/// let COMMA_NUMBER_PATTERN = comma_number_pattern();
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("512,622"), true);
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("1,000"), true);
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("1,000.99"), true);
@@ -160,12 +216,16 @@ pub static ABBR_PATTERN: &Lazy<Regex> = regex!(r"([A-Za-z]\.)+[A-Za-z]\.?");
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("55"), false);
 /// assert_eq!(COMMA_NUMBER_PATTERN.match_perfect("1,2345"), false);
 /// ```
-pub static COMMA_NUMBER_PATTERN: &Lazy<Regex> =
-    regex!(r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?");
+#[must_use]
+pub fn comma_number_pattern() -> Regex { 
+    Regex::new(r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?")
+        .expect("a valid regex pattern")
+}
 
 /// Matches punctuation clusters
 /// ```
-/// # use fry_common::regex::{PUNCTUATION_PATTERN, RegexExt};
+/// # use fry_common::regex::{punctuation_pattern, RegexExt};
+/// let PUNCTUATION_PATTERN = punctuation_pattern();
 /// assert_eq!(PUNCTUATION_PATTERN.match_perfect("(]"), true);
 /// assert_eq!(PUNCTUATION_PATTERN.match_perfect("[.?!..,.,.,,[]"), true);
 /// assert_eq!(PUNCTUATION_PATTERN.match_perfect(",.!?"), true);
@@ -176,24 +236,35 @@ pub static COMMA_NUMBER_PATTERN: &Lazy<Regex> =
 /// ```
 pub static PUNCTUATION_PATTERN: &Lazy<Regex> = regex!(r"[,\.\?\!\]\[\)\(]+");
 
+/// Matches punctuation clusters
+#[must_use]
+pub fn punctuation_pattern() -> Regex { 
+    Regex::new(r"[,\.\?\!\]\[\)\(]+")
+        .expect("a valid regex pattern")
+}
+
 /// Matches positive, negative decimals (and their scientific notation), as well as plain integers
 /// without decimal points.
 /// ```
-/// # use fry_common::regex::{DECIMAL_PATTERN, RegexExt};
-/// assert_eq!(DECIMAL_PATTERN.match_perfect("1"), true);
-/// assert_eq!(DECIMAL_PATTERN.match_perfect("10"), true);
-/// assert_eq!(DECIMAL_PATTERN.match_perfect("10.5"), true);
+/// # use fry_common::regex::{decimal_pattern, RegexExt};
+/// let DECIMAL_PATTERN = decimal_pattern();
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("1"), true, "1 should match the decimal expression");
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("10"), true, "10 should match the decimal expression");
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("10.5"), true, "10.5 should match the decimal expression");
 /// // matches entire expression
-/// assert_eq!(DECIMAL_PATTERN.match_perfect("3.9e15"), true);
-/// assert_eq!(DECIMAL_PATTERN.match_perfect("-3.9E15"), true);
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("3.9e15"), true, "3.9e15 should match the decimal expression");
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("-3.9E15"), true, "-3.9E15 should match the decimal expression");
 /// // no matches
-/// assert_eq!(DECIMAL_PATTERN.match_perfect("one"), false);
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("one"), false, "one should NOT match the decimal expression");
 /// // matches "1"
-/// assert_eq!(DECIMAL_PATTERN.match_perfect("one1"), false);
-/// assert_eq!(DECIMAL_PATTERN.match_perfect("1,2345"), false);
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("one1"), false, "one1 should NOT match the decimal expression");
+/// assert_eq!(DECIMAL_PATTERN.match_perfect("1,2345"), false, "1,2345 should NOT match the decimal expression");
 /// ```
-pub static DECIMAL_PATTERN: &Lazy<Regex> =
-    regex!(r"-?(([0-9]+.[0-9]*)|([0-9]+)|(.[0-9]+))([eE][---+]?[0-9]+)?");
+#[must_use]
+pub fn decimal_pattern() -> Regex { 
+    Regex::new(r"-?(([0-9]+\.[0-9]*)|([0-9]+)|(\.[0-9]+))([eE][-+]?[0-9]+)?")
+        .expect("a valid regex pattern")
+}
 
 /// All characters considered punctuation for the purposes of the TTS engine.
 /// Note how these are trimmed down from the list of [all ASCII pronunciation in the standard
@@ -243,145 +314,146 @@ pub mod test {
         };
     }
     #[test]
-    fn test_one_number() {
+    fn test_whitespace_pattern() {
+        let WHITESPACE_PATTERN = whitespace_pattern();
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[0], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[0], false);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[0], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[0], false);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[0], true);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[0], false);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[0], true);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[0], true);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[0], false);
-    }
-
-    #[test]
-    fn test_all_whitespace() {
-        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[1], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[1], false);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[1], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[1], false);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[1], false);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[1], false);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[1], false);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[1], false);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[1], false);
-    }
-
-    #[test]
-    fn test_hello() {
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[1], true);
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[2], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[2], true);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[2], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[2], true);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[2], true);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[2], true);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[2], false);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[2], false);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[2], false);
-    }
-
-    #[test]
-    fn test_title_case_hello() {
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[3], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[3], true);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[3], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[3], false);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[3], true);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[3], true);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[3], false);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[3], false);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[3], false);
-    }
-
-    #[test]
-    fn test_1and2() {
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[4], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[4], false);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[4], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[4], false);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[4], true);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[4], false);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[4], false);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[4], false);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[4], false);
-    }
-
-    #[test]
-    fn test_oneandtwo() {
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[5], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[5], true);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[5], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[5], true);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[5], true);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[5], true);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[5], false);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[5], false);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[5], false);
-    }
-
-    #[test]
-    fn test_negative_deciaml_number() {
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[6], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[6], false);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[6], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[6], false);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[6], false);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[6], false);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[6], false);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[6], true);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[6], false);
-    }
-
-    #[test]
-    fn test_integer() {
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[7], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[7], false);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[7], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[7], false);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[7], true);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[7], false);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[7], true);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[7], true);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[7], false);
-    }
-
-    #[test]
-    fn test_zero_padd_integer() {
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[8], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[8], false);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[8], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[8], false);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[8], true);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[8], false);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[8], true);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[8], true);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[8], false);
-    }
-
-    #[test]
-    fn test_american_style_digit() {
         assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[9], false);
-        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[9], false);
-        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[9], false);
-        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[9], false);
-        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[9], false);
-        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[9], false);
-        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[9], false);
-        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[9], false);
-        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[9], true);
+        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[10], false);
     }
 
     #[test]
-    fn test_american_style_digit_with_too_many_ending_numbers() {
-        assert_matches!(WHITESPACE_PATTERN, REGEX_TESTS[10], false);
+    fn test_alphabetic_pattern() {
+        let ALPHABETIC_PATTERN = alphabetic_pattern();
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[0], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[2], true);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[3], true);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[5], true);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[9], false);
         assert_matches!(ALPHABETIC_PATTERN, REGEX_TESTS[10], false);
+    }
+
+    #[test]
+    fn test_uppercase_pattern() {
+        let UPPERCASE_PATTERN = uppercase_pattern();
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[0], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[2], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[5], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[9], false);
         assert_matches!(UPPERCASE_PATTERN, REGEX_TESTS[10], false);
+    }
+
+    #[test]
+    fn test_lowercase_pattern() {
+        let LOWERCASE_PATTERN = lowercase_pattern();
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[0], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[2], true);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[5], true);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[9], false);
         assert_matches!(LOWERCASE_PATTERN, REGEX_TESTS[10], false);
+    }
+
+    #[test]
+    fn test_alphanumeric_pattern() {
+        let ALPHANUMERIC_PATTERN = alphanumeric_pattern();
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[0], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[2], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[3], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[4], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[5], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[7], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[8], true);
+        assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[9], false);
         assert_matches!(ALPHANUMERIC_PATTERN, REGEX_TESTS[10], false);
+    }
+
+    #[test]
+    fn test_identifier_pattern() {
+        let IDENTIFIER_PATTERN = identifier_pattern();
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[0], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[2], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[3], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[5], true);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[9], false);
         assert_matches!(IDENTIFIER_PATTERN, REGEX_TESTS[10], false);
+    }
+
+    #[test]
+    fn test_digit_pattern() {
+        let DIGIT_PATTERN = digit_pattern();
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[0], true);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[2], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[5], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[7], true);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[8], true);
+        assert_matches!(DIGIT_PATTERN, REGEX_TESTS[9], false);
         assert_matches!(DIGIT_PATTERN, REGEX_TESTS[10], false);
+    }
+
+    #[test]
+    fn test_decimal_pattern() {
+        let DECIMAL_PATTERN = decimal_pattern();
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[0], true);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[2], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[5], false);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[6], true);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[7], true);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[8], true);
+        assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[9], false);
         assert_matches!(DECIMAL_PATTERN, REGEX_TESTS[10], false);
+    }
+
+    #[test]
+    fn test_comma_pattern() {
+        let COMMA_NUMBER_PATTERN = comma_number_pattern();
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[0], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[1], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[2], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[3], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[4], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[5], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[6], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[7], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[8], false);
+        assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[9], true);
         assert_matches!(COMMA_NUMBER_PATTERN, REGEX_TESTS[10], false);
     }
 }
