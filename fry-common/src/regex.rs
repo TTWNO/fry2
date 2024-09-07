@@ -193,7 +193,8 @@ pub static ABBR_PATTERN: &str = r"([A-Za-z]\.)+[A-Za-z]\.?";
 /// assert_eq!(comma_number_regex.match_perfect("55"), false);
 /// assert_eq!(comma_number_regex.match_perfect("1,2345"), false);
 /// ```
-pub static COMMA_NUMBER_PATTERN: &str = r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?";
+pub static COMMA_NUMBER_PATTERN: &str =
+    r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?";
 
 /// Matches punctuation clusters
 /// ```
