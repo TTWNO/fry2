@@ -189,7 +189,7 @@ jobs:
       - name: Install UEFI Targets
         run: rustup target add x86_64-unknown-none
       - name: Test Compilation
-        run: cargo build --no-default-features --features critical-section --target x86_64-unknown-none
+        run: cargo build --no-default-features --target x86_64-unknown-none
   uefi-compatibilithy:
     runs-on: ubuntu-latest
     needs: [rustfmt]
