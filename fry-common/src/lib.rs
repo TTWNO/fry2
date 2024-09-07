@@ -9,9 +9,6 @@
 #![deny(clippy::all, clippy::pedantic, missing_docs)]
 #![allow(clippy::module_name_repetitions)]
 
-#[cfg(feature = "std")]
-extern crate std;
-
 extern crate alloc;
 
 pub mod error;
