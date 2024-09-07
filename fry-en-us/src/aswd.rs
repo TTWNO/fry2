@@ -110,10 +110,10 @@ impl<const LEN: usize> Fsm<LEN> {
                 continue;
             };
             // if reference is out of bounds
-            if item.0 as usize > start.len() - 1 {
+            if item.0 > start.len() - 1 {
                 return Err(FsmError::FsmInvalidIndex(FsmInvalidIndex {
                     idx: i,
-                    ref_idx: item.0 as usize,
+                    ref_idx: item.0,
                     len: start.len(),
                 }));
             }
