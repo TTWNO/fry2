@@ -259,19 +259,17 @@ impl RegexExt for Regex {
 #[cfg(test)]
 pub mod test {
     use regex::Regex;
-    const REGEX_TESTS: [&str; 11] = [
-        "1",
-        " \n ",
-        "hello",
-        "Hello",
-        "1and2",
-        "oneandtwo",
-        "-1.43",
-        "235",
-        "034",
-        "1,234,235",
-        "1,2345",
-    ];
+    static ONE_NUMBER: &str = "1";
+    static SPACE_NEWLINE_SPACE: &str = " \n ";
+    static HELLO: &str = "hello";
+    static HELLO_TITLE_CASE: &str = "Hello";
+    static ONE_AND_TWO_NUMBER: &str = "1and2";
+    static ONE_AND_TWO_TEXT: &str = "oneandtwo";
+    static NEGATIVE_DECIMAL: &str = "-1.43";
+    static INT_NUMBER: &str = "235";
+    static ZERO_PADDED_INT: &str = "034";
+    static MILLION_COMMAS: &str = "1,234,235";
+    static COMMA_TOO_MANY_NUMS: &str = "1,2345";
 
     use super::*;
     macro_rules! assert_matches {
@@ -282,144 +280,144 @@ pub mod test {
     #[test]
     fn test_whitespace_pattern() {
         let whitespace_regex = Regex::new(WHITESPACE_PATTERN).expect("Valid regex pattern");
-        assert_matches!(whitespace_regex, REGEX_TESTS[0], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[1], true);
-        assert_matches!(whitespace_regex, REGEX_TESTS[2], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[3], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[4], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[5], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[6], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[7], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[8], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[9], false);
-        assert_matches!(whitespace_regex, REGEX_TESTS[10], false);
+        assert_matches!(whitespace_regex, ONE_NUMBER, false);
+        assert_matches!(whitespace_regex, SPACE_NEWLINE_SPACE, true);
+        assert_matches!(whitespace_regex, HELLO, false);
+        assert_matches!(whitespace_regex, HELLO_TITLE_CASE, false);
+        assert_matches!(whitespace_regex, ONE_AND_TWO_NUMBER, false);
+        assert_matches!(whitespace_regex, ONE_AND_TWO_TEXT, false);
+        assert_matches!(whitespace_regex, NEGATIVE_DECIMAL, false);
+        assert_matches!(whitespace_regex, INT_NUMBER, false);
+        assert_matches!(whitespace_regex, ZERO_PADDED_INT, false);
+        assert_matches!(whitespace_regex, MILLION_COMMAS, false);
+        assert_matches!(whitespace_regex, COMMA_TOO_MANY_NUMS, false);
     }
 
     #[test]
     fn test_alphabetic_pattern() {
         let alphabetic_regex = Regex::new(ALPHABETIC_PATTERN).expect("A valid regex pattern");
-        assert_matches!(alphabetic_regex, REGEX_TESTS[0], false);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[1], false);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[2], true);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[3], true);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[4], false);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[5], true);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[6], false);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[7], false);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[8], false);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[9], false);
-        assert_matches!(alphabetic_regex, REGEX_TESTS[10], false);
+        assert_matches!(alphabetic_regex, ONE_NUMBER, false);
+        assert_matches!(alphabetic_regex, SPACE_NEWLINE_SPACE, false);
+        assert_matches!(alphabetic_regex, HELLO, true);
+        assert_matches!(alphabetic_regex, HELLO_TITLE_CASE, true);
+        assert_matches!(alphabetic_regex, ONE_AND_TWO_NUMBER, false);
+        assert_matches!(alphabetic_regex, ONE_AND_TWO_TEXT, true);
+        assert_matches!(alphabetic_regex, NEGATIVE_DECIMAL, false);
+        assert_matches!(alphabetic_regex, INT_NUMBER, false);
+        assert_matches!(alphabetic_regex, ZERO_PADDED_INT, false);
+        assert_matches!(alphabetic_regex, MILLION_COMMAS, false);
+        assert_matches!(alphabetic_regex, COMMA_TOO_MANY_NUMS, false);
     }
 
     #[test]
     fn test_uppercase_pattern() {
         let uppercase_regex = Regex::new(UPPERCASE_PATTERN).expect("A valid regex pattern");
-        assert_matches!(uppercase_regex, REGEX_TESTS[0], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[1], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[2], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[3], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[4], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[5], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[6], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[7], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[8], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[9], false);
-        assert_matches!(uppercase_regex, REGEX_TESTS[10], false);
+        assert_matches!(uppercase_regex, ONE_NUMBER, false);
+        assert_matches!(uppercase_regex, SPACE_NEWLINE_SPACE, false);
+        assert_matches!(uppercase_regex, HELLO, false);
+        assert_matches!(uppercase_regex, HELLO_TITLE_CASE, false);
+        assert_matches!(uppercase_regex, ONE_AND_TWO_NUMBER, false);
+        assert_matches!(uppercase_regex, ONE_AND_TWO_TEXT, false);
+        assert_matches!(uppercase_regex, NEGATIVE_DECIMAL, false);
+        assert_matches!(uppercase_regex, INT_NUMBER, false);
+        assert_matches!(uppercase_regex, ZERO_PADDED_INT, false);
+        assert_matches!(uppercase_regex, MILLION_COMMAS, false);
+        assert_matches!(uppercase_regex, COMMA_TOO_MANY_NUMS, false);
     }
 
     #[test]
     fn test_lowercase_pattern() {
         let lowercase_regex = Regex::new(LOWERCASE_PATTERN).expect("A valid regex pattern");
-        assert_matches!(lowercase_regex, REGEX_TESTS[0], false);
-        assert_matches!(lowercase_regex, REGEX_TESTS[1], false);
-        assert_matches!(lowercase_regex, REGEX_TESTS[2], true);
-        assert_matches!(lowercase_regex, REGEX_TESTS[3], false);
-        assert_matches!(lowercase_regex, REGEX_TESTS[4], false);
-        assert_matches!(lowercase_regex, REGEX_TESTS[5], true);
-        assert_matches!(lowercase_regex, REGEX_TESTS[6], false);
-        assert_matches!(lowercase_regex, REGEX_TESTS[7], false);
-        assert_matches!(lowercase_regex, REGEX_TESTS[8], false);
-        assert_matches!(lowercase_regex, REGEX_TESTS[9], false);
-        assert_matches!(lowercase_regex, REGEX_TESTS[10], false);
+        assert_matches!(lowercase_regex, ONE_NUMBER, false);
+        assert_matches!(lowercase_regex, SPACE_NEWLINE_SPACE, false);
+        assert_matches!(lowercase_regex, HELLO, true);
+        assert_matches!(lowercase_regex, HELLO_TITLE_CASE, false);
+        assert_matches!(lowercase_regex, ONE_AND_TWO_NUMBER, false);
+        assert_matches!(lowercase_regex, ONE_AND_TWO_TEXT, true);
+        assert_matches!(lowercase_regex, NEGATIVE_DECIMAL, false);
+        assert_matches!(lowercase_regex, INT_NUMBER, false);
+        assert_matches!(lowercase_regex, ZERO_PADDED_INT, false);
+        assert_matches!(lowercase_regex, MILLION_COMMAS, false);
+        assert_matches!(lowercase_regex, COMMA_TOO_MANY_NUMS, false);
     }
 
     #[test]
     fn test_alphanumeric_pattern() {
         let alphanumeric_regex = Regex::new(ALPHANUMERIC_PATTERN).expect("A valid regex pattern");
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[0], true);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[1], false);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[2], true);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[3], true);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[4], true);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[5], true);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[6], false);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[7], true);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[8], true);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[9], false);
-        assert_matches!(alphanumeric_regex, REGEX_TESTS[10], false);
+        assert_matches!(alphanumeric_regex, ONE_NUMBER, true);
+        assert_matches!(alphanumeric_regex, SPACE_NEWLINE_SPACE, false);
+        assert_matches!(alphanumeric_regex, HELLO, true);
+        assert_matches!(alphanumeric_regex, HELLO_TITLE_CASE, true);
+        assert_matches!(alphanumeric_regex, ONE_AND_TWO_NUMBER, true);
+        assert_matches!(alphanumeric_regex, ONE_AND_TWO_TEXT, true);
+        assert_matches!(alphanumeric_regex, NEGATIVE_DECIMAL, false);
+        assert_matches!(alphanumeric_regex, INT_NUMBER, true);
+        assert_matches!(alphanumeric_regex, ZERO_PADDED_INT, true);
+        assert_matches!(alphanumeric_regex, MILLION_COMMAS, false);
+        assert_matches!(alphanumeric_regex, COMMA_TOO_MANY_NUMS, false);
     }
 
     #[test]
     fn test_identifier_pattern() {
         let identifier_regex = Regex::new(IDENTIFIER_PATTERN).expect("A valid regex pattern");
-        assert_matches!(identifier_regex, REGEX_TESTS[0], false);
-        assert_matches!(identifier_regex, REGEX_TESTS[1], false);
-        assert_matches!(identifier_regex, REGEX_TESTS[2], true);
-        assert_matches!(identifier_regex, REGEX_TESTS[3], true);
-        assert_matches!(identifier_regex, REGEX_TESTS[4], false);
-        assert_matches!(identifier_regex, REGEX_TESTS[5], true);
-        assert_matches!(identifier_regex, REGEX_TESTS[6], false);
-        assert_matches!(identifier_regex, REGEX_TESTS[7], false);
-        assert_matches!(identifier_regex, REGEX_TESTS[8], false);
-        assert_matches!(identifier_regex, REGEX_TESTS[9], false);
-        assert_matches!(identifier_regex, REGEX_TESTS[10], false);
+        assert_matches!(identifier_regex, ONE_NUMBER, false);
+        assert_matches!(identifier_regex, SPACE_NEWLINE_SPACE, false);
+        assert_matches!(identifier_regex, HELLO, true);
+        assert_matches!(identifier_regex, HELLO_TITLE_CASE, true);
+        assert_matches!(identifier_regex, ONE_AND_TWO_NUMBER, false);
+        assert_matches!(identifier_regex, ONE_AND_TWO_TEXT, true);
+        assert_matches!(identifier_regex, NEGATIVE_DECIMAL, false);
+        assert_matches!(identifier_regex, INT_NUMBER, false);
+        assert_matches!(identifier_regex, ZERO_PADDED_INT, false);
+        assert_matches!(identifier_regex, MILLION_COMMAS, false);
+        assert_matches!(identifier_regex, COMMA_TOO_MANY_NUMS, false);
     }
 
     #[test]
     fn test_digit_pattern() {
         let digit_regex = Regex::new(DIGIT_PATTERN).expect("A valid regex pattern");
-        assert_matches!(digit_regex, REGEX_TESTS[0], true);
-        assert_matches!(digit_regex, REGEX_TESTS[1], false);
-        assert_matches!(digit_regex, REGEX_TESTS[2], false);
-        assert_matches!(digit_regex, REGEX_TESTS[3], false);
-        assert_matches!(digit_regex, REGEX_TESTS[4], false);
-        assert_matches!(digit_regex, REGEX_TESTS[5], false);
-        assert_matches!(digit_regex, REGEX_TESTS[6], false);
-        assert_matches!(digit_regex, REGEX_TESTS[7], true);
-        assert_matches!(digit_regex, REGEX_TESTS[8], true);
-        assert_matches!(digit_regex, REGEX_TESTS[9], false);
-        assert_matches!(digit_regex, REGEX_TESTS[10], false);
+        assert_matches!(digit_regex, ONE_NUMBER, true);
+        assert_matches!(digit_regex, SPACE_NEWLINE_SPACE, false);
+        assert_matches!(digit_regex, HELLO, false);
+        assert_matches!(digit_regex, HELLO_TITLE_CASE, false);
+        assert_matches!(digit_regex, ONE_AND_TWO_NUMBER, false);
+        assert_matches!(digit_regex, ONE_AND_TWO_TEXT, false);
+        assert_matches!(digit_regex, NEGATIVE_DECIMAL, false);
+        assert_matches!(digit_regex, INT_NUMBER, true);
+        assert_matches!(digit_regex, ZERO_PADDED_INT, true);
+        assert_matches!(digit_regex, MILLION_COMMAS, false);
+        assert_matches!(digit_regex, COMMA_TOO_MANY_NUMS, false);
     }
 
     #[test]
     fn test_decimal_pattern() {
         let decimal_regex = Regex::new(DECIMAL_PATTERN).expect("A valid regex pattern");
-        assert_matches!(decimal_regex, REGEX_TESTS[0], true);
-        assert_matches!(decimal_regex, REGEX_TESTS[1], false);
-        assert_matches!(decimal_regex, REGEX_TESTS[2], false);
-        assert_matches!(decimal_regex, REGEX_TESTS[3], false);
-        assert_matches!(decimal_regex, REGEX_TESTS[4], false);
-        assert_matches!(decimal_regex, REGEX_TESTS[5], false);
-        assert_matches!(decimal_regex, REGEX_TESTS[6], true);
-        assert_matches!(decimal_regex, REGEX_TESTS[7], true);
-        assert_matches!(decimal_regex, REGEX_TESTS[8], true);
-        assert_matches!(decimal_regex, REGEX_TESTS[9], false);
-        assert_matches!(decimal_regex, REGEX_TESTS[10], false);
+        assert_matches!(decimal_regex, ONE_NUMBER, true);
+        assert_matches!(decimal_regex, SPACE_NEWLINE_SPACE, false);
+        assert_matches!(decimal_regex, HELLO, false);
+        assert_matches!(decimal_regex, HELLO_TITLE_CASE, false);
+        assert_matches!(decimal_regex, ONE_AND_TWO_NUMBER, false);
+        assert_matches!(decimal_regex, ONE_AND_TWO_TEXT, false);
+        assert_matches!(decimal_regex, NEGATIVE_DECIMAL, true);
+        assert_matches!(decimal_regex, INT_NUMBER, true);
+        assert_matches!(decimal_regex, ZERO_PADDED_INT, true);
+        assert_matches!(decimal_regex, MILLION_COMMAS, false);
+        assert_matches!(decimal_regex, COMMA_TOO_MANY_NUMS, false);
     }
 
     #[test]
     fn test_comma_pattern() {
         let comma_number_regex = Regex::new(COMMA_NUMBER_PATTERN).expect("A valid regex pattern");
-        assert_matches!(comma_number_regex, REGEX_TESTS[0], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[1], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[2], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[3], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[4], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[5], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[6], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[7], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[8], false);
-        assert_matches!(comma_number_regex, REGEX_TESTS[9], true);
-        assert_matches!(comma_number_regex, REGEX_TESTS[10], false);
+        assert_matches!(comma_number_regex, ONE_NUMBER, false);
+        assert_matches!(comma_number_regex, SPACE_NEWLINE_SPACE, false);
+        assert_matches!(comma_number_regex, HELLO, false);
+        assert_matches!(comma_number_regex, HELLO_TITLE_CASE, false);
+        assert_matches!(comma_number_regex, ONE_AND_TWO_NUMBER, false);
+        assert_matches!(comma_number_regex, ONE_AND_TWO_TEXT, false);
+        assert_matches!(comma_number_regex, NEGATIVE_DECIMAL, false);
+        assert_matches!(comma_number_regex, INT_NUMBER, false);
+        assert_matches!(comma_number_regex, ZERO_PADDED_INT, false);
+        assert_matches!(comma_number_regex, MILLION_COMMAS, true);
+        assert_matches!(comma_number_regex, COMMA_TOO_MANY_NUMS, false);
     }
 }
