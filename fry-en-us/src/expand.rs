@@ -7,24 +7,12 @@
 //! - real numbers
 //!
 
-use alloc::{
-    string::String,
-    vec::Vec,
-};
+use alloc::{string::String, vec::Vec};
 
 use num2words::Num2Words;
 
 static DIGIT_TO_NUM: [&str; 10] = [
-    "zero",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
 ];
 
 static DIGIT_TO_TEEN: [&str; 10] = [
@@ -42,28 +30,11 @@ static DIGIT_TO_TEEN: [&str; 10] = [
 
 static DIGIT_TO_TENS: [&str; 10] = [
     "zero", /* not used, but there to make indexing easier */
-    "ten",
-    "twenty",
-    "thirty",
-    "fourty",
-    "fifty",
-    "sixty",
-    "seventy",
-    "eighty",
-    "ninety",
+    "ten", "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety",
 ];
 
 static DIGIT_TO_ORDINAL: [&str; 10] = [
-    "zeroth",
-    "first",
-    "second",
-    "third",
-    "fourth",
-    "fifth",
-    "sixth",
-    "seventh",
-    "eighth",
-    "ninth",
+    "zeroth", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth",
 ];
 
 static DIGIT_TO_ORDINAL_TEEN: [&str; 10] = [
@@ -108,13 +79,11 @@ static DIGIT_TO_ORDINAL_TENS: [&str; 10] = [
 // TODO: optimize
 #[must_use]
 pub fn expand_ordinal(s: &str) -> Option<String> {
-    let only_num_chrs = s.chars()
+    let only_num_chrs = s
+        .chars()
         .filter(|c| *c >= '0' && *c <= '9' || *c == '.')
         .collect::<String>();
-    Num2Words::parse(&only_num_chrs)?
-        .ordinal()
-        .to_words()
-        .ok()
+    Num2Words::parse(&only_num_chrs)?.ordinal().to_words().ok()
 }
 
 /// Read a number.
@@ -131,12 +100,11 @@ pub fn expand_ordinal(s: &str) -> Option<String> {
 // TODO: optimize
 #[must_use]
 pub fn expand_number(s: &str) -> Option<String> {
-    let only_num_chrs = s.chars()
+    let only_num_chrs = s
+        .chars()
         .filter(|c| *c >= '0' && *c <= '9' || *c == '.')
         .collect::<String>();
-    Num2Words::parse(&only_num_chrs)?
-        .to_words()
-        .ok()
+    Num2Words::parse(&only_num_chrs)?.to_words().ok()
 }
 
 /// Read a number from its real/scientific form.
@@ -152,12 +120,13 @@ pub fn expand_number(s: &str) -> Option<String> {
 /// ```
 #[must_use]
 pub fn expand_real(s: &str) -> Option<String> {
-    let only_num_chrs = s.chars()
-        .filter(|c| c.is_ascii_digit() || *c == '.' || *c == 'e' || *c == 'E' || *c == '+' || *c == '-')
+    let only_num_chrs = s
+        .chars()
+        .filter(|c| {
+            c.is_ascii_digit() || *c == '.' || *c == 'e' || *c == 'E' || *c == '+' || *c == '-'
+        })
         .collect::<String>();
-    Num2Words::parse(&only_num_chrs)?
-        .to_words()
-        .ok()
+    Num2Words::parse(&only_num_chrs)?.to_words().ok()
 }
 
 /// Read a number into individual digits.
@@ -176,10 +145,12 @@ pub fn expand_real(s: &str) -> Option<String> {
 #[must_use]
 pub fn expand_digits(s: &str) -> String {
     s.chars()
-        .filter_map(|c| if c.is_ascii_digit() {
-            Some(DIGIT_TO_NUM[c as usize - '0' as usize])
-        } else {
-            None
+        .filter_map(|c| {
+            if c.is_ascii_digit() {
+                Some(DIGIT_TO_NUM[c as usize - '0' as usize])
+            } else {
+                None
+            }
         })
         .collect::<Vec<&str>>()
         .join(" ")

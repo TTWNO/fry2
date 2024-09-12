@@ -1,5 +1,5 @@
 //! `Word` newtype.
-//! 
+//!
 //! Word has many additional functionalites availadle beyond that of a standard string.
 //! See trait implementation blocks for more information.
 
