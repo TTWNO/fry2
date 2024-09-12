@@ -139,8 +139,22 @@ pub fn expand_number<'a>(s: &'a str) -> Option<String> {
 
 /// Read a number from its real/scientific form.
 /// Ignores all characters other than "0-9", "+-", "eE" and "."
-pub fn expand_real<'a>(s: &'a str) -> String {
-    todo!()
+/// ```rust
+/// # use fry_en_us::expand::expand_real;
+/// assert_eq!(expand_real("10.10"), Some("ten point one".to_string()));
+/// assert_eq!(expand_real("6.022e-8"), Some("point zero zero zero zero zero zero zero six zero two two".to_string()));
+/// assert_eq!(expand_real("2.03e3"), Some("two thousand and thirty".to_string()));
+/// // NOTE: should this be "negative" instead of "minus"?
+/// assert_eq!(expand_real("-3.09E6"), Some("minus three million ninety thousand".to_string()));
+/// assert_eq!(expand_real("+8.09e-2"), Some("point zero eight zero nine".to_string()));
+/// ```
+pub fn expand_real<'a>(s: &'a str) -> Option<String> {
+    let only_num_chrs = s.chars()
+        .filter(|c| (*c >= '0' && *c <= '9') || *c == '.' || *c == 'e' || *c == 'E' || *c == '+' || *c == '-')
+        .collect::<String>();
+    Num2Words::parse(&only_num_chrs)?
+        .to_words()
+        .ok()
 }
 
 /// Read a number into individual digits.
