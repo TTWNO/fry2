@@ -5,6 +5,8 @@
 #![allow(clippy::module_name_repetitions, clippy::struct_field_names)]
 #![forbid(unsafe_code)]
 
+extern crate alloc;
+
 pub mod aswd;
 mod aswd_state;
 pub mod dur_stats;
