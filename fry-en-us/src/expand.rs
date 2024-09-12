@@ -106,7 +106,8 @@ static DIGIT_TO_ORDINAL_TENS: [&str; 10] = [
 /// assert_eq!(expand_ordinal("10.8"), None);
 /// ```
 // TODO: optimize
-pub fn expand_ordinal<'a>(s: &'a str) -> Option<String> {
+#[must_use]
+pub fn expand_ordinal(s: &str) -> Option<String> {
     let only_num_chrs = s.chars()
         .filter(|c| *c >= '0' && *c <= '9' || *c == '.')
         .collect::<String>();
@@ -128,7 +129,8 @@ pub fn expand_ordinal<'a>(s: &'a str) -> Option<String> {
 /// assert_eq!(expand_number("33,093.88"), Some("thirty-three thousand and ninety-three point eight eight".to_string()));
 /// ```
 // TODO: optimize
-pub fn expand_number<'a>(s: &'a str) -> Option<String> {
+#[must_use]
+pub fn expand_number(s: &str) -> Option<String> {
     let only_num_chrs = s.chars()
         .filter(|c| *c >= '0' && *c <= '9' || *c == '.')
         .collect::<String>();
@@ -148,9 +150,10 @@ pub fn expand_number<'a>(s: &'a str) -> Option<String> {
 /// assert_eq!(expand_real("-3.09E6"), Some("minus three million ninety thousand".to_string()));
 /// assert_eq!(expand_real("+8.09e-2"), Some("point zero eight zero nine".to_string()));
 /// ```
-pub fn expand_real<'a>(s: &'a str) -> Option<String> {
+#[must_use]
+pub fn expand_real(s: &str) -> Option<String> {
     let only_num_chrs = s.chars()
-        .filter(|c| (*c >= '0' && *c <= '9') || *c == '.' || *c == 'e' || *c == 'E' || *c == '+' || *c == '-')
+        .filter(|c| c.is_ascii_digit() || *c == '.' || *c == 'e' || *c == 'E' || *c == '+' || *c == '-')
         .collect::<String>();
     Num2Words::parse(&only_num_chrs)?
         .to_words()
@@ -170,9 +173,10 @@ pub fn expand_real<'a>(s: &'a str) -> Option<String> {
 /// // test the ASCII characters on either side of 0 and 9
 /// assert_eq!(expand_digits("./0:;9"), "zero nine");
 /// ```
-pub fn expand_digits<'a>(s: &'a str) -> String {
+#[must_use]
+pub fn expand_digits(s: &str) -> String {
     s.chars()
-        .filter_map(|c| if c >= '0' && c <= '9' {
+        .filter_map(|c| if c.is_ascii_digit() {
             Some(DIGIT_TO_NUM[c as usize - '0' as usize])
         } else {
             None
@@ -200,7 +204,8 @@ pub fn expand_digits<'a>(s: &'a str) -> String {
 /// // the year I wrote this code!
 /// assert_eq!(parse_roman("MMXXIV"), 2024);
 /// ```
-pub fn parse_roman<'a>(s: &'a str) -> usize {
+#[must_use]
+pub fn parse_roman(s: &str) -> usize {
     s.chars()
         // reverso the order of characters
         .rev()
