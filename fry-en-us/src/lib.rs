@@ -11,4 +11,5 @@ pub mod aswd;
 mod aswd_state;
 pub mod dur_stats;
 pub mod expand;
+pub mod phoneset;
 pub mod pos;
