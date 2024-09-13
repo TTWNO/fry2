@@ -186,10 +186,14 @@ jobs:
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: nightly
-      - name: Install UEFI Targets
-        run: rustup target add x86_64-unknown-none
-      - name: Test Compilation
+      - name: Install Bare Metal Targets
+        run: rustup target add x86_64-unknown-none && rustup target add aarch64-unknown-none && rustup target add aarch64-unknown-none-softfloat
+      - name: Test Compilation (x86_64)
         run: cargo build --no-default-features --target x86_64-unknown-none
+      - name: Test Compilation (Aarch64,HF)
+        run: cargo build --no-default-features --target aarch64-unknown-none
+      - name: Test Compilation (Aarch64,SF)
+        run: cargo build --no-default-features --target aarch64-unknown-none-softfloat
   uefi-compatibilithy:
     runs-on: ubuntu-latest
     needs: [rustfmt]
@@ -201,9 +205,11 @@ jobs:
         with:
           toolchain: nightly
       - name: Install UEFI Targets
-        run: rustup target add x86_64-unknown-uefi
-      - name: Test Compilation
+        run: rustup target add x86_64-unknown-uefi && rustup target add aarch64-unknown-uefi
+      - name: Test UEFI Compilation (x86_64)
         run: cargo build --target x86_64-unknown-uefi
+      - name: Test UEFI Compilation (Aarch64)
+        run: cargo build --target aarch64-unknown-uefi
   wasm-compatibility:
     runs-on: ubuntu-latest
     needs: [rustfmt]
@@ -215,11 +221,11 @@ jobs:
         with:
           toolchain: nightly
       - name: Install WASM target(s)
-        run: rustup target add  wasm32-wasip1 && rustup target add wasm32-unknown-unknown
+        run: rustup target add  wasm32-wasip2 && rustup target add wasm32-unknown-unknown
       - name: Test Common Compilation (wasm32-unknown-unknown)
         run: cargo build --target wasm32-unknown-unknown
-      - name: Test Common Compilation (wasm32-wasip1)
-        run: cargo build --target wasm32-wasip1
+      - name: Test Common Compilation (wasm32-wasip2)
+        run: cargo build --target wasm32-wasip2
   coverage:
     runs-on: ubuntu-latest
     needs: [clippy,no-unused-dependencies]
