@@ -25,11 +25,22 @@ pub enum FsmStateError {
     NonAscii(char),
 }
 
+/// An error from the creation of a CART Tree.
+#[derive(Clone, Copy, Debug, Display, DeriveError)]
+pub enum CartTreeError {
+    /// An invalid index was used in a node.
+    #[display("InvalidIndex: the node contains an index {_0} to a non-existant node")]
+    #[error(ignore)]
+    InvalidIndex(usize),
+}
+
 /// A Fry error.
 #[derive(Clone, Copy, Debug, Display, DeriveError, From)]
 pub enum Error {
     /// Errors related to the `fry-en-us` FSMs.
     Fsm(FsmError),
+    /// Errors related to CART Tree initialization.
+    CartTree(CartTreeError),
 }
 
 /// When a non-existant index is referenced by an FSM.

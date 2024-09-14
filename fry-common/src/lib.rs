@@ -13,5 +13,8 @@ extern crate alloc;
 
 pub mod error;
 pub mod regex;
+pub mod val;
 pub mod word;
+pub use val::Value;
+pub mod cart_tree;
 pub use error::Error;

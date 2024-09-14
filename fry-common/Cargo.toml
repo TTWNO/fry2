@@ -14,3 +14,4 @@ description = "Common data structures used in Fry, the embedded text-to-speech e
 derive_more = { version = "1.0.0", default-features = false, features = ["deref", "from", "display", "error"] }
 regex = { version = "1.10.6", default-features = false }
 serde = { version = "1.0.204", default-features = false, features = ["derive"] }
+const_panic = { version = "0.2.9", default-features = false, features = ["derive"] }
