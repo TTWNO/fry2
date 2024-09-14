@@ -20,6 +20,8 @@ pub enum CartOperation {
     Leaf,
 }
 
+/// NOTE: this could likely be turned into a generic node over T, instead of requiring the `Value`
+/// enum.
 #[allow(missing_docs)]
 #[derive(Debug)]
 pub struct CartNode<'a> {
