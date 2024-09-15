@@ -280,7 +280,7 @@ const CTNODE_US_POS_NO_0361: usize = 363;
 const CTNODE_US_POS_NO_0363: usize = 365;
 const CTNODE_US_POS_NO_0000: usize = 366;
 
-const POS_CART_TREE: CartTree<'static, 367, 10> = CartTree::init_unchecked(
+static POS_CART_TREE: CartTree<'static, 367, 10> = CartTree::init_unchecked(
     [
         CartNode::init(0, Some(CartOperation::Is), CTNODE_US_POS_NO_0000, VAL_0000),
         CartNode::init(1, Some(CartOperation::Is), CTNODE_US_POS_NO_0001, VAL_0001),

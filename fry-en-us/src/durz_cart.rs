@@ -937,7 +937,7 @@ const VAL_0492: Value<'static> = Value::Float(-0.640572);
 const VAL_0493: Value<'static> = Value::Float(-0.321322);
 const VAL_0494: Value<'static> = Value::Float(-0.925472);
 
-const DURZ_CART_TREE: CartTree<'static, 875, 29> = CartTree::init_unchecked(
+static DURZ_CART_TREE: CartTree<'static, 875, 29> = CartTree::init_unchecked(
     [
         CartNode::init(0, Some(CartOperation::Is), CTNODE_NO_0000, VAL_0000),
         CartNode::init(1, Some(CartOperation::Is), CTNODE_NO_0001, VAL_0001),

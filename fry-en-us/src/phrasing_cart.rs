@@ -17,7 +17,7 @@ const VAL_0003: Value<'static> = Value::Str("");
 const VAL_0004: Value<'static> = Value::Str("1");
 const VAL_0005: Value<'static> = Value::Str("NB");
 
-const PHRASING_CART_TREE: CartTree<'static, 15, 6> = CartTree::init_unchecked(
+static PHRASING_CART_TREE: CartTree<'static, 15, 6> = CartTree::init_unchecked(
     [
         CartNode::init(
             0,

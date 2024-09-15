@@ -82,7 +82,7 @@ const CTNODE_US_NUMS_NO_0090: usize = 94;
 const CTNODE_US_NUMS_NO_0089: usize = 95;
 const CTNODE_US_NUMS_NO_0088: usize = 96;
 
-const NUMS_CART_TREE: CartTree<'static, 97, 7> = CartTree::init_unchecked(
+static NUMS_CART_TREE: CartTree<'static, 97, 7> = CartTree::init_unchecked(
     [
         CartNode::init(
             0,

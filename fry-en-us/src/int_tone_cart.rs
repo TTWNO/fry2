@@ -75,7 +75,7 @@ const VAL_0018: Value<'static> = Value::Str("content");
 const VAL_0019: Value<'static> = Value::Str("to");
 const VAL_0020: Value<'static> = Value::Str("H-");
 
-const INT_TONE_CART_TREE: CartTree<'static, 95, 15> = CartTree::init_unchecked(
+static INT_TONE_CART_TREE: CartTree<'static, 95, 15> = CartTree::init_unchecked(
     [
         CartNode::init(0, Some(CartOperation::Is), CTNODE_NO_0000, VAL_0000),
         CartNode::init(255, None, 0, VAL_0001),
