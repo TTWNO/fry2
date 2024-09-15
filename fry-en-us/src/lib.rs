@@ -7,16 +7,17 @@
 
 extern crate alloc;
 
-pub mod aswd;
+mod aswd;
 mod aswd_state;
-pub mod dur_stats;
+mod dur_stats;
 mod durz_cart;
 pub mod expand;
-pub mod fzero_lr_term;
+mod fzero_lr_term;
 mod int_accent_cart;
 mod int_tone_cart;
 mod nums_cart;
-pub mod phoneset;
+mod phoneset;
 mod phrasing_cart;
-pub mod pos;
+mod pos;
 mod pos_cart;
+pub mod regex;
