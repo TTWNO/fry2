@@ -1,6 +1,6 @@
 //! `F0` is a measure of frequency across time as the lowest common frequency across the period
 //!
-//! See also: https://en.wikipedia.org/wiki/Fundamental_frequency
+//! See also: <https://en.wikipedia.org/wiki/Fundamental_frequency>
 
 /// Struct that holds an `F0` term.
 #[allow(missing_docs)]

@@ -1,6 +1,6 @@
 //! CART Trees.
 //!
-//! See: https://en.wikipedia.org/wiki/Decision_tree_learning
+//! See: <https://en.wikipedia.org/wiki/Decision_tree_learning>
 
 use crate::error::{CartTreeError, Error};
 use crate::Value;
