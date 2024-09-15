@@ -12,6 +12,7 @@ mod aswd_state;
 pub mod dur_stats;
 mod durz_cart;
 pub mod expand;
+pub mod fzero_lr_term;
 mod int_accent_cart;
 mod int_tone_cart;
 mod nums_cart;
