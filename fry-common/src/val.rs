@@ -1,6 +1,6 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 /// A generic value, which could be a `String`, `Int` (16 bits), or `Float` (32 bits)
 pub enum Value<'a> {
     /// A string with a lifetime
