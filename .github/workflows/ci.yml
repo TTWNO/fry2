@@ -243,7 +243,7 @@ jobs:
         if: hashFiles('Cargo.lock') == ''
         run: cargo generate-lockfile
       - name: cargo llvm-cov
-        run: cargo llvm-cov --workspace --locked --lcov --output-path lcov.info
+        run: cargo llvm-cov --workspace --doc --locked --lcov --output-path lcov.info
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v4
         with:
