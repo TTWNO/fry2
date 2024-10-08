@@ -7,6 +7,6 @@ use alloc::vec::Vec;
 /// Content struct containing both features and relations (both are just lists of features)
 #[derive(Clone, Debug)]
 pub struct Content<'a> {
-    features: Vec<Feature<'a>>,
-    relations: Vec<Feature<'a>>,
+    pub(crate) features: Vec<Feature<'a>>,
+    pub(crate) relations: Vec<Feature<'a>>,
 }

@@ -3,8 +3,8 @@
 use crate::Value;
 
 /// A borrowed `str` and a `crate::Value` with the same lifetime.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Feature<'a> {
-    name: &'a str,
-    value: Value<'a>,
+    pub(crate) name: &'a str,
+    pub(crate) value: Value<'a>,
 }

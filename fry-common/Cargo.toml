@@ -15,3 +15,6 @@ derive_more = { version = "1.0.0", default-features = false, features = ["deref"
 regex = { version = "1.10.6", default-features = false }
 serde = { version = "1.0.204", default-features = false, features = ["derive"] }
 const_panic = { version = "0.2.9", default-features = false, features = ["derive"] }
+itertools = { version = "0.13.0", default-features = false }
+indextree = { version = "4.7.2", default-features = false }
+strum = { version = "0.26.3", default-features = false, features = ["derive", "strum_macros"] }

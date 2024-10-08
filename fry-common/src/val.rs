@@ -1,5 +1,7 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
+use crate::Utterance;
+
 #[derive(PartialEq, Debug, Clone)]
 /// A generic value, which could be a `String`, `Int` (16 bits), or `Float` (32 bits)
 pub enum Value<'a> {

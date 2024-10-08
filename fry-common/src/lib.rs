@@ -21,6 +21,8 @@ pub mod feature;
 use feature::Feature;
 pub mod content;
 use content::Content;
+pub mod path;
+use path::Path;
 pub mod error;
 pub mod regex;
 pub mod val;
