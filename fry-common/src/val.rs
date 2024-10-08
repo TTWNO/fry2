@@ -25,9 +25,9 @@ pub enum Value<'a> {
     Wave(()) = 9,
     /// TODO: track
     Track(()) = 11,
-    /// TODO: LPCres
+    /// TODO: `LPCres`
     Lpcres(()) = 13,
-    /// TODO: UttFunc
+    /// TODO: `UttFunc`
     UttFunc(()) = 15,
     /// TODO: ffunc
     FFunc(()) = 17,
@@ -47,9 +47,9 @@ pub enum Value<'a> {
     DiphoneDb(()) = 31,
     /// TODO: clunitdb
     ClunitDb(()) = 33,
-    /// TODO: vit_cand
+    /// TODO: `vit_cand`
     VitCand(()) = 35,
-    /// TODO: sts_list
+    /// TODO: `sts_list`
     StsList(()) = 37,
     /// TODO: userdata
     UserData(()) = 41,
@@ -59,10 +59,10 @@ pub enum Value<'a> {
     Features(&'a Vec<Feature<'a>>) = 45,
     /// TODO: breakfunc
     BreakFunc(()) = 47,
-    /// TODO: cg_db
+    /// TODO: `cg_db`
     ClustergenDb(()) = 49,
     /// TODO: voice
     Voice(()) = 51,
-    /// TODO: audio_streaming_info
+    /// TODO: `audio_streaming_info`
     AudioStreamingInfo(()) = 53,
 }
