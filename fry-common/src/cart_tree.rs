@@ -23,7 +23,7 @@ pub enum CartOperation {
 /// NOTE: this could likely be turned into a generic node over T, instead of requiring the `Value`
 /// enum.
 #[allow(missing_docs)]
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct CartNode<'a> {
     feature: u8,
     operation: Option<CartOperation>,
@@ -48,6 +48,7 @@ impl<'a> CartNode<'a> {
 }
 
 #[allow(missing_docs)]
+#[derive(PartialEq, Debug)]
 pub struct CartTree<'a, const RULE_LEN: usize, const FEAT_LEN: usize> {
     rule_table: [CartNode<'a>; RULE_LEN],
     feature_table: [&'a str; FEAT_LEN],

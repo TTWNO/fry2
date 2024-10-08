@@ -11,7 +11,7 @@ use alloc::vec::Vec;
 use indextree::{NodeId, Arena};
 
 /// An individual item.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Item<'a> {
     content: Content<'a>,
     relation: Relation<'a>,

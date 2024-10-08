@@ -29,6 +29,7 @@ pub mod val;
 pub mod word;
 pub use val::Value;
 pub mod cart_tree;
+pub use cart_tree::CartTree;
 pub use error::Error;
 pub mod fzero;
 pub use fzero::FZero;
