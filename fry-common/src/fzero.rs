@@ -2,13 +2,14 @@
 //!
 //! See also: <https://en.wikipedia.org/wiki/Fundamental_frequency>
 
-use crate::item::Item;
+use crate::item::{Item, ItemTree};
 use itertools::Itertools;
+use indextree::NodeId;
 use core::iter::once;
 
 /// Struct that holds an `F0` term.
 #[allow(missing_docs)]
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct FZero<'a> {
     feature: &'a str,
     start: f32,
@@ -41,7 +42,7 @@ impl<'a> FZero<'a> {
 ///
 /// It returns None if there is not at least one item in the `f0_lr_terms` iterator.
 /// <http://www.festvox.org/docs/manual-2.4.0/festival_25.html#Linear-regression>
-pub fn apply_lr_model<'b>(item: &'b Item, mut f0_lr_terms: impl Iterator<Item = &'b FZero<'b>>) -> Option<(f32, f32, f32)> {
+pub fn apply_lr_model<'b>(tree: ItemTree<'b>, node: NodeId, mut f0_lr_terms: impl Iterator<Item = &'b FZero<'b>>) -> Option<(f32, f32, f32)> {
     // set interceptors
     let icp = f0_lr_terms.next()?;
     let mut start = icp.start;
@@ -54,6 +55,10 @@ pub fn apply_lr_model<'b>(item: &'b Item, mut f0_lr_terms: impl Iterator<Item = 
         // overlapping windows: (0,1),(1,2),(2,3)
         .tuple_windows()
         .map(|(last, cur)| {
+            if last.feature != cur.feature { 
+                tree.find_feature(node, cur.feature);
+            }
+            None
         });
 
     todo!()

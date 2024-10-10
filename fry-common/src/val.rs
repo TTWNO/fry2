@@ -10,7 +10,7 @@ use crate::{
 use alloc::vec::Vec;
 
 #[repr(u8)]
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 /// A generic value, which could be a `String`, `Int` (16 bits), or `Float` (32 bits)
 pub enum Value<'a> {
     /// A string with a lifetime
