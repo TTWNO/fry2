@@ -5,6 +5,7 @@
 //! These errors are more-or-less original creations; compared to the rest of the crate, which is
 //! based on `flite` and `Festival`. Since neither uses their own error types.
 
+use crate::val::ValueDiscriminants;
 use derive_more::{Display, Error as DeriveError, From};
 
 /// An error for the `fry-en-us` FSM (finite state machine).
@@ -34,13 +35,31 @@ pub enum CartTreeError {
     InvalidIndex(usize),
 }
 
+/// An error from the conversion from/to a `Value` type.
+#[derive(Clone, Debug, Display, DeriveError, From)]
+pub enum ValueError {
+    /// An invalid type was used for conversion
+    #[display("Invalid type: {orig} tried to convert to {try_to}")]
+    InvalidType {
+        /// the variant of the `Value` type
+        orig: ValueDiscriminants,
+        /// the variant that was attempted to convert to
+        try_to: ValueDiscriminants,
+    },
+    /// A float conversion error during the conversion between string to float
+    #[display("{_0}")]
+    FloatParse(core::num::ParseFloatError),
+}
+
 /// A Fry error.
-#[derive(Clone, Copy, Debug, Display, DeriveError, From)]
+#[derive(Clone, Debug, Display, DeriveError, From)]
 pub enum Error {
     /// Errors related to the `fry-en-us` FSMs.
     Fsm(FsmError),
     /// Errors related to CART Tree initialization.
     CartTree(CartTreeError),
+    /// Errors related to the `Value` enum.
+    Value(ValueError),
 }
 
 /// When a non-existant index is referenced by an FSM.
