@@ -1,9 +1,6 @@
 //! CST Relation.
 
-use crate::{
-    Utterance,
-    Feature,
-};
+use crate::{Feature, Utterance};
 
 use alloc::vec::Vec;
 

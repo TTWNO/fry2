@@ -1,20 +1,10 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-use crate::{
-    Utterance,
-    Relation,
-    Item,
-    CartTree,
-    Feature,
-    error::ValueError,
-};
-use strum::{
-    EnumDiscriminants,
-    Display,
-};
+use crate::{error::ValueError, CartTree, Feature, Item, Relation, Utterance};
 use alloc::vec::Vec;
 use core::str::FromStr;
 use indextree::NodeId;
+use strum::{Display, EnumDiscriminants};
 
 #[repr(u8)]
 #[derive(Debug, Clone, PartialEq, EnumDiscriminants)]
@@ -97,7 +87,10 @@ impl<'a> Value<'a> {
             Self::Float(f) => Ok(*f),
             Self::Int(i) => Ok(*i as f32),
             Self::Str(s) => Ok(f32::from_str(s)?),
-            _ => Err(ValueError::InvalidType { orig: self.into(), try_to: ValueDiscriminants::Float }),
+            _ => Err(ValueError::InvalidType {
+                orig: self.into(),
+                try_to: ValueDiscriminants::Float,
+            }),
         }
     }
 }

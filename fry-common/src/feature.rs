@@ -9,4 +9,3 @@ pub struct Feature<'a> {
     pub(crate) name: &'a str,
     pub(crate) value: Value<'a>,
 }
-

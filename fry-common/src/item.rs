@@ -1,21 +1,16 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{
-    Content,
-    Relation,
-    Path,
-    Feature,
-    Value,
-    Utterance,
+use crate::{Content, Feature, Path, Relation, Utterance, Value};
+use alloc::{
+    rc::{Rc, Weak},
+    str,
+    vec::Vec,
 };
-use indextree::{NodeId, Arena, NodeEdge};
-use core::{
-    ops::{ControlFlow, Deref},
-};
-use alloc::{vec::Vec, str, rc::{Rc, Weak}};
+use core::ops::{ControlFlow, Deref};
+use indextree::{Arena, NodeEdge, NodeId};
 use itertools::{
+    FoldWhile::{Continue, Done},
     Itertools,
-    FoldWhile::{Done, Continue},
 };
 
 trait GetNodeId {
@@ -44,7 +39,10 @@ pub struct Item<'a> {
     relation: Option<Relation<'a>>,
 }
 
-fn feature_value<'a>(mut iter: impl Iterator<Item = &'a Feature<'a>>, name: &'a str) -> Option<&'a Value<'a>> {
+fn feature_value<'a>(
+    mut iter: impl Iterator<Item = &'a Feature<'a>>,
+    name: &'a str,
+) -> Option<&'a Value<'a>> {
     Some(&iter.find(|feat| feat.name == name)?.value)
 }
 
@@ -75,7 +73,8 @@ impl<'a> ItemTree<'a> {
         self.0.get(node)?.last_child()
     }
     fn relation(&self, node: NodeId, name: &'a str) -> Option<NodeId> {
-        self.0.get(node)
+        self.0
+            .get(node)
             .map(|node| feature_value(node.get().contents.relations.iter(), name)?.item())?
     }
     fn next(&self, node: NodeId) -> Option<NodeId> {
@@ -116,7 +115,8 @@ impl<'a> ItemTree<'a> {
     ///
     /// NOTE: xref `src/hrg/ffeatures.c:internal_ff`
     pub fn find_feature(&self, node: NodeId, multipath: &'a str) -> Option<Value<'a>> {
-        let dest: NodeId = multipath.split(".")
+        let dest: NodeId = multipath
+            .split(".")
             .map(Path::try_from)
             // TODO: is there a way to do this without collecing?
             .collect::<Result<Vec<Path>, _>>()
@@ -124,13 +124,11 @@ impl<'a> ItemTree<'a> {
             .iter()
             // NOTE: must drop last item; I'd prefer something like `skip_last` but haven't found it anywhere, but this is good enough
             .tuple_windows()
-            .map(|(a,b)| a)
+            .map(|(a, b)| a)
             // graph traversal, use item from first path as input to next section of path
             // NOTE: if any use_path directive fails (returns None) it will short-circurit the rest
             // of the function
-            .try_fold(node, |nid, path| {
-                self.use_path(nid, path)
-            })?;
+            .try_fold(node, |nid, path| self.use_path(nid, path))?;
         // yes we have to parse it twice. Can't figure aut how to combine this in the big piping
         // arrangement above
         let last_path = multipath.split(".").last()?;
@@ -143,7 +141,7 @@ impl<'a> ItemTree<'a> {
                 // then the destination is the right value
                 .map(|_| Value::Item(dest))
                 // otherwise use the default value (Value::Int(0))
-                .unwrap_or_default()
+                .unwrap_or_default(),
         )
     }
     /// Path to an item via its mulitpath
@@ -152,4 +150,3 @@ impl<'a> ItemTree<'a> {
         todo!()
     }
 }
-

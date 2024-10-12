@@ -35,7 +35,7 @@ impl<'a> TryFrom<&'a str> for Path<'a> {
             "daughter2" => return Ok(SecondDaughter),
             "daughtern" => return Ok(LastDaughter),
             "" => return Err(PathError::MissingFeature),
-            _ => {},
+            _ => {}
         };
         let mut split = s.split(":");
         let Some(r_colon) = split.next() else {
@@ -60,5 +60,3 @@ pub enum PathError<'a> {
     /// Missing relation; blank string after "R:"
     MissingRelation,
 }
-
-
