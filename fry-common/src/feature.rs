@@ -7,6 +7,6 @@ use indextree::NodeId;
 #[derive(Clone, Debug, PartialEq)]
 pub struct Feature<'a> {
     pub(crate) name: &'a str,
-    pub(crate) value: NodeId,
+    pub(crate) value: Value<'a>,
 }
 
