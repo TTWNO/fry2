@@ -1,6 +1,6 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-use crate::{error::ValueError, CartTree, Feature, Item, Relation, Utterance};
+use crate::{error::ValueError, CartTree, Feature, Item, Relation, Utterance, Phoneset};
 use alloc::vec::Vec;
 use core::str::FromStr;
 use indextree::NodeId;
@@ -37,7 +37,7 @@ pub enum Value<'a> {
     /// TODO: cart tree
     //Cart(&'a CartTree<'a, 1, 1>) = 23,
     /// TODO: phoneset
-    Phoneset(()) = 25,
+    Phoneset(Phoneset<'a>) = 25,
     /// TODO: lexicon
     Lexicon(()) = 27,
     /// TODO: durstats
