@@ -22,7 +22,10 @@ pub enum Path<'a> {
 impl<'a> TryFrom<&'a str> for Path<'a> {
     type Error = PathError<'a>;
     fn try_from(s: &'a str) -> Result<Path<'a>, Self::Error> {
-        use Path::{Daughter, First, Last, LastDaughter, Next, NextNext, Parent, Previous, PreviousPrevious, Relation, SecondDaughter};
+        use Path::{
+            Daughter, First, Last, LastDaughter, Next, NextNext, Parent, Previous,
+            PreviousPrevious, Relation, SecondDaughter,
+        };
         match s {
             "n" => return Ok(Next),
             "p" => return Ok(Previous),
