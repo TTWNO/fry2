@@ -23,6 +23,8 @@ pub mod content;
 use content::Content;
 pub mod path;
 use path::Path;
+pub mod phoneset;
+use phoneset::Phoneset;
 pub mod error;
 pub mod regex;
 pub mod val;
