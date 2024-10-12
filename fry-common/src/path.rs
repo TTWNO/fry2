@@ -22,7 +22,7 @@ pub enum Path<'a> {
 impl<'a> TryFrom<&'a str> for Path<'a> {
     type Error = PathError<'a>;
     fn try_from(s: &'a str) -> Result<Path<'a>, Self::Error> {
-        use Path::*;
+        use Path::{Daughter, First, Last, LastDaughter, Next, NextNext, Parent, Previous, PreviousPrevious, Relation, SecondDaughter};
         match s {
             "n" => return Ok(Next),
             "p" => return Ok(Previous),
@@ -37,7 +37,7 @@ impl<'a> TryFrom<&'a str> for Path<'a> {
             "" => return Err(PathError::MissingFeature),
             _ => {}
         };
-        let mut split = s.split(":");
+        let mut split = s.split(':');
         let Some(r_colon) = split.next() else {
             return Err(PathError::MissingFeature);
         };

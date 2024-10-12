@@ -19,8 +19,7 @@ trait GetNodeId {
 impl GetNodeId for NodeEdge {
     fn node_id(&self) -> NodeId {
         match self {
-            NodeEdge::Start(nid) => *nid,
-            NodeEdge::End(nid) => *nid,
+            NodeEdge::Start(nid) | NodeEdge::End(nid) => *nid,
         }
     }
 }
@@ -51,6 +50,7 @@ pub struct ItemTree<'a>(pub Arena<Item<'a>>);
 
 impl<'a> ItemTree<'a> {
     /// Grab an item from the tree.
+    #[must_use]
     pub fn get(&'a self, node: NodeId) -> Option<&'a Item<'a>> {
         Some(self.0.get(node)?.get())
     }
@@ -78,19 +78,19 @@ impl<'a> ItemTree<'a> {
             .map(|node| feature_value(node.get().contents.relations.iter(), name)?.item())?
     }
     fn next(&self, node: NodeId) -> Option<NodeId> {
-        Some(node.traverse(&self.0).skip(1).next()?.node_id())
+        Some(node.traverse(&self.0).nth(1)?.node_id())
     }
     fn next_next(&self, node: NodeId) -> Option<NodeId> {
-        Some(node.traverse(&self.0).skip(2).next()?.node_id())
+        Some(node.traverse(&self.0).nth(2)?.node_id())
     }
     fn first(&self, node: NodeId) -> Option<NodeId> {
         Some(node.traverse(&self.0).last()?.node_id())
     }
     fn previous(&self, node: NodeId) -> Option<NodeId> {
-        Some(node.reverse_traverse(&self.0).skip(1).next()?.node_id())
+        Some(node.reverse_traverse(&self.0).nth(1)?.node_id())
     }
     fn previous_previous(&self, node: NodeId) -> Option<NodeId> {
-        Some(node.reverse_traverse(&self.0).skip(2).next()?.node_id())
+        Some(node.reverse_traverse(&self.0).nth(2)?.node_id())
     }
     fn last(&self, node: NodeId) -> Option<NodeId> {
         Some(node.reverse_traverse(&self.0).last()?.node_id())
@@ -116,7 +116,7 @@ impl<'a> ItemTree<'a> {
     /// NOTE: xref `src/hrg/ffeatures.c:internal_ff`
     pub fn find_feature(&self, node: NodeId, multipath: &'a str) -> Option<Value<'a>> {
         let dest: NodeId = multipath
-            .split(".")
+            .split('.')
             .map(Path::try_from)
             // TODO: is there a way to do this without collecing?
             .collect::<Result<Vec<Path>, _>>()
@@ -131,7 +131,7 @@ impl<'a> ItemTree<'a> {
             .try_fold(node, |nid, path| self.use_path(nid, path))?;
         // yes we have to parse it twice. Can't figure aut how to combine this in the big piping
         // arrangement above
-        let last_path = multipath.split(".").last()?;
+        let last_path = multipath.split('.').last()?;
         let dest_item: &Item<'a> = self.0.get(dest)?.get();
         // NOTE: does not have the ffunc condition in the original ffeature function
         // this is because it's a function pointer pass; pretty sure we don't need it
@@ -146,6 +146,7 @@ impl<'a> ItemTree<'a> {
     }
     /// Path to an item via its mulitpath
     // TODO: src/hrg/cst_ffeature.c:154-183
+    #[must_use]
     pub fn path_to_item(&self, node: NodeId, mulitpath: &'a str) -> Option<Item<'a>> {
         todo!()
     }

@@ -32,7 +32,7 @@ pub enum Value<'a> {
     FFunc(()) = 17,
     /// TODO: relation
     Relation(&'a Relation<'a>) = 19,
-    /// TODO: item; encoded as a NodeId so that it can grab the Item from the arena
+    /// TODO: item; encoded as a `NodeId` so that it can grab the Item from the arena
     Item(NodeId) = 21,
     /// TODO: cart tree
     //Cart(&'a CartTree<'a, 1, 1>) = 23,
@@ -67,6 +67,7 @@ pub enum Value<'a> {
 }
 impl<'a> Value<'a> {
     /// Gets `str` inner value, `None` otherwise
+    #[must_use]
     pub fn str(&self) -> Option<&'a str> {
         if let Value::Str(s) = self {
             return Some(s);
@@ -74,6 +75,7 @@ impl<'a> Value<'a> {
         None
     }
     /// Gets `item` inner value, `None` otherwise
+    #[must_use]
     pub fn item(&self) -> Option<NodeId> {
         if let Value::Item(id) = self {
             return Some(*id);
@@ -82,6 +84,14 @@ impl<'a> Value<'a> {
     }
     /// Get the `Float` inner value, `None` otherwise
     /// Works for either an int (will cast to float), or string (will parse float)
+    ///
+    /// # Errors
+    ///
+    /// - If the Value is any variant other than:
+    ///     - Float
+    ///     - Int, or
+    ///     - Str
+    #[expect(clippy::cast_precision_loss)]
     pub fn float(&self) -> Result<f32, ValueError> {
         match self {
             Self::Float(f) => Ok(*f),
@@ -99,7 +109,7 @@ impl<'a> Default for Value<'a> {
         Value::Int(0)
     }
 }
-impl<'a> PartialEq<str> for Value<'a> {
+impl PartialEq<str> for Value<'_> {
     fn eq(&self, other: &str) -> bool {
         if let Value::Str(s) = &self {
             return *s == other;
