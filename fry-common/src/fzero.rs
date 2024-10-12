@@ -52,17 +52,48 @@ pub fn apply_lr_model<'b>(
     let mut start = icp.start;
     let mut mid = icp.mid;
     let mut end = icp.end;
+    let mut i_val = None;
 
     // create iterator that has `icp` as the first element
-    once(icp)
+    Some(
+        once(icp)
         .chain(f0_lr_terms)
         // overlapping windows: (0,1),(1,2),(2,3)
         .tuple_windows()
         .map(|(last, cur)| {
             if last.feature != cur.feature {
-                tree.find_feature(node, cur.feature);
+                i_val = tree.find_feature(node, cur.feature);
             }
-        });
 
-    todo!()
+            // TODO: make this a mapping pipeline
+            let fv = if let Some(val) = &i_val {
+                if let Some(typ) = cur.typ {
+                    if *val == *typ {
+                        1.0
+                    } else {
+                        0.0
+                    }
+                } else {
+                    // NOTE: if this operation fails in Flite, the program crashes by calling
+                    // cst_error, which is a macro.
+                    // The macro has this comment for if it's for PalmOS not using the ARM aritechture: "I've never tested this or even compiled it"
+                    // we decidede to pass back up a Result
+                    // NOTE: this condition is not in `flite`; it makes sense to have a 0 condition just in
+                    // case thought
+                    val.float().unwrap_or_default()
+                }
+            // NOTE: this condition is not in `flite`; it makes sense to have a 0 condition just in
+            // case thought
+            } else {
+                0.0
+            };
+            (fv, cur.start, cur.mid, cur.end)
+        })
+        .map(|(fv, c_start, c_mid, c_end)| {
+            (fv*c_start, fv*c_mid, fv*c_end)
+        })
+        .fold((start, mid, end), |(s, m, e), (c_s, c_m, c_e)| {
+            (s + c_s, m + c_m, e + c_e)
+        })
+    )
 }

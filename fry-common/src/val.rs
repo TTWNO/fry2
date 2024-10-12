@@ -99,3 +99,11 @@ impl<'a> Default for Value<'a> {
         Value::Int(0)
     }
 }
+impl<'a> PartialEq<str> for Value<'a> {
+    fn eq(&self, other: &str) -> bool {
+        if let Value::Str(s) = &self {
+            return *s == other;
+        }
+        false
+    }
+}
