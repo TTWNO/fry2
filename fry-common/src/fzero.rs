@@ -58,7 +58,6 @@ pub fn apply_lr_model<'b>(tree: ItemTree<'b>, node: NodeId, mut f0_lr_terms: imp
             if last.feature != cur.feature { 
                 tree.find_feature(node, cur.feature);
             }
-            None
         });
 
     todo!()
