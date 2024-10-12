@@ -37,12 +37,28 @@ pub struct Item<'a> {
     contents: ItemContents<'a>,
     relation: Option<Relation<'a>>,
 }
+impl<'a> Item<'a> {
+    fn features(&self) -> &Vec<Feature<'a>> {
+        &self.contents.features
+    }
+    fn relations(&self) -> &Vec<Feature<'a>> {
+        &self.contents.relations
+    }
+    fn utterance(&'a self) -> Option<&'a Utterance<'a>> {
+        if let Some(rel) = &self.relation {
+            return Some(&rel.utterance);
+        }
+        None
+    }
+}
 
-fn feature_value<'a>(
-    mut iter: impl Iterator<Item = &'a Feature<'a>>,
-    name: &'a str,
-) -> Option<&'a Value<'a>> {
-    Some(&iter.find(|feat| feat.name == name)?.value)
+pub(crate) trait FeatureValue<'a> {
+    fn feature_value(&self, name: &str) -> Option<&Value<'a>>;
+}
+impl<'a> FeatureValue<'a> for [Feature<'a>] {
+    fn feature_value(&self, name: &str) -> Option<&Value<'a>> {
+        Some(&self.iter().find(|feat| feat.name == name)?.value)
+    }
 }
 
 /// A full item tree.
@@ -75,7 +91,7 @@ impl<'a> ItemTree<'a> {
     fn relation(&self, node: NodeId, name: &'a str) -> Option<NodeId> {
         self.0
             .get(node)
-            .map(|node| feature_value(node.get().contents.relations.iter(), name)?.item())?
+            .map(|node| node.get().relations().feature_value(name)?.item())?
     }
     fn next(&self, node: NodeId) -> Option<NodeId> {
         Some(node.traverse(&self.0).nth(1)?.node_id())
@@ -137,7 +153,8 @@ impl<'a> ItemTree<'a> {
         // this is because it's a function pointer pass; pretty sure we don't need it
         Some(
             // if the last item in the path is found in the feature set
-            feature_value(dest_item.contents.features.iter(), last_path)
+            dest_item.features()
+                .feature_value(last_path)
                 // then the destination is the right value
                 .map(|_| Value::Item(dest))
                 // otherwise use the default value (Value::Int(0))
