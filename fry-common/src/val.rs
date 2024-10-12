@@ -6,17 +6,26 @@ use crate::{
     Item,
     CartTree,
     Feature,
+    error::ValueError,
+};
+use strum::{
+    EnumDiscriminants,
+    Display,
 };
 use alloc::vec::Vec;
+use core::str::FromStr;
+use indextree::NodeId;
 
 #[repr(u8)]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, EnumDiscriminants)]
+#[strum_discriminants(derive(Display))]
 /// A generic value, which could be a `String`, `Int` (16 bits), or `Float` (32 bits)
 pub enum Value<'a> {
     /// A string with a lifetime
     Str(&'a str),
-    /// An integer: signed, 16 bits
-    Int(i16),
+    /// An integer: signed, 32 bits
+    /// may need to be 64 bits? idx
+    Int(i32),
     /// A float
     Float(f32),
     /// Utterance
@@ -33,8 +42,8 @@ pub enum Value<'a> {
     FFunc(()) = 17,
     /// TODO: relation
     Relation(&'a Relation<'a>) = 19,
-    /// TODO: item
-    Item(&'a Item<'a>) = 21,
+    /// TODO: item; encoded as a NodeId so that it can grab the Item from the arena
+    Item(NodeId) = 21,
     /// TODO: cart tree
     //Cart(&'a CartTree<'a, 1, 1>) = 23,
     /// TODO: phoneset
@@ -65,4 +74,35 @@ pub enum Value<'a> {
     Voice(()) = 51,
     /// TODO: `audio_streaming_info`
     AudioStreamingInfo(()) = 53,
+}
+impl<'a> Value<'a> {
+    /// Gets `str` inner value, `None` otherwise
+    pub fn str(&self) -> Option<&'a str> {
+        if let Value::Str(s) = self {
+            return Some(s);
+        }
+        None
+    }
+    /// Gets `item` inner value, `None` otherwise
+    pub fn item(&self) -> Option<NodeId> {
+        if let Value::Item(id) = self {
+            return Some(*id);
+        }
+        None
+    }
+    /// Get the `Float` inner value, `None` otherwise
+    /// Works for either an int (will cast to float), or string (will parse float)
+    pub fn float(&self) -> Result<f32, ValueError> {
+        match self {
+            Self::Float(f) => Ok(*f),
+            Self::Int(i) => Ok(*i as f32),
+            Self::Str(s) => Ok(f32::from_str(s)?),
+            _ => Err(ValueError::InvalidType { orig: self.into(), try_to: ValueDiscriminants::Float }),
+        }
+    }
+}
+impl<'a> Default for Value<'a> {
+    fn default() -> Value<'a> {
+        Value::Int(0)
+    }
 }
