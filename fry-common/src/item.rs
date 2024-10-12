@@ -13,7 +13,10 @@ use core::{
     ops::{ControlFlow, Deref},
 };
 use alloc::{vec::Vec, str, rc::{Rc, Weak}};
-use itertools::Itertools;
+use itertools::{
+    Itertools,
+    FoldWhile::{Done, Continue},
+};
 
 trait GetNodeId {
     fn node_id(&self) -> NodeId;
@@ -110,6 +113,8 @@ impl<'a> ItemTree<'a> {
         }
     }
     /// Get the item at the end of the feature path.
+    ///
+    /// NOTE: xref `src/hrg/ffeatures.c:internal_ff`
     pub fn find_feature(&self, node: NodeId, multipath: &'a str) -> Option<Value<'a>> {
         let dest: NodeId = multipath.split(".")
             .map(Path::try_from)
@@ -117,27 +122,29 @@ impl<'a> ItemTree<'a> {
             .collect::<Result<Vec<Path>, _>>()
             .ok()?
             .iter()
-            // TODO: must drop last item
-            .fold(Some(node), |nid, path| {
-                self.use_path(nid?, path)
+            // NOTE: must drop last item; I'd prefer something like `skip_last` but haven't found it anywhere, but this is good enough
+            .tuple_windows()
+            .map(|(a,b)| a)
+            // graph traversal, use item from first path as input to next section of path
+            // NOTE: if any use_path directive fails (returns None) it will short-circurit the rest
+            // of the function
+            .try_fold(node, |nid, path| {
+                self.use_path(nid, path)
             })?;
+        // yes we have to parse it twice. Can't figure aut how to combine this in the big piping
+        // arrangement above
         let last_path = multipath.split(".").last()?;
         let dest_item: &Item<'a> = self.0.get(dest)?.get();
-        let ff: Option<&Value<'_>> = if let Some(rel) = &dest_item.relation {
-            feature_value(rel.utterance.ffunctions.iter(), last_path)
-        } else {
-            None
-        };
-        let feat = if ff == None {
+        // NOTE: does not have the ffunc condition in the original ffeature function
+        // this is because it's a function pointer pass; pretty sure we don't need it
+        Some(
+            // if the last item in the path is found in the feature set
             feature_value(dest_item.contents.features.iter(), last_path)
-        } else {
-            None
-        };
-        if feat == None {
-            Some(Value::default())
-        } else {
-            Some(Value::Item(dest))
-        }
+                // then the destination is the right value
+                .map(|_| Value::Item(dest))
+                // otherwise use the default value (Value::Int(0))
+                .unwrap_or_default()
+        )
     }
     /// Path to an item via its mulitpath
     // TODO: src/hrg/cst_ffeature.c:154-183
