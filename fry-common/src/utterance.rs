@@ -7,7 +7,7 @@ use alloc::vec::Vec;
 /// An utterance.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Utterance<'a> {
-    features: Vec<Feature<'a>>,
-    ffunctions: Vec<Feature<'a>>,
-    relations: Vec<Feature<'a>>,
+    pub(crate) features: Vec<Feature<'a>>,
+    pub(crate) ffunctions: Vec<Feature<'a>>,
+    pub(crate) relations: Vec<Feature<'a>>,
 }
