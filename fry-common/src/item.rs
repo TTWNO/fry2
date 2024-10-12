@@ -6,6 +6,7 @@ use crate::{
     Path,
     Feature,
     Value,
+    Utterance,
 };
 use indextree::{NodeId, Arena, NodeEdge};
 use core::{
@@ -37,12 +38,11 @@ pub struct ItemContents<'a> {
 #[derive(Clone, Debug, PartialEq)]
 pub struct Item<'a> {
     contents: ItemContents<'a>,
-    relation: Relation<'a>,
+    relation: Option<Relation<'a>>,
 }
-impl Item<'_> {
-    fn feature_value_node<'b>(&'b self, name: &'b str) -> Option<NodeId> {
-        Some(self.contents.relations.iter().find(|feature| feature.name == name)?.value)
-    }
+
+fn feature_value<'a>(mut iter: impl Iterator<Item = &'a Feature<'a>>, name: &'a str) -> Option<&'a Value<'a>> {
+    Some(&iter.find(|feat| feat.name == name)?.value)
 }
 
 /// A full item tree.
@@ -73,7 +73,7 @@ impl<'a> ItemTree<'a> {
     }
     fn relation(&self, node: NodeId, name: &'a str) -> Option<NodeId> {
         self.0.get(node)
-            .map(|node| node.get().feature_value_node(name))?
+            .map(|node| feature_value(node.get().contents.relations.iter(), name)?.item())?
     }
     fn next(&self, node: NodeId) -> Option<NodeId> {
         Some(node.traverse(&self.0).skip(1).next()?.node_id())
@@ -110,20 +110,34 @@ impl<'a> ItemTree<'a> {
         }
     }
     /// Get the item at the end of the feature path.
-    pub fn find_feature(&self, node: NodeId, multipath: &'a str) -> Option<Item<'a>> {
+    pub fn find_feature(&self, node: NodeId, multipath: &'a str) -> Option<Value<'a>> {
         let dest: NodeId = multipath.split(".")
             .map(Path::try_from)
             // TODO: is there a way to do this without collecing?
             .collect::<Result<Vec<Path>, _>>()
             .ok()?
-            // TODO: if !typ, we need to cut the last path item
             .iter()
-            .fold(node, |nid, path| {
-                self.use_path(nid, path)
-                    .unwrap_or(nid)
-            });
+            // TODO: must drop last item
+            .fold(Some(node), |nid, path| {
+                self.use_path(nid?, path)
+            })?;
+        let last_path = multipath.split(".").last()?;
         let dest_item: &Item<'a> = self.0.get(dest)?.get();
-        Some(dest_item.clone())
+        let ff: Option<&Value<'_>> = if let Some(rel) = &dest_item.relation {
+            feature_value(rel.utterance.ffunctions.iter(), last_path)
+        } else {
+            None
+        };
+        let feat = if ff == None {
+            feature_value(dest_item.contents.features.iter(), last_path)
+        } else {
+            None
+        };
+        if feat == None {
+            Some(Value::default())
+        } else {
+            Some(Value::Item(dest))
+        }
     }
     /// Path to an item via its mulitpath
     // TODO: src/hrg/cst_ffeature.c:154-183
