@@ -13,6 +13,11 @@ use itertools::{
     Itertools,
 };
 
+/// Maigc value in `us_f0_model.c`
+const MODEL_MEAN: f32 = 170.0;
+/// Maigc value in `us_f0_model.c`
+const MODEL_STANDARD_DEVIATION: f32 = 34.0;
+
 trait GetNodeId {
     fn node_id(&self) -> NodeId;
 }
@@ -167,4 +172,26 @@ impl<'a> ItemTree<'a> {
     pub fn path_to_item(&self, node: NodeId, mulitpath: &'a str) -> Option<Item<'a>> {
         todo!()
     }
+    /// TODO: could be optimized by:
+    ///
+    /// - converting ""R:SylStructure.daughter.R:Segment.p.name" into an array of `Path` segments
+    /// - turn path contests into direct calls .parent().relation(...) etc.
+    /// - also applies to many other pieces of code in here
+    /// - what does "pau" mean?
+    fn pre_break(&self, node: NodeId) -> bool {
+        self.next(node).is_none() ||
+        if let Some(ref feat) = self.find_feature(node, "R:SylStructure.daughter.R:Segment.p.name") {
+            feat == "pau"
+        } else { false }
+    }
+    fn post_break(&self, node: NodeId) -> bool {
+        self.previous(node).is_none() ||
+        if let Some(ref feat) = self.find_feature(node, "R:SylStructure.daughter.R:Segment.p.name") {
+            feat == "pau"
+        } else { false }
+    }
+}
+
+const fn map_f0(v: f32, m: f32, s: f32) -> f32 {
+    (((v-MODEL_MEAN)/MODEL_STANDARD_DEVIATION)*s)*m
 }
