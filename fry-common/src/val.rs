@@ -66,6 +66,14 @@ pub enum Value<'a> {
     AudioStreamingInfo(()) = 53,
 }
 impl<'a> Value<'a> {
+    /// Gets the `Phoneset` value if exists, `None` otherwise
+    #[must_use]
+    pub fn phoneset(&'a self) -> Option<&'a Phoneset<'a>> {
+        if let Value::Phoneset(ph) = self {
+            return Some(ph);
+        }
+        None
+    }
     /// Gets `str` inner value, `None` otherwise
     #[must_use]
     pub fn str(&self) -> Option<&'a str> {

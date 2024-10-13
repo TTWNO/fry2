@@ -1,6 +1,6 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{Content, Feature, Path, Relation, Utterance, Value};
+use crate::{Content, Feature, Path, Relation, Utterance, Value, Phoneset};
 use alloc::{
     rc::{Rc, Weak},
     str,
@@ -17,6 +17,75 @@ use itertools::{
 const MODEL_MEAN: f32 = 170.0;
 /// Maigc value in `us_f0_model.c`
 const MODEL_STANDARD_DEVIATION: f32 = 34.0;
+
+trait TreeAccess<'a> {
+    fn find_feature(&self, tree: &'a ItemTree<'a>, multipath: &'a str) -> Option<Value<'a>>;
+    fn in_order_traverse(&self, tree: &'a ItemTree<'a>) -> impl Iterator<Item = (&'a Item<'a>, NodeId)>;
+    fn in_order_reverse_traverse(&self, tree: &'a ItemTree<'a>) -> impl Iterator<Item = (&'a Item<'a>, NodeId)>;
+    fn parent(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn next_sibling(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn prev_sibling(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn first_child(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn second_child(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn last_child(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn relation(&self, tree: &ItemTree<'a>, name: &'a str) -> Option<NodeId>;
+    fn next(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn next_next(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn first(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn previous(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn previous_previous(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+    fn last(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
+}
+impl<'a> TreeAccess<'a> for NodeId {
+    fn find_feature(&self, tree: &'a ItemTree<'a>, multipath: &'a str) -> Option<Value<'a>> {
+        tree.find_feature(*self, multipath)
+    }
+    fn in_order_traverse(&self, tree: &'a ItemTree<'a>) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
+        tree.traverse(*self)
+    }
+    fn in_order_reverse_traverse(&self, tree: &'a ItemTree<'a>) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
+        tree.reverse_traverse(*self)
+    }
+    fn parent(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.parent(*self)
+    }
+    fn next_sibling(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.next_sibling(*self)
+    }
+    fn prev_sibling(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.prev_sibling(*self)
+    }
+    fn first_child(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.first_child(*self)
+    }
+    fn second_child(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.second_child(*self)
+    }
+    fn last_child(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.last_child(*self)
+    }
+    fn relation(&self, tree: &ItemTree<'a>, name: &'a str) -> Option<NodeId> {
+        tree.relation(*self, name)
+    }
+    fn next(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.next(*self)
+    }
+    fn next_next(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.next_next(*self)
+    }
+    fn first(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.first(*self)
+    }
+    fn previous(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.previous(*self)
+    }
+    fn previous_previous(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.previous_previous(*self)
+    }
+    fn last(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
+        tree.last(*self)
+    }
+}
 
 trait GetNodeId {
     fn node_id(&self) -> NodeId;
@@ -59,10 +128,14 @@ impl<'a> Item<'a> {
 
 pub(crate) trait FeatureValue<'a> {
     fn feature_value(&self, name: &str) -> Option<&Value<'a>>;
+    fn feature_present(&self, name: &str) -> bool;
 }
 impl<'a> FeatureValue<'a> for [Feature<'a>] {
     fn feature_value(&self, name: &str) -> Option<&Value<'a>> {
         Some(&self.iter().find(|feat| feat.name == name)?.value)
+    }
+    fn feature_present(&self, name: &str) -> bool {
+        self.iter().find(|feat| feat.name == name).is_some()
     }
 }
 
@@ -97,6 +170,14 @@ impl<'a> ItemTree<'a> {
         self.0
             .get(node)
             .map(|node| node.get().relations().feature_value(name)?.item())?
+    }
+    fn traverse(&'a self, node: NodeId) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
+        node.traverse(&self.0)
+            .filter_map(|ne| Some((self.get(ne.node_id())?, ne.node_id())))
+    }
+    fn reverse_traverse(&'a self, node: NodeId) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
+        node.reverse_traverse(&self.0)
+            .filter_map(|ne| Some((self.get(ne.node_id())?, ne.node_id())))
     }
     fn next(&self, node: NodeId) -> Option<NodeId> {
         Some(node.traverse(&self.0).nth(1)?.node_id())
@@ -189,6 +270,42 @@ impl<'a> ItemTree<'a> {
         if let Some(ref feat) = self.find_feature(node, "R:SylStructure.daughter.R:Segment.p.name") {
             feat == "pau"
         } else { false }
+    }
+    fn phoneset(&'a self, node: NodeId) -> Option<&'a Phoneset<'a>> {
+        self.get(node)?
+            .utterance()?
+            .features
+            .feature_value("phoneset")?
+            .phoneset()
+    }
+    fn vowel_mid(&'a self, node: NodeId) -> Option<f32> {
+        let phone = self.phoneset(node)?;
+        self.get(node)?
+            .relations()
+            .feature_value("SylStructure")?
+            .item()?
+            .first_child(self)?
+            .in_order_traverse(self)
+            .filter(|(item, _)| {
+                let Some(Value::Str(phone_name)) = item.features().feature_value("name") else {
+                    return false;
+                };
+                let Some(Value::Str(phone_feat_str)) = phone.phone_feature(phone_name, "vc") else {
+                    return false;
+                };
+                "+" == *phone_feat_str
+            })
+            .filter_map(|(item, id)| Some(
+                (item.features()
+                    .feature_value("end")?
+                    .float()
+                    .ok()?
+                +
+                id.find_feature(self, "R:Segment.p.end")?.float().ok()?)
+                /
+                2.0
+            ))
+            .next()
     }
 }
 
