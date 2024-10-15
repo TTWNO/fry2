@@ -135,7 +135,7 @@ impl<'a> FeatureValue<'a> for [Feature<'a>] {
         Some(&self.iter().find(|feat| feat.name == name)?.value)
     }
     fn feature_present(&self, name: &str) -> bool {
-        self.iter().find(|feat| feat.name == name).is_some()
+        self.iter().any(|feat| feat.name == name)
     }
 }
 
@@ -295,7 +295,7 @@ impl<'a> ItemTree<'a> {
                 };
                 "+" == *phone_feat_str
             })
-            .filter_map(|(item, id)| Some(
+            .find_map(|(item, id)| Some(
                 (item.features()
                     .feature_value("end")?
                     .float()
@@ -305,7 +305,6 @@ impl<'a> ItemTree<'a> {
                 /
                 2.0
             ))
-            .next()
     }
 }
 
