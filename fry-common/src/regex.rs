@@ -1,3 +1,6 @@
+//! Regex pattern recognition.
+//!
+//!
 //! Defenitions and character sets required for TTS pattern recognition.
 //! TODO: a lot of these are very simple patterns that could be replaced with much simpler
 //! functions that do not require a regex engine (although some still do).
@@ -79,6 +82,7 @@ pub static UPPERCASE_PATTERN: &str = r"[A-Z]+";
 pub static LOWERCASE_PATTERN: &str = r"[a-z]+";
 
 /// Matches any digits.
+///
 /// NOTE: I am unsure of the reason the pattern used is `[0-9][0-9]*`.
 /// It seems that this is useless and it could just be `[0-9]+`.
 /// But for now I don't want to deviate from the pattern used in flite.
@@ -193,7 +197,8 @@ pub static ABBR_PATTERN: &str = r"([A-Za-z]\.)+[A-Za-z]\.?";
 /// assert_eq!(comma_number_regex.match_perfect("55"), false);
 /// assert_eq!(comma_number_regex.match_perfect("1,2345"), false);
 /// ```
-pub static COMMA_NUMBER_PATTERN: &str = r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?";
+pub static COMMA_NUMBER_PATTERN: &str =
+    r"[0-9][0-9]?[0-9]?,([0-9][0-9][0-9],)*[0-9][0-9][0-9](\.[0-9]+)?";
 
 /// Matches punctuation clusters
 /// ```

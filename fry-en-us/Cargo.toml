@@ -12,5 +12,8 @@ description = "English (US) grammar rules used for Fry, the embedded text-to-spe
 
 [dependencies]
 fry-common = { version = "0.1.0", path = "../fry-common/", default-features = false }
+num2words = { git = "https://github.com/TTWNO/num2words/", branch = "no-std-support", version = "1.2.0", default-features = false }
 const_panic = { version = "0.2.9", default-features = false, features = ["derive"] }
-tracing = { version = "0.1.40", default-features = false }
+
+[dev-dependencies]
+regex = { version = "1.10.6", default-features = false }
