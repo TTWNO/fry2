@@ -49,9 +49,9 @@ pub fn apply_lr_model<'b>(
 ) -> Option<(f32, f32, f32)> {
     // set interceptors
     let icp = f0_lr_terms.next()?;
-    let mut start = icp.start;
-    let mut mid = icp.mid;
-    let mut end = icp.end;
+    let start = icp.start;
+    let mid = icp.mid;
+    let end = icp.end;
     let mut i_val = None;
 
     // create iterator that has `icp` as the first element

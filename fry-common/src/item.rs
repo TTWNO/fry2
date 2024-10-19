@@ -119,10 +119,10 @@ impl<'a> Item<'a> {
         &self.contents.relations
     }
     fn utterance(&'a self) -> Option<&'a Utterance<'a>> {
-        if let Some(rel) = &self.relation {
-            return Some(&rel.utterance);
-        }
-        None
+        let Some(rel) = &self.relation else {
+            return None;
+        };
+        Some(&rel.utterance)
     }
 }
 
