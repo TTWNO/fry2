@@ -2,7 +2,7 @@
 //!
 //! See also: <https://en.wikipedia.org/wiki/Fundamental_frequency>
 
-use crate::item::{Item, ItemTree};
+use crate::item::ItemTree;
 use core::iter::once;
 use indextree::NodeId;
 use itertools::Itertools;

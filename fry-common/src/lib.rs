@@ -12,7 +12,6 @@
 extern crate alloc;
 
 pub mod item;
-use item::Item;
 pub mod relation;
 use relation::Relation;
 pub mod utterance;
@@ -20,7 +19,6 @@ use utterance::Utterance;
 pub mod feature;
 use feature::Feature;
 pub mod content;
-use content::Content;
 pub mod path;
 use path::Path;
 pub mod phoneset;

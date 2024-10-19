@@ -286,7 +286,7 @@ pub static DIGITS_TO_DASH_PATTERN: &str = r"([0-9]+-+)+[0-9]+";
 /// Matches common unit patterns like "4GHz", "16lbs", or "128GB".
 /// No spaces are allowed between the number and the unit.
 ///
-/// NOTE: this is slightly modified from the original so that for example "MHz" would match before
+/// NOTE: this is slightly modified from the original so that for example "`MHz`" would match before
 /// "Hz".
 ///
 /// ```rust

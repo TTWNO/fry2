@@ -1,6 +1,6 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-use crate::{error::ValueError, CartTree, Feature, Item, Relation, Utterance, Phoneset};
+use crate::{error::ValueError, Feature, Relation, Utterance, Phoneset};
 use alloc::vec::Vec;
 use core::str::FromStr;
 use indextree::NodeId;

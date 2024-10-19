@@ -1,17 +1,12 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{Content, Feature, Path, Relation, Utterance, Value, Phoneset};
+use crate::{Feature, Path, Relation, Utterance, Value, Phoneset};
 use alloc::{
-    rc::{Rc, Weak},
     str,
     vec::Vec,
 };
-use core::ops::{ControlFlow, Deref};
 use indextree::{Arena, NodeEdge, NodeId};
-use itertools::{
-    FoldWhile::{Continue, Done},
-    Itertools,
-};
+use itertools::Itertools;
 
 /// Maigc value in `us_f0_model.c`
 const MODEL_MEAN: f32 = 170.0;
