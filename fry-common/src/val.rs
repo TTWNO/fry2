@@ -1,7 +1,12 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-use crate::{error::ValueError, CartTree, Feature, Item, Relation, Utterance, Phoneset, MaybeStrong};
-use alloc::vec::Vec;
+use crate::{
+    error::ValueError, CartTree, Feature, Item, MaybeStrong, Phoneset, Relation, Utterance,
+};
+use alloc::{
+    rc::{Rc, Weak},
+    vec::Vec,
+};
 use core::str::FromStr;
 use indextree::NodeId;
 use strum::{Display, EnumDiscriminants};
@@ -31,13 +36,13 @@ pub enum Value<'a> {
     /// TODO: ffunc
     FFunc(()) = 17,
     /// TODO: relation
-    Relation(&'a Relation<'a>) = 19,
+    Relation(MaybeStrong<Relation<'a>>) = 19,
     /// TODO: item; encoded as a `NodeId` so that it can grab the Item from the arena
     Item(NodeId) = 21,
     /// TODO: cart tree
     //Cart(&'a CartTree<'a, 1, 1>) = 23,
     /// TODO: phoneset
-    Phoneset(Phoneset<'a>) = 25,
+    Phoneset(MaybeStrong<Phoneset<'a>>) = 25,
     /// TODO: lexicon
     Lexicon(()) = 27,
     /// TODO: durstats
@@ -55,7 +60,7 @@ pub enum Value<'a> {
     /// TODO: itemfunc
     ItemFunc(()) = 43,
     /// TODO: features
-    Features(&'a Vec<Feature<'a>>) = 45,
+    Features(MaybeStrong<Vec<Feature<'a>>>) = 45,
     /// TODO: breakfunc
     BreakFunc(()) = 47,
     /// TODO: `cg_db`
@@ -68,9 +73,9 @@ pub enum Value<'a> {
 impl<'a> Value<'a> {
     /// Gets the `Phoneset` value if exists, `None` otherwise
     #[must_use]
-    pub fn phoneset(&'a self) -> Option<&'a Phoneset<'a>> {
+    pub fn phoneset(&'a self) -> Option<Rc<Phoneset<'a>>> {
         if let Value::Phoneset(ph) = self {
-            return Some(ph);
+            return ph.get();
         }
         None
     }

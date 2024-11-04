@@ -1,6 +1,6 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{Content, Feature, Path, Relation, Utterance, Value, Phoneset};
+use crate::{Content, Feature, Path, Phoneset, Relation, Utterance, Value};
 use alloc::{
     rc::{Rc, Weak},
     str,
@@ -20,8 +20,14 @@ const MODEL_STANDARD_DEVIATION: f32 = 34.0;
 
 trait TreeAccess<'a> {
     fn find_feature(&self, tree: &'a ItemTree<'a>, multipath: &'a str) -> Option<Value<'a>>;
-    fn in_order_traverse(&self, tree: &'a ItemTree<'a>) -> impl Iterator<Item = (&'a Item<'a>, NodeId)>;
-    fn in_order_reverse_traverse(&self, tree: &'a ItemTree<'a>) -> impl Iterator<Item = (&'a Item<'a>, NodeId)>;
+    fn in_order_traverse(
+        &self,
+        tree: &'a ItemTree<'a>,
+    ) -> impl Iterator<Item = (&'a Item<'a>, NodeId)>;
+    fn in_order_reverse_traverse(
+        &self,
+        tree: &'a ItemTree<'a>,
+    ) -> impl Iterator<Item = (&'a Item<'a>, NodeId)>;
     fn parent(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
     fn next_sibling(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
     fn prev_sibling(&self, tree: &ItemTree<'a>) -> Option<NodeId>;
@@ -40,10 +46,16 @@ impl<'a> TreeAccess<'a> for NodeId {
     fn find_feature(&self, tree: &'a ItemTree<'a>, multipath: &'a str) -> Option<Value<'a>> {
         tree.find_feature(*self, multipath)
     }
-    fn in_order_traverse(&self, tree: &'a ItemTree<'a>) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
+    fn in_order_traverse(
+        &self,
+        tree: &'a ItemTree<'a>,
+    ) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
         tree.traverse(*self)
     }
-    fn in_order_reverse_traverse(&self, tree: &'a ItemTree<'a>) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
+    fn in_order_reverse_traverse(
+        &self,
+        tree: &'a ItemTree<'a>,
+    ) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
         tree.reverse_traverse(*self)
     }
     fn parent(&self, tree: &ItemTree<'a>) -> Option<NodeId> {
@@ -239,7 +251,8 @@ impl<'a> ItemTree<'a> {
         // this is because it's a function pointer pass; pretty sure we don't need it
         Some(
             // if the last item in the path is found in the feature set
-            dest_item.features()
+            dest_item
+                .features()
                 .feature_value(last_path)
                 // then the destination is the right value
                 .map(|_| Value::Item(dest))
@@ -260,18 +273,26 @@ impl<'a> ItemTree<'a> {
     /// - also applies to many other pieces of code in here
     /// - what does "pau" mean?
     fn pre_break(&self, node: NodeId) -> bool {
-        self.next(node).is_none() ||
-        if let Some(ref feat) = self.find_feature(node, "R:SylStructure.daughter.R:Segment.p.name") {
-            feat == "pau"
-        } else { false }
+        self.next(node).is_none()
+            || if let Some(ref feat) =
+                self.find_feature(node, "R:SylStructure.daughter.R:Segment.p.name")
+            {
+                feat == "pau"
+            } else {
+                false
+            }
     }
     fn post_break(&self, node: NodeId) -> bool {
-        self.previous(node).is_none() ||
-        if let Some(ref feat) = self.find_feature(node, "R:SylStructure.daughter.R:Segment.p.name") {
-            feat == "pau"
-        } else { false }
+        self.previous(node).is_none()
+            || if let Some(ref feat) =
+                self.find_feature(node, "R:SylStructure.daughter.R:Segment.p.name")
+            {
+                feat == "pau"
+            } else {
+                false
+            }
     }
-    fn phoneset(&'a self, node: NodeId) -> Option<&'a Phoneset<'a>> {
+    fn phoneset(&'a self, node: NodeId) -> Option<Rc<Phoneset<'a>>> {
         self.get(node)?
             .utterance()?
             .features
@@ -295,19 +316,16 @@ impl<'a> ItemTree<'a> {
                 };
                 "+" == *phone_feat_str
             })
-            .find_map(|(item, id)| Some(
-                (item.features()
-                    .feature_value("end")?
-                    .float()
-                    .ok()?
-                +
-                id.find_feature(self, "R:Segment.p.end")?.float().ok()?)
-                /
-                2.0
-            ))
+            .find_map(|(item, id)| {
+                Some(
+                    (item.features().feature_value("end")?.float().ok()?
+                        + id.find_feature(self, "R:Segment.p.end")?.float().ok()?)
+                        / 2.0,
+                )
+            })
     }
 }
 
 const fn map_f0(v: f32, m: f32, s: f32) -> f32 {
-    (((v-MODEL_MEAN)/MODEL_STANDARD_DEVIATION)*s)*m
+    (((v - MODEL_MEAN) / MODEL_STANDARD_DEVIATION) * s) * m
 }
