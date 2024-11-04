@@ -61,7 +61,7 @@ impl<'a, const RULE_LEN: usize, const FEAT_LEN: usize> CartTree<'a, RULE_LEN, FE
     /// # Panics
     ///
     /// If one of the `CartNode`s have an index which in not within bounds.
-    pub const fn init_unchecked(
+    pub fn init_unchecked(
         rule_table: [CartNode<'a>; RULE_LEN],
         feature_table: [&'a str; FEAT_LEN],
     ) -> Self {
@@ -81,7 +81,7 @@ impl<'a, const RULE_LEN: usize, const FEAT_LEN: usize> CartTree<'a, RULE_LEN, FE
     /// # Errors
     ///
     /// If one of the `CartNode`s have an index which in not within bounds.
-    pub const fn init(
+    pub fn init(
         rule_table: [CartNode<'a>; RULE_LEN],
         feature_table: [&'a str; FEAT_LEN],
     ) -> Result<Self, CartTreeError> {
