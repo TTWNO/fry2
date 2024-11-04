@@ -33,11 +33,11 @@ impl<'a> Phoneset<'a> {
             .unwrap_or_default()
     }
     pub fn phone_feature(&self, phone_name: &'a str, feat_name: &'a str) -> Option<&'a Value<'a>> {
-        self.feature_values
-            .get(
-                *(self.fv_table
-                    .get(self.phone_id(phone_name))?
-                    .get(self.phone_feature_id(feat_name))?)
-            )
+        self.feature_values.get(
+            *(self
+                .fv_table
+                .get(self.phone_id(phone_name))?
+                .get(self.phone_feature_id(feat_name))?),
+        )
     }
 }

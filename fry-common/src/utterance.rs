@@ -1,14 +1,8 @@
 //! CST Utterance.
 
-use crate::{
-    Feature,
-    item::FeatureValue,
-};
+use crate::{item::FeatureValue, Feature};
 
-use alloc::{
-    vec::Vec,
-    collections::BTreeSet,
-};
+use alloc::{collections::BTreeSet, vec::Vec};
 
 /// An utterance.
 #[derive(Clone, Debug, PartialEq)]
