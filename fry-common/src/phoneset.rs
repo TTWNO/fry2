@@ -3,7 +3,6 @@
 //! I have no idea what this really is? But I'm making it anyways.
 
 use crate::Value;
-use alloc::vec::Vec;
 
 #[derive(Debug, PartialEq, Clone)]
 pub(crate) struct Phoneset<'a> {

@@ -1,7 +1,6 @@
 //! A pair of values.
 
 use crate::Value;
-use indextree::NodeId;
 
 /// A borrowed `str` and a `crate::Value` with the same lifetime.
 #[derive(Clone, Debug, PartialEq)]

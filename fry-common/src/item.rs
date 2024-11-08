@@ -2,16 +2,11 @@
 
 use crate::{Content, Feature, Path, Phoneset, Relation, Utterance, Value};
 use alloc::{
-    rc::{Rc, Weak},
     str,
     vec::Vec,
 };
-use core::ops::{ControlFlow, Deref};
 use indextree::{Arena, NodeEdge, NodeId};
-use itertools::{
-    FoldWhile::{Continue, Done},
-    Itertools,
-};
+use itertools::Itertools;
 
 /// Maigc value in `us_f0_model.c`
 const MODEL_MEAN: f32 = 170.0;
@@ -131,10 +126,10 @@ impl<'a> Item<'a> {
         &self.contents.relations
     }
     fn utterance(&'a self) -> Option<&'a Utterance<'a>> {
-        if let Some(rel) = &self.relation {
-            return Some(&rel.utterance);
-        }
-        None
+        let Some(rel) = &self.relation else {
+            return None;
+        };
+        Some(&rel.utterance)
     }
 }
 

@@ -73,27 +73,27 @@ pub enum Value<'a> {
 impl<'a> Value<'a> {
     /// Gets the `Phoneset` value if exists, `None` otherwise
     #[must_use]
-    pub fn phoneset(&'a self) -> Option<Rc<Phoneset<'a>>> {
-        if let Value::Phoneset(ph) = self {
-            return ph.get();
-        }
-        None
+    pub fn phoneset(&'a self) -> Option<&'a Phoneset<'a>> {
+        let Value::Phoneset(ph) = self else {
+            return None;
+        };
+        Some(ph)
     }
     /// Gets `str` inner value, `None` otherwise
     #[must_use]
     pub fn str(&self) -> Option<&'a str> {
-        if let Value::Str(s) = self {
-            return Some(s);
-        }
-        None
+        let Value::Str(s) = self else {
+            return None;
+        };
+        Some(s)
     }
     /// Gets `item` inner value, `None` otherwise
     #[must_use]
     pub fn item(&self) -> Option<NodeId> {
-        if let Value::Item(id) = self {
-            return Some(*id);
-        }
-        None
+        let Value::Item(id) = self else {
+            return None;
+        };
+        Some(*id)
     }
     /// Get the `Float` inner value, `None` otherwise
     /// Works for either an int (will cast to float), or string (will parse float)
@@ -124,9 +124,9 @@ impl<'a> Default for Value<'a> {
 }
 impl PartialEq<str> for Value<'_> {
     fn eq(&self, other: &str) -> bool {
-        if let Value::Str(s) = &self {
-            return *s == other;
-        }
-        false
+        let Value::Str(s) = &self else {
+            return false;
+        };
+        *s == other
     }
 }

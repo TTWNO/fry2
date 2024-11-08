@@ -3,7 +3,7 @@ use fry_common::{
     Value,
 };
 
-const VAL_0000: Value<'static> = Value::Float(3.800000);
+const VAL_0000: Value<'static> = Value::Float(3.8);
 const VAL_0001: Value<'static> = Value::Str("month");
 const VAL_0002: Value<'static> = Value::Str("0");
 const VAL_0003: Value<'static> = Value::Str("year");
@@ -13,25 +13,25 @@ const VAL_0006: Value<'static> = Value::Str("numeric");
 const VAL_0007: Value<'static> = Value::Float(2.000000);
 const VAL_0008: Value<'static> = Value::Str("sym");
 const VAL_0009: Value<'static> = Value::Str("digits");
-const VAL_0010: Value<'static> = Value::Float(302.299988);
+const VAL_0010: Value<'static> = Value::Float(302.3);
 const VAL_0011: Value<'static> = Value::Str("flight");
 const VAL_0012: Value<'static> = Value::Str("a");
-const VAL_0013: Value<'static> = Value::Float(669.200012);
-const VAL_0014: Value<'static> = Value::Float(373.200012);
-const VAL_0015: Value<'static> = Value::Float(436.200012);
-const VAL_0016: Value<'static> = Value::Float(392.600006);
-const VAL_0017: Value<'static> = Value::Float(716.500000);
-const VAL_0018: Value<'static> = Value::Float(773.599976);
+const VAL_0013: Value<'static> = Value::Float(669.2);
+const VAL_0014: Value<'static> = Value::Float(373.2);
+const VAL_0015: Value<'static> = Value::Float(436.2);
+const VAL_0016: Value<'static> = Value::Float(392.6);
+const VAL_0017: Value<'static> = Value::Float(716.5);
+const VAL_0018: Value<'static> = Value::Float(773.6);
 const VAL_0019: Value<'static> = Value::Str("_other_");
-const VAL_0020: Value<'static> = Value::Float(4.400000);
-const VAL_0021: Value<'static> = Value::Float(2959.600098);
-const VAL_0022: Value<'static> = Value::Float(1773.400024);
+const VAL_0020: Value<'static> = Value::Float(4.4);
+const VAL_0021: Value<'static> = Value::Float(2_959.6);
+const VAL_0022: Value<'static> = Value::Float(1_773.4);
 const VAL_0023: Value<'static> = Value::Str("to");
-const VAL_0024: Value<'static> = Value::Float(4.600000);
-const VAL_0025: Value<'static> = Value::Float(4.800000);
+const VAL_0024: Value<'static> = Value::Float(4.6);
+const VAL_0025: Value<'static> = Value::Float(4.8);
 const VAL_0026: Value<'static> = Value::Float(2880.000000);
-const VAL_0027: Value<'static> = Value::Float(1633.199951);
-const VAL_0028: Value<'static> = Value::Float(1306.400024);
+const VAL_0027: Value<'static> = Value::Float(1_633.2);
+const VAL_0028: Value<'static> = Value::Float(1_306.4);
 
 const CTNODE_US_NUMS_NO_0002: usize = 4;
 const CTNODE_US_NUMS_NO_0001: usize = 5;
