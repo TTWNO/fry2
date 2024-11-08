@@ -73,11 +73,11 @@ pub enum Value<'a> {
 impl<'a> Value<'a> {
     /// Gets the `Phoneset` value if exists, `None` otherwise
     #[must_use]
-    pub fn phoneset(&'a self) -> Option<&'a Phoneset<'a>> {
+    pub fn phoneset(&'a self) -> Option<Rc<Phoneset<'a>>> {
         let Value::Phoneset(ph) = self else {
             return None;
         };
-        Some(ph)
+        ph.get()
     }
     /// Gets `str` inner value, `None` otherwise
     #[must_use]

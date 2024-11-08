@@ -4,6 +4,7 @@ use crate::{Content, Feature, Path, Phoneset, Relation, Utterance, Value};
 use alloc::{
     str,
     vec::Vec,
+		rc::Rc,
 };
 use indextree::{Arena, NodeEdge, NodeId};
 use itertools::Itertools;
