@@ -12,7 +12,7 @@
 extern crate alloc;
 
 mod maybe_strong;
-pub use maybe_strong::MaybeStrong;
+pub use maybe_strong::{MaybeStrong, Strong};
 
 pub mod item;
 use item::Item;

@@ -1,6 +1,6 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{Content, Feature, Path, Phoneset, Relation, Utterance, Value, MaybeStrong};
+use crate::{Content, Feature, Path, Phoneset, Relation, Utterance, Value, MaybeStrong, Strong};
 use alloc::{
     str,
     vec::Vec,
@@ -126,7 +126,7 @@ impl<'a> Item<'a> {
     fn relations(&self) -> &Vec<Feature<'a>> {
         &self.contents.relations
     }
-    fn utterance(&self) -> Option<Rc<Utterance<'a>>> {
+    fn utterance(&self) -> Option<Strong<Utterance<'a>>> {
         let Some(rel) = &self.relation else {
             return None;
         };
@@ -288,7 +288,7 @@ impl<'a> ItemTree<'a> {
                 false
             }
     }
-    fn phoneset(&'a self, node: NodeId) -> Option<Rc<Phoneset<'a>>> {
+    fn phoneset(&'a self, node: NodeId) -> Option<Strong<Phoneset<'a>>> {
         self.get(node)?
             .utterance()?
             .features

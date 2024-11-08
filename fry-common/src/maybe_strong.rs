@@ -1,5 +1,9 @@
 use alloc::rc::{Rc, Weak};
 
+/// A wrapped `Rc<T>` for custom implementations only possible when shared-pointer access is possible.
+#[derive(derive_more::Deref)]
+pub struct Strong<T>(#[deref] Rc<T>);
+
 /// A wrapped T (i.e., it pointed to by either a reference-counted pointer or a weak reference-counted pointer)
 ///
 /// Where the original Flite checks "if (utt == null)" is essentially the same step as checking if the Weak variant of this utterance points to a real utterance (or if it has been deallocated).
@@ -21,10 +25,10 @@ impl<T> MaybeStrong<T> {
     ///
     /// - In the original Flite code, an explicit reference-count addition is not needed often (due to raw pointers everywhere), but Rust required strict ownership.
     /// - This means that an explicit reference count addition is done upon _every_ invocation of this function on a `MaybeStrong::Strong` varaint.
-    pub fn get(&self) -> Option<Rc<T>> {
+    pub fn get(&self) -> Option<Strong<T>> {
         match self {
-            MaybeStrong::Strong(s) => Some(Rc::clone(&s)),
-            MaybeStrong::Weak(w) => Weak::upgrade(&w),
+            MaybeStrong::Strong(s) => Some(Strong(Rc::clone(&s))),
+            MaybeStrong::Weak(w) => Some(Strong(Weak::upgrade(&w)?)),
         }
     }
 }

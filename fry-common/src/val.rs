@@ -1,7 +1,7 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
 use crate::{
-    error::ValueError, CartTree, Feature, Item, MaybeStrong, Phoneset, Relation, Utterance,
+    error::ValueError, CartTree, Feature, Item, MaybeStrong, Phoneset, Relation, Utterance, Strong
 };
 use alloc::{
     rc::{Rc, Weak},
@@ -73,7 +73,7 @@ pub enum Value<'a> {
 impl<'a> Value<'a> {
     /// Gets the `Phoneset` value if exists, `None` otherwise
     #[must_use]
-    pub fn phoneset(&self) -> Option<Rc<Phoneset<'a>>> {
+    pub fn phoneset(&self) -> Option<Strong<Phoneset<'a>>> {
         let Value::Phoneset(ph) = self else {
             return None;
         };
