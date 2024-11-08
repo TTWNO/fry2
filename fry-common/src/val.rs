@@ -1,6 +1,6 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-use crate::{error::ValueError, Feature, Relation, Utterance, Phoneset};
+use crate::{error::ValueError, CartTree, Feature, Item, Relation, Utterance, Phoneset, MaybeStrong};
 use alloc::vec::Vec;
 use core::str::FromStr;
 use indextree::NodeId;
@@ -19,7 +19,7 @@ pub enum Value<'a> {
     /// A float
     Float(f32),
     /// Utterance
-    Utterance(&'a Utterance<'a>) = 7,
+    Utterance(MaybeStrong<Utterance<'a>>) = 7,
     /// TODO: wave
     Wave(()) = 9,
     /// TODO: track
