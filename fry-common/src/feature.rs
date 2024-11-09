@@ -9,6 +9,12 @@ pub struct Feature<'a> {
     pub(crate) name: &'a str,
     pub(crate) value: Value<'a>,
 }
+impl<'a> Feature<'a> {
+    /// Create a new feature pair!
+    pub fn new(name: &'a str, value: Value<'a>) -> Self {
+        Feature { name, value }
+    }
+}
 
 /// A set of features, which have unique features beyond that of a plain `Vec<Feature>`
 #[derive(Debug, PartialEq)]
@@ -16,6 +22,19 @@ pub struct Features<'a> {
     inner: Vec<Feature<'a>>,
 }
 impl<'a> Features<'a> {
+    /// Set a feature.
+    /// If a feature has the same name, the value will be replaced.
+    pub fn set(&mut self, name: &'a str, val: Value<'a>) {
+        let Some(idx) = self.inner.iter().position(|feat| feat.name == name) else {
+            self.inner.push(Feature::new(name, val));
+            return;
+        };
+        let Some(mut feat) = self.inner.get_mut(idx) else {
+            // Technically should never happen, but ok.
+            return;
+        };
+        feat.value = val;
+    }
     /// Get the value of an individual feature, if a feature with the name `name` is found.
     /// None otherwise.
     pub fn feature_value(&self, name: &str) -> Option<&Value<'a>> {
