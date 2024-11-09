@@ -3,7 +3,7 @@
 //! See: <https://en.wikipedia.org/wiki/Decision_tree_learning>
 
 use crate::error::CartTreeError;
-use crate::Value;
+use crate::{Value, ValueInner};
 
 /// A CART node operation.
 #[allow(missing_docs)]
@@ -43,6 +43,21 @@ impl<'a> CartNode<'a> {
             operation,
             next_node,
             value,
+        }
+    }
+    /// Initialize a `CartNode`
+    #[must_use]
+    pub fn init_val_inner(
+        feature: u8,
+        operation: Option<CartOperation>,
+        next_node: usize,
+        value: ValueInner<'a>,
+    ) -> Self {
+        Self {
+            feature,
+            operation,
+            next_node,
+            value: value.into(),
         }
     }
 }
