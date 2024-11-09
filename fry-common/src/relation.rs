@@ -5,7 +5,7 @@ use crate::{Feature, MaybeStrong, Utterance};
 use alloc::vec::Vec;
 
 /// Relation.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct Relation<'a> {
     pub(crate) name: &'a str,
     pub(crate) features: Vec<Feature<'a>>,

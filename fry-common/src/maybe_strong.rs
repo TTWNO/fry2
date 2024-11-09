@@ -2,8 +2,18 @@ use alloc::rc::{Rc, Weak as RcWeak};
 use core::cell::RefCell;
 
 /// A wrapped `Rc<RefCell<T>>` for custom implementations only possible when shared-pointer access is possible.
-#[derive(derive_more::Deref, Debug, PartialEq, Clone)]
+#[derive(derive_more::Deref, Debug, PartialEq, derive_more::From)]
 pub struct Strong<T>(#[deref] Rc<RefCell<T>>);
+impl<T> Strong<T> {
+    pub fn new(t: T) -> Strong<T> {
+        Strong(Rc::new(RefCell::new(t)))
+    }
+}
+impl<T> Clone for Strong<T> {
+    fn clone(&self) -> Strong<T> {
+        Strong(Rc::clone(&self.0))
+    }
+}
 
 /// A wrapped `Weak<RefCell<T>>` for custom implementations only possible when shared-pointer access is possible.
 #[derive(Debug, Clone)]
@@ -21,10 +31,7 @@ pub enum MaybeStrong<T> {
     Weak(Weak<T>),
 }
 
-impl<T> MaybeStrong<T>
-where
-    T: Clone,
-{
+impl<T> MaybeStrong<T> {
     /// Get the (optional) reference to the inner `T`.
     /// This method will succeed if it contains a strong reference (`Rc<T>`),
     /// but could fail if there is a `Weak<T>` variant; if this fails, it will return `None`

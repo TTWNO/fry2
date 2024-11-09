@@ -32,7 +32,7 @@ pub mod error;
 pub mod regex;
 pub mod val;
 pub mod word;
-pub use val::Value;
+pub use val::{Value, ValueInner};
 pub mod cart_tree;
 pub use cart_tree::CartTree;
 pub use error::Error;

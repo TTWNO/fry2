@@ -5,7 +5,7 @@ use crate::{item::FeatureValue, maybe_strong::Strong, Feature};
 use alloc::{collections::BTreeSet, vec::Vec};
 
 /// An utterance.
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct Utterance<'a> {
     pub(crate) features: Vec<Feature<'a>>,
     pub(crate) ffunctions: Vec<Feature<'a>>,

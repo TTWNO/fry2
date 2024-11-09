@@ -5,7 +5,7 @@
 //! These errors are more-or-less original creations; compared to the rest of the crate, which is
 //! based on `flite` and `Festival`. Since neither uses their own error types.
 
-use crate::val::ValueDiscriminants;
+use crate::val::ValueInnerDiscriminants;
 use derive_more::{Display, Error as DeriveError, From};
 
 /// An error for the `fry-en-us` FSM (finite state machine).
@@ -42,9 +42,9 @@ pub enum ValueError {
     #[display("Invalid type: {orig} tried to convert to {try_to}")]
     InvalidType {
         /// the variant of the `Value` type
-        orig: ValueDiscriminants,
+        orig: ValueInnerDiscriminants,
         /// the variant that was attempted to convert to
-        try_to: ValueDiscriminants,
+        try_to: ValueInnerDiscriminants,
     },
     /// A float conversion error during the conversion between string to float
     #[display("{_0}")]

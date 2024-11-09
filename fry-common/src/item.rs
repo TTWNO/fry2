@@ -1,6 +1,8 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{Content, Feature, MaybeStrong, Path, Phoneset, Relation, Strong, Utterance, Value};
+use crate::{
+    Content, Feature, MaybeStrong, Path, Phoneset, Relation, Strong, Utterance, Value, ValueInner,
+};
 use alloc::{rc::Rc, str, vec::Vec};
 use indextree::{Arena, NodeEdge, NodeId};
 use itertools::Itertools;
@@ -103,14 +105,14 @@ impl GetNodeId for NodeEdge {
 }
 
 /// An individual item's content.
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct ItemContents<'a> {
     features: Vec<Feature<'a>>,
     relations: Vec<Feature<'a>>,
 }
 
 /// An individual item.
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct Item<'a> {
     contents: ItemContents<'a>,
     relation: Option<Relation<'a>>,
@@ -173,7 +175,7 @@ impl<'a> ItemTree<'a> {
     fn relation(&self, node: NodeId, name: &str) -> Option<NodeId> {
         self.0
             .get(node)
-            .map(|node| node.get().relations().feature_value(name)?.item())?
+            .map(|node| node.get().relations().feature_value(name)?.borrow().item())?
     }
     fn traverse(&'a self, node: NodeId) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
         node.traverse(&self.0)
@@ -247,9 +249,10 @@ impl<'a> ItemTree<'a> {
                 .features()
                 .feature_value(last_path)
                 // then the destination is the right value
-                .map(|_| Value::Item(dest))
+                .map(|_| ValueInner::Item(dest))
                 // otherwise use the default value (Value::Int(0))
-                .unwrap_or_default(),
+                .unwrap_or_default()
+                .into(),
         )
     }
     /// Path to an item via its mulitpath
@@ -285,26 +288,32 @@ impl<'a> ItemTree<'a> {
             }
     }
     fn phoneset(&'a self, node: NodeId) -> Option<Strong<Phoneset<'a>>> {
+        todo!()
+        /*
         self.get(node)?
             .utterance()?
             .borrow()
             .features
             .feature_value("phoneset")?
             .phoneset()
+            */
     }
     fn vowel_mid(&'a self, node: NodeId) -> Option<f32> {
         let phone = self.phoneset(node)?;
         self.get(node)?
             .relations()
             .feature_value("SylStructure")?
+            .try_borrow()
+            .ok()?
             .item()?
             .first_child(self)?
             .in_order_traverse(self)
             .filter(|(item, _)| {
-                let Some(Value::Str(phone_name)) = item.features().feature_value("name") else {
+                let Some(ValueInner::Str(phone_name)) = item.features().feature_value("name")
+                else {
                     return false;
                 };
-                let Some(Value::Str(phone_feat_str)) =
+                let Some(ValueInner::Str(phone_feat_str)) =
                     phone.borrow().phone_feature(phone_name, "vc")
                 else {
                     return false;
@@ -313,8 +322,18 @@ impl<'a> ItemTree<'a> {
             })
             .find_map(|(item, id)| {
                 Some(
-                    (item.features().feature_value("end")?.float().ok()?
-                        + id.find_feature(self, "R:Segment.p.end")?.float().ok()?)
+                    (item
+                        .features()
+                        .feature_value("end")?
+                        .try_borrow()
+                        .ok()?
+                        .float()
+                        .ok()?
+                        + id.find_feature(self, "R:Segment.p.end")?
+                            .try_borrow()
+                            .ok()?
+                            .float()
+                            .ok()?)
                         / 2.0,
                 )
             })

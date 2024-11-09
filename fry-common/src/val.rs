@@ -1,50 +1,61 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-use crate::{
-    error::ValueError, Feature, Phoneset, Relation, Strong, Utterance,
-};
-use alloc::{
-    vec::Vec,
-		boxed::Box,
-};
+use crate::{error::ValueError, Feature, Phoneset, Relation, Strong, Utterance};
+use alloc::{boxed::Box, vec::Vec};
+use core::ops::Deref;
 use core::str::FromStr;
 use indextree::NodeId;
 use strum::{Display, EnumDiscriminants};
 
-/// Either:
+/// CST (Carnegie Speech Tools) Value Either:
 ///
 /// - A [`ValueAtom`] in a list, or
 /// - A single [`ValueAtom`] value
 ///
 /// [Named `Cons` and `Atom` respectively because of Lisp naming schemes](https://en.wikipedia.org/wiki/Lisp_(programming_language)#Lists)
-/// 
+///
 /// This type implements [`core::ops::Deref`] for the inner [`ValueAtom`] structure of either the `Cons` or `Atom` variants.
-#[derive(derive_more::From)]
-pub enum CstValue<'a> {
-	/// List variant, first item is data, second is the next item
-	Cons((ValueAtom<'a>, Box<CstValue<'a>>)),
-	/// Single value
-	Atom(ValueAtom<'a>),
+#[derive(derive_more::From, Debug)]
+pub enum Value<'a> {
+    /// List variant, first item is data, second is the next item
+    Cons((ValueAtom<'a>, Box<Value<'a>>)),
+    /// Single value
+    Atom(ValueAtom<'a>),
 }
-impl<'a> core::ops::Deref for CstValue<'a> {
-	type Target = ValueAtom<'a>;
-	fn deref(&self) -> &ValueAtom<'a> {
-		match self {
-			CstValue::Cons((ref atom, _)) => atom,
-			CstValue::Atom(ref atom) => atom,
-		}
-	}
+impl<'a> From<ValueInner<'a>> for Value<'a> {
+    fn from(vi: ValueInner<'a>) -> Value<'a> {
+        Value::Atom(ValueAtom::new(vi))
+    }
+}
+impl<'a> core::ops::Deref for Value<'a> {
+    type Target = ValueAtom<'a>;
+    fn deref(&self) -> &ValueAtom<'a> {
+        match self {
+            Value::Cons((ref atom, _)) => atom,
+            Value::Atom(ref atom) => atom,
+        }
+    }
 }
 
 /// Value atom (AKA a `Strong<Value>`)
-#[derive(derive_more::From, derive_more::Deref)]
-pub struct ValueAtom<'a>(#[deref] Strong<Value<'a>>);
+#[derive(derive_more::From, derive_more::Deref, PartialEq, Debug)]
+pub struct ValueAtom<'a>(#[deref] Strong<ValueInner<'a>>);
+impl<'a> Clone for ValueAtom<'a> {
+    fn clone(&self) -> ValueAtom<'a> {
+        ValueAtom(Strong::clone(&self.0))
+    }
+}
+impl<'a> ValueAtom<'a> {
+    fn new(vi: ValueInner<'a>) -> Self {
+        ValueAtom(Strong::new(vi))
+    }
+}
 
 #[repr(u8)]
-#[derive(Debug, Clone, PartialEq, EnumDiscriminants, derive_more::From)]
+#[derive(Debug, PartialEq, EnumDiscriminants, derive_more::From)]
 #[strum_discriminants(derive(Display))]
 /// A generic value, which could be a `String`, `Int` (16 bits), or `Float` (32 bits)
-pub enum Value<'a> {
+pub enum ValueInner<'a> {
     /// A string with a lifetime
     Str(&'a str),
     /// An integer: signed, 32 bits
@@ -99,11 +110,11 @@ pub enum Value<'a> {
     //// TODO: `audio_streaming_info`
     //AudioStreamingInfo(()) = 53,
 }
-impl<'a> Value<'a> {
+impl<'a> ValueInner<'a> {
     /// Gets the `Phoneset` value if exists, `None` otherwise
     #[must_use]
     pub fn phoneset(&'a self) -> Option<&'a Phoneset<'a>> {
-        let Value::Phoneset(ph) = self else {
+        let ValueInner::Phoneset(ph) = self else {
             return None;
         };
         Some(ph)
@@ -111,7 +122,7 @@ impl<'a> Value<'a> {
     /// Gets `str` inner value, `None` otherwise
     #[must_use]
     pub fn str(&self) -> Option<&'a str> {
-        let Value::Str(s) = self else {
+        let ValueInner::Str(s) = self else {
             return None;
         };
         Some(s)
@@ -119,7 +130,7 @@ impl<'a> Value<'a> {
     /// Gets `item` inner value, `None` otherwise
     #[must_use]
     pub fn item(&self) -> Option<NodeId> {
-        let Value::Item(id) = self else {
+        let ValueInner::Item(id) = self else {
             return None;
         };
         Some(*id)
@@ -129,7 +140,7 @@ impl<'a> Value<'a> {
     ///
     /// # Errors
     ///
-    /// - If the Value is any variant other than:
+    /// - If the ValueInner is any variant other than:
     ///     - Float
     ///     - Int, or
     ///     - Str
@@ -141,19 +152,36 @@ impl<'a> Value<'a> {
             Self::Str(s) => Ok(f32::from_str(s)?),
             _ => Err(ValueError::InvalidType {
                 orig: self.into(),
-                try_to: ValueDiscriminants::Float,
+                try_to: ValueInnerDiscriminants::Float,
             }),
         }
     }
 }
-impl<'a> Default for Value<'a> {
-    fn default() -> Value<'a> {
-        Value::Int(0)
+impl<'a> Default for ValueInner<'a> {
+    fn default() -> ValueInner<'a> {
+        ValueInner::Int(0)
     }
 }
-impl PartialEq<str> for Value<'_> {
+impl<'a> PartialEq<Value<'a>> for Value<'a> {
+    fn eq(&self, other: &Value<'a>) -> bool {
+        self.deref() == other.deref()
+    }
+}
+impl<'a, T> PartialEq<T> for Value<'a>
+where
+    ValueInner<'a>: PartialEq<T>,
+    T: ?Sized,
+{
+    fn eq(&self, other: &T) -> bool {
+        let Ok(inner) = self.deref().try_borrow() else {
+            return false;
+        };
+        *inner == *other
+    }
+}
+impl PartialEq<str> for ValueInner<'_> {
     fn eq(&self, other: &str) -> bool {
-        let Value::Str(s) = &self else {
+        let ValueInner::Str(s) = &self else {
             return false;
         };
         *s == other
