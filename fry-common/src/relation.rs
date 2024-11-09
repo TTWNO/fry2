@@ -1,6 +1,6 @@
 //! CST Relation.
 
-use crate::{Feature, MaybeStrong, Utterance};
+use crate::{Features, MaybeStrong, Utterance};
 
 use alloc::vec::Vec;
 
@@ -8,6 +8,6 @@ use alloc::vec::Vec;
 #[derive(Debug, PartialEq)]
 pub struct Relation<'a> {
     pub(crate) name: &'a str,
-    pub(crate) features: Vec<Feature<'a>>,
+    pub(crate) features: Features<'a>,
     pub(crate) utterance: MaybeStrong<Utterance<'a>>,
 }

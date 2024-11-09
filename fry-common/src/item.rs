@@ -1,7 +1,8 @@
 //! CST Item and a tree containing its nodes.
 
 use crate::{
-    Content, Feature, MaybeStrong, Path, Phoneset, Relation, Strong, Utterance, Value, ValueInner,
+    Content, Feature, Features, MaybeStrong, Path, Phoneset, Relation, Strong, Utterance, Value,
+    ValueInner,
 };
 use alloc::{rc::Rc, str, vec::Vec};
 use indextree::{Arena, NodeEdge, NodeId};
@@ -107,8 +108,8 @@ impl GetNodeId for NodeEdge {
 /// An individual item's content.
 #[derive(Debug, PartialEq)]
 pub struct ItemContents<'a> {
-    features: Vec<Feature<'a>>,
-    relations: Vec<Feature<'a>>,
+    features: Features<'a>,
+    relations: Features<'a>,
 }
 
 /// An individual item.
@@ -118,10 +119,10 @@ pub struct Item<'a> {
     relation: Option<Relation<'a>>,
 }
 impl<'a> Item<'a> {
-    fn features(&self) -> &Vec<Feature<'a>> {
+    fn features(&self) -> &Features<'a> {
         &self.contents.features
     }
-    fn relations(&self) -> &Vec<Feature<'a>> {
+    fn relations(&self) -> &Features<'a> {
         &self.contents.relations
     }
     fn utterance(&self) -> Option<Strong<Utterance<'a>>> {
@@ -129,19 +130,6 @@ impl<'a> Item<'a> {
             return None;
         };
         rel.utterance.get()
-    }
-}
-
-pub(crate) trait FeatureValue<'a> {
-    fn feature_value(&self, name: &str) -> Option<&Value<'a>>;
-    fn feature_present(&self, name: &str) -> bool;
-}
-impl<'a> FeatureValue<'a> for [Feature<'a>] {
-    fn feature_value(&self, name: &str) -> Option<&Value<'a>> {
-        Some(&self.iter().find(|feat| feat.name == name)?.value)
-    }
-    fn feature_present(&self, name: &str) -> bool {
-        self.iter().any(|feat| feat.name == name)
     }
 }
 

@@ -1,6 +1,6 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-use crate::{error::ValueError, Feature, Phoneset, Relation, Strong, Utterance};
+use crate::{error::ValueError, Features, Phoneset, Relation, Strong, Utterance};
 use alloc::{boxed::Box, vec::Vec};
 use core::ops::Deref;
 use core::str::FromStr;
@@ -100,7 +100,7 @@ pub enum ValueInner<'a> {
     //// TODO: itemfunc
     //ItemFunc(()) = 43,
     /// TODO: features
-    Features(Vec<Feature<'a>>) = 45,
+    Features(Features<'a>) = 45,
     //// TODO: breakfunc
     //BreakFunc(()) = 47,
     //// TODO: `cg_db`

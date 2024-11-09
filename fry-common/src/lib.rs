@@ -21,7 +21,7 @@ use relation::Relation;
 pub mod utterance;
 use utterance::Utterance;
 pub mod feature;
-use feature::Feature;
+use feature::{Feature, Features};
 pub mod content;
 use content::Content;
 pub mod path;
