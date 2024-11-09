@@ -1,6 +1,6 @@
 //! CST Utterance.
 
-use crate::{item::FeatureValue, Feature, maybe_strong::Strong};
+use crate::{item::FeatureValue, maybe_strong::Strong, Feature};
 
 use alloc::{collections::BTreeSet, vec::Vec};
 
@@ -13,7 +13,7 @@ pub struct Utterance<'a> {
 }
 impl Strong<Utterance<'_>> {
     fn us_f0_model(&mut self) {
-        if self.features.feature_present("no_f0_target_model") {
+        if self.borrow().features.feature_present("no_f0_target_model") {
             return;
         }
         todo!()

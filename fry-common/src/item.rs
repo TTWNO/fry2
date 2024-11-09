@@ -1,11 +1,7 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{Content, Feature, Path, Phoneset, Relation, Utterance, Value, MaybeStrong, Strong};
-use alloc::{
-    str,
-    vec::Vec,
-		rc::Rc,
-};
+use crate::{Content, Feature, MaybeStrong, Path, Phoneset, Relation, Strong, Utterance, Value};
+use alloc::{rc::Rc, str, vec::Vec};
 use indextree::{Arena, NodeEdge, NodeId};
 use itertools::Itertools;
 
@@ -174,7 +170,7 @@ impl<'a> ItemTree<'a> {
     fn last_child(&self, node: NodeId) -> Option<NodeId> {
         self.0.get(node)?.last_child()
     }
-    fn relation(&self, node: NodeId, name: &'a str) -> Option<NodeId> {
+    fn relation(&self, node: NodeId, name: &str) -> Option<NodeId> {
         self.0
             .get(node)
             .map(|node| node.get().relations().feature_value(name)?.item())?
@@ -205,7 +201,7 @@ impl<'a> ItemTree<'a> {
     fn last(&self, node: NodeId) -> Option<NodeId> {
         Some(node.reverse_traverse(&self.0).last()?.node_id())
     }
-    fn use_path(&self, node: NodeId, path: &'a Path<'a>) -> Option<NodeId> {
+    fn use_path<'b>(&self, node: NodeId, path: &'b Path<'b>) -> Option<NodeId> {
         // note: traverse starts at the current node, so skip(1) is used to go to the next one
         match path {
             Path::Next => self.next(node),
@@ -224,7 +220,7 @@ impl<'a> ItemTree<'a> {
     /// Get the item at the end of the feature path.
     ///
     /// NOTE: xref `src/hrg/ffeatures.c:internal_ff`
-    pub fn find_feature(&self, node: NodeId, multipath: &'a str) -> Option<Value<'a>> {
+    pub fn find_feature(&self, node: NodeId, multipath: &str) -> Option<Value<'a>> {
         let dest: NodeId = multipath
             .split('.')
             .map(Path::try_from)
@@ -234,7 +230,7 @@ impl<'a> ItemTree<'a> {
             .iter()
             // NOTE: must drop last item; I'd prefer something like `skip_last` but haven't found it anywhere, but this is good enough
             .tuple_windows()
-            .map(|(a, b)| a)
+            .map(|(a, _b)| a)
             // graph traversal, use item from first path as input to next section of path
             // NOTE: if any use_path directive fails (returns None) it will short-circurit the rest
             // of the function
@@ -291,6 +287,7 @@ impl<'a> ItemTree<'a> {
     fn phoneset(&'a self, node: NodeId) -> Option<Strong<Phoneset<'a>>> {
         self.get(node)?
             .utterance()?
+            .borrow()
             .features
             .feature_value("phoneset")?
             .phoneset()
@@ -307,7 +304,9 @@ impl<'a> ItemTree<'a> {
                 let Some(Value::Str(phone_name)) = item.features().feature_value("name") else {
                     return false;
                 };
-                let Some(Value::Str(phone_feat_str)) = phone.phone_feature(phone_name, "vc") else {
+                let Some(Value::Str(phone_feat_str)) =
+                    phone.borrow().phone_feature(phone_name, "vc")
+                else {
                     return false;
                 };
                 "+" == *phone_feat_str

@@ -1,6 +1,6 @@
 //! CST Relation.
 
-use crate::{Feature, Utterance, MaybeStrong};
+use crate::{Feature, MaybeStrong, Utterance};
 
 use alloc::vec::Vec;
 

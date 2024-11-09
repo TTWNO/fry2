@@ -1,7 +1,7 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
 use crate::{
-    error::ValueError, CartTree, Feature, Item, MaybeStrong, Phoneset, Relation, Utterance, Strong
+    error::ValueError, CartTree, Feature, Item, MaybeStrong, Phoneset, Relation, Strong, Utterance,
 };
 use alloc::{
     rc::{Rc, Weak},
