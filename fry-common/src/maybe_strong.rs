@@ -5,6 +5,8 @@ use core::cell::RefCell;
 #[derive(derive_more::Deref, Debug, PartialEq, derive_more::From)]
 pub struct Strong<T>(#[deref] Rc<RefCell<T>>);
 impl<T> Strong<T> {
+    /// Create a new `Strong` reference.
+    /// This will create an inner `Rc<RefCell<T>>`
     pub fn new(t: T) -> Strong<T> {
         Strong(Rc::new(RefCell::new(t)))
     }

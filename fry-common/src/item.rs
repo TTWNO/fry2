@@ -309,16 +309,22 @@ impl<'a> ItemTree<'a> {
             .first_child(self)?
             .in_order_traverse(self)
             .filter(|(item, _)| {
-                let Some(ValueInner::Str(phone_name)) = item.features().feature_value("name")
-                else {
+                let Some(value_ref) = item.features().feature_value("name") else {
                     return false;
                 };
-                let Some(ValueInner::Str(phone_feat_str)) =
-                    phone.borrow().phone_feature(phone_name, "vc")
-                else {
+                let Ok(value) = value_ref.try_borrow() else {
                     return false;
                 };
-                "+" == *phone_feat_str
+                let Some(phone_name) = value.str() else {
+                    return false;
+                };
+                let Some(phone_feat) = phone.borrow().phone_feature(phone_name, "vc") else {
+                    return false;
+                };
+                let Some(phone_feat_str) = phone_feat.borrow().str() else {
+                    return false;
+                };
+                "+" == phone_feat_str
             })
             .find_map(|(item, id)| {
                 Some(
