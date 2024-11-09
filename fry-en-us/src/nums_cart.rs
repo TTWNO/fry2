@@ -1,37 +1,37 @@
 use fry_common::{
     cart_tree::{CartNode, CartOperation, CartTree},
-    Value,
+    ValueInner,
 };
 
-const VAL_0000: Value<'static> = Value::Float(3.8);
-const VAL_0001: Value<'static> = Value::Str("month");
-const VAL_0002: Value<'static> = Value::Str("0");
-const VAL_0003: Value<'static> = Value::Str("year");
-const VAL_0004: Value<'static> = Value::Str("ordinal");
-const VAL_0005: Value<'static> = Value::Str("cardinal");
-const VAL_0006: Value<'static> = Value::Str("numeric");
-const VAL_0007: Value<'static> = Value::Float(2.000000);
-const VAL_0008: Value<'static> = Value::Str("sym");
-const VAL_0009: Value<'static> = Value::Str("digits");
-const VAL_0010: Value<'static> = Value::Float(302.3);
-const VAL_0011: Value<'static> = Value::Str("flight");
-const VAL_0012: Value<'static> = Value::Str("a");
-const VAL_0013: Value<'static> = Value::Float(669.2);
-const VAL_0014: Value<'static> = Value::Float(373.2);
-const VAL_0015: Value<'static> = Value::Float(436.2);
-const VAL_0016: Value<'static> = Value::Float(392.6);
-const VAL_0017: Value<'static> = Value::Float(716.5);
-const VAL_0018: Value<'static> = Value::Float(773.6);
-const VAL_0019: Value<'static> = Value::Str("_other_");
-const VAL_0020: Value<'static> = Value::Float(4.4);
-const VAL_0021: Value<'static> = Value::Float(2_959.6);
-const VAL_0022: Value<'static> = Value::Float(1_773.4);
-const VAL_0023: Value<'static> = Value::Str("to");
-const VAL_0024: Value<'static> = Value::Float(4.6);
-const VAL_0025: Value<'static> = Value::Float(4.8);
-const VAL_0026: Value<'static> = Value::Float(2880.000000);
-const VAL_0027: Value<'static> = Value::Float(1_633.2);
-const VAL_0028: Value<'static> = Value::Float(1_306.4);
+const VAL_0000: ValueInner<'static> = ValueInner::Float(3.8);
+const VAL_0001: ValueInner<'static> = ValueInner::Str("month");
+const VAL_0002: ValueInner<'static> = ValueInner::Str("0");
+const VAL_0003: ValueInner<'static> = ValueInner::Str("year");
+const VAL_0004: ValueInner<'static> = ValueInner::Str("ordinal");
+const VAL_0005: ValueInner<'static> = ValueInner::Str("cardinal");
+const VAL_0006: ValueInner<'static> = ValueInner::Str("numeric");
+const VAL_0007: ValueInner<'static> = ValueInner::Float(2.000000);
+const VAL_0008: ValueInner<'static> = ValueInner::Str("sym");
+const VAL_0009: ValueInner<'static> = ValueInner::Str("digits");
+const VAL_0010: ValueInner<'static> = ValueInner::Float(302.3);
+const VAL_0011: ValueInner<'static> = ValueInner::Str("flight");
+const VAL_0012: ValueInner<'static> = ValueInner::Str("a");
+const VAL_0013: ValueInner<'static> = ValueInner::Float(669.2);
+const VAL_0014: ValueInner<'static> = ValueInner::Float(373.2);
+const VAL_0015: ValueInner<'static> = ValueInner::Float(436.2);
+const VAL_0016: ValueInner<'static> = ValueInner::Float(392.6);
+const VAL_0017: ValueInner<'static> = ValueInner::Float(716.5);
+const VAL_0018: ValueInner<'static> = ValueInner::Float(773.6);
+const VAL_0019: ValueInner<'static> = ValueInner::Str("_other_");
+const VAL_0020: ValueInner<'static> = ValueInner::Float(4.4);
+const VAL_0021: ValueInner<'static> = ValueInner::Float(2_959.6);
+const VAL_0022: ValueInner<'static> = ValueInner::Float(1_773.4);
+const VAL_0023: ValueInner<'static> = ValueInner::Str("to");
+const VAL_0024: ValueInner<'static> = ValueInner::Float(4.6);
+const VAL_0025: ValueInner<'static> = ValueInner::Float(4.8);
+const VAL_0026: ValueInner<'static> = ValueInner::Float(2880.000000);
+const VAL_0027: ValueInner<'static> = ValueInner::Float(1_633.2);
+const VAL_0028: ValueInner<'static> = ValueInner::Float(1_306.4);
 
 const CTNODE_US_NUMS_NO_0002: usize = 4;
 const CTNODE_US_NUMS_NO_0001: usize = 5;
@@ -85,193 +85,193 @@ const CTNODE_US_NUMS_NO_0088: usize = 96;
 fn nums_cart_tree() -> CartTree<'static, 97, 7> {
     CartTree::init_unchecked(
         [
-            CartNode::init(
+            CartNode::init_val_inner(
                 0,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0000,
                 VAL_0000,
             ),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0001, VAL_0001),
-            CartNode::init(2, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0002, VAL_0002),
-            CartNode::init(255, None, 0, VAL_0003),
-            CartNode::init(255, None, 0, VAL_0004),
-            CartNode::init(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0005, VAL_0001),
-            CartNode::init(2, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0006, VAL_0002),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0004),
-            CartNode::init(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0009, VAL_0006),
-            CartNode::init(
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0001, VAL_0001),
+            CartNode::init_val_inner(2, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0002, VAL_0002),
+            CartNode::init_val_inner(255, None, 0, VAL_0003),
+            CartNode::init_val_inner(255, None, 0, VAL_0004),
+            CartNode::init_val_inner(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0005, VAL_0001),
+            CartNode::init_val_inner(2, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0006, VAL_0002),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0004),
+            CartNode::init_val_inner(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0009, VAL_0006),
+            CartNode::init_val_inner(
                 0,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0010,
                 VAL_0007,
             ),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0011, VAL_0006),
-            CartNode::init(4, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0012, VAL_0008),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0016, VAL_0008),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0011, VAL_0006),
+            CartNode::init_val_inner(4, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0012, VAL_0008),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0016, VAL_0008),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(
                 0,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0019,
                 VAL_0007,
             ),
-            CartNode::init(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0020, VAL_0006),
-            CartNode::init(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0021, VAL_0008),
-            CartNode::init(2, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0022, VAL_0002),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(
+            CartNode::init_val_inner(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0020, VAL_0006),
+            CartNode::init_val_inner(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0021, VAL_0008),
+            CartNode::init_val_inner(2, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0022, VAL_0002),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0027,
                 VAL_0010,
             ),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0028, VAL_0011),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0030, VAL_0008),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0031, VAL_0008),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0035, VAL_0012),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0037, VAL_0008),
-            CartNode::init(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0038, VAL_0008),
-            CartNode::init(
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0028, VAL_0011),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0030, VAL_0008),
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0031, VAL_0008),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0035, VAL_0012),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0037, VAL_0008),
+            CartNode::init_val_inner(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0038, VAL_0008),
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0039,
                 VAL_0013,
             ),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0043,
                 VAL_0014,
             ),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0045,
                 VAL_0015,
             ),
-            CartNode::init(
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0046,
                 VAL_0016,
             ),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0049,
                 VAL_0017,
             ),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0051,
                 VAL_0018,
             ),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0052, VAL_0019),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0056, VAL_0006),
-            CartNode::init(4, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0057, VAL_0001),
-            CartNode::init(255, None, 0, VAL_0003),
-            CartNode::init(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0059, VAL_0006),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0062, VAL_0006),
-            CartNode::init(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0063, VAL_0001),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0065, VAL_0006),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0067, VAL_0019),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0003),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0070, VAL_0019),
-            CartNode::init(
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0052, VAL_0019),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0056, VAL_0006),
+            CartNode::init_val_inner(4, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0057, VAL_0001),
+            CartNode::init_val_inner(255, None, 0, VAL_0003),
+            CartNode::init_val_inner(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0059, VAL_0006),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(5, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0062, VAL_0006),
+            CartNode::init_val_inner(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0063, VAL_0001),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0065, VAL_0006),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0067, VAL_0019),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0003),
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0070, VAL_0019),
+            CartNode::init_val_inner(
                 0,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0071,
                 VAL_0020,
             ),
-            CartNode::init(
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0072,
                 VAL_0021,
             ),
-            CartNode::init(
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0073,
                 VAL_0022,
             ),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0003),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(4, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0077, VAL_0019),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0080, VAL_0023),
-            CartNode::init(255, None, 0, VAL_0003),
-            CartNode::init(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0082, VAL_0008),
-            CartNode::init(4, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0083, VAL_0008),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0003),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(4, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0077, VAL_0019),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(3, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0080, VAL_0023),
+            CartNode::init_val_inner(255, None, 0, VAL_0003),
+            CartNode::init_val_inner(1, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0082, VAL_0008),
+            CartNode::init_val_inner(4, Some(CartOperation::Is), CTNODE_US_NUMS_NO_0083, VAL_0008),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(
                 0,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0085,
                 VAL_0024,
             ),
-            CartNode::init(255, None, 0, VAL_0003),
-            CartNode::init(255, None, 0, VAL_0009),
-            CartNode::init(
+            CartNode::init_val_inner(255, None, 0, VAL_0003),
+            CartNode::init_val_inner(255, None, 0, VAL_0009),
+            CartNode::init_val_inner(
                 0,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0088,
                 VAL_0025,
             ),
-            CartNode::init(
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0089,
                 VAL_0026,
             ),
-            CartNode::init(
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0090,
                 VAL_0027,
             ),
-            CartNode::init(
+            CartNode::init_val_inner(
                 6,
                 Some(CartOperation::Less),
                 CTNODE_US_NUMS_NO_0091,
                 VAL_0028,
             ),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0003),
-            CartNode::init(255, None, 0, VAL_0003),
-            CartNode::init(255, None, 0, VAL_0005),
-            CartNode::init(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0003),
+            CartNode::init_val_inner(255, None, 0, VAL_0003),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
+            CartNode::init_val_inner(255, None, 0, VAL_0005),
         ],
         [
             "num_digits",
