@@ -80,6 +80,7 @@ pub fn apply_lr_model<'b>(
                         // we decidede to pass back up a Result
                         // NOTE: this condition is not in `flite`; it makes sense to have a 0 condition just in
                         // case thought
+												// TODO: make so it can not panic.
                         val.borrow().float().unwrap_or_default()
                     }
                 // NOTE: this condition is not in `flite`; it makes sense to have a 0 condition just in

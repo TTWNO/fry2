@@ -22,10 +22,13 @@ pub enum Value<'a> {
     /// Single value
     Atom(ValueAtom<'a>),
 }
-impl<'a> From<ValueInner<'a>> for Value<'a> {
-    fn from(vi: ValueInner<'a>) -> Value<'a> {
-        Value::Atom(ValueAtom::new(vi))
-    }
+impl<'a, T> From<T> for Value<'a> 
+where T: Into<ValueInner<'a>> {
+	fn from(tvi: T) -> Value<'a> {
+		Value::Atom(ValueAtom(Strong::new(
+			tvi.into()
+		)))
+	}
 }
 impl<'a> core::ops::Deref for Value<'a> {
     type Target = ValueAtom<'a>;
@@ -111,6 +114,14 @@ pub enum ValueInner<'a> {
     //AudioStreamingInfo(()) = 53,
 }
 impl<'a> ValueInner<'a> {
+    /// Gets the `Relation` value if exists, `None` otherwise
+    #[must_use]
+    pub fn relation(&'a self) -> Option<&'a Relation<'a>> {
+        let ValueInner::Relation(rel) = self else {
+            return None;
+        };
+        Some(rel)
+    }
     /// Gets the `Phoneset` value if exists, `None` otherwise
     #[must_use]
     pub fn phoneset(&'a self) -> Option<&'a Phoneset<'a>> {
