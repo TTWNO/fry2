@@ -13,6 +13,11 @@ pub struct Utterance<'a> {
     pub(crate) ffunctions: Features<'a>,
     pub(crate) relations: Features<'a>,
 }
+impl<'a> Utterance<'a> {
+    fn relation(&'a self, name: &'a str) -> Option<&'a Value<'a>> {
+        self.relations.feature_value(name)
+    }
+}
 impl<'a> Strong<Utterance<'a>> {
     fn relation_create(&mut self, name: &'a str, value: Value<'a>) -> Strong<Relation<'a>> {
         let (rel_val, rel_copy) = Rc::downgrade(self)
