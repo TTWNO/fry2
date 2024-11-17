@@ -42,9 +42,10 @@ impl<T> MaybeStrong<T> {
     ///
     /// - In the original Flite code, an explicit reference-count addition is not needed often (due to raw pointers everywhere), but Rust required strict ownership.
     /// - This means that an explicit reference count addition is done upon _every_ invocation of this function on a `MaybeStrong::Strong` varaint.
+    #[must_use]
     pub fn get(&self) -> Option<Strong<T>> {
         match self {
-            MaybeStrong::Strong(s) => Some(Strong::clone(&s)),
+            MaybeStrong::Strong(ref s) => Some(Strong::clone(s)),
             MaybeStrong::Weak(w) => Some(Strong(RcWeak::upgrade(&w.0)?)),
         }
     }

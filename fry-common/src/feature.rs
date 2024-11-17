@@ -23,6 +23,7 @@ pub struct Features<'a> {
 }
 impl<'a> Features<'a> {
     /// Create a new, empty list of features.
+    #[must_use]
     pub fn new() -> Self {
         Features { inner: Vec::new() }
     }
@@ -41,12 +42,19 @@ impl<'a> Features<'a> {
     }
     /// Get the value of an individual feature, if a feature with the name `name` is found.
     /// None otherwise.
+    #[must_use]
     pub fn feature_value(&self, name: &str) -> Option<&Value<'a>> {
         Some(&self.inner.iter().find(|feat| feat.name == name)?.value)
     }
     /// Check if a feature exists in this set.
     /// True if the feature name is found, false otherwise.
+    #[must_use]
     pub fn feature_present(&self, name: &str) -> bool {
         self.inner.iter().any(|feat| feat.name == name)
+    }
+}
+impl Default for Features<'_> {
+    fn default() -> Self {
+        Self::new()
     }
 }

@@ -26,8 +26,7 @@ impl<'a> core::ops::Deref for Value<'a> {
     type Target = ValueAtom<'a>;
     fn deref(&self) -> &ValueAtom<'a> {
         match self {
-            Value::Cons((ref atom, _)) => atom,
-            Value::Atom(ref atom) => atom,
+            Value::Cons((ref atom, _)) | Value::Atom(ref atom) => atom,
         }
     }
 }
@@ -129,7 +128,7 @@ impl<'a> ValueAtom<'a> {
     ///
     /// # Errors
     ///
-    /// - If the ValueAtom is any variant other than:
+    /// - If the `ValueAtom` is any variant other than:
     ///     - Float
     ///     - Int, or
     ///     - Str
@@ -162,7 +161,9 @@ where
     T: ?Sized,
 {
     fn eq(&self, other: &T) -> bool {
-        *self == *other
+        match self {
+            Value::Atom(ref atom) | Value::Cons((ref atom, _)) => atom == other,
+        }
     }
 }
 impl PartialEq<str> for ValueAtom<'_> {

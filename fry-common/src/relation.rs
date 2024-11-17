@@ -13,6 +13,7 @@ pub struct Relation<'a> {
 }
 impl<'a> Relation<'a> {
     /// Create a new, relation set (with an empty features list)
+    #[must_use]
     pub fn new(name: &'a str, utterance: MaybeStrong<Utterance<'a>>) -> Self {
         Relation {
             name,
