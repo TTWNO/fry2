@@ -136,7 +136,7 @@ impl<'a> Item<'a> {
 /// A full item tree.
 pub struct ItemTree<'a>(pub Arena<Item<'a>>);
 
-impl<'a> Iterator for &ItemTree<'a> {
+impl<'a> Iterator for ItemTree<'a> {
     type Item = Item<'a>;
     fn next(&mut self) -> Option<Self::Item> {
         self.next()
