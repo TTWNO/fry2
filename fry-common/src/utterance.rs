@@ -1,6 +1,6 @@
 //! CST Utterance.
 
-use crate::{maybe_strong::Strong, Features, MaybeStrong, Relation, Value};
+use crate::{maybe_strong::Strong, Features, MaybeStrong, Relation, Value, ValueAtom};
 use tap::{Pipe, Tap};
 
 use alloc::{collections::BTreeSet, rc::Rc, vec::Vec};
@@ -15,19 +15,20 @@ pub struct Utterance<'a> {
 }
 impl<'a> Strong<Utterance<'a>> {
     fn relation_create(&mut self, name: &'a str, value: Value<'a>) -> Strong<Relation<'a>> {
-        let rel = self
-            .clone()
+        let (rel_val, rel_copy) = Rc::downgrade(&self)
             .pipe(MaybeStrong::from)
             .pipe(|mstr_utt| Relation::new(name, mstr_utt))
-            .pipe(RefCell::new)
-            .pipe(Rc::new)
-            .pipe(Strong::from);
-        // only an RC clone
-        let rel_copy = Strong::clone(&rel);
-        // let mut utt = self.borrow_mut();
-        //let rel_val = rel.into();
-        //utt.relations.set(name, rel_val);
-        //rel_val.borrow().relation().unwrap()
+            .pipe(Strong::new)
+            .pipe(|st_rel| {
+                (
+                    Strong::clone(&st_rel)
+                        .pipe(ValueAtom::from)
+                        .pipe(Value::from),
+                    st_rel,
+                )
+            });
+        self.borrow_mut()
+            .tap_mut(|mut utt| utt.relations.set(name, rel_val));
         rel_copy
     }
 }

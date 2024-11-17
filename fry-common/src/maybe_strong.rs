@@ -55,6 +55,16 @@ impl<T> From<Strong<T>> for MaybeStrong<T> {
         MaybeStrong::Strong(strong)
     }
 }
+impl<T> From<Weak<T>> for MaybeStrong<T> {
+    fn from(weak: Weak<T>) -> MaybeStrong<T> {
+        MaybeStrong::Weak(weak)
+    }
+}
+impl<T> From<RcWeak<RefCell<T>>> for MaybeStrong<T> {
+    fn from(weak: RcWeak<RefCell<T>>) -> MaybeStrong<T> {
+        MaybeStrong::Weak(Weak(weak))
+    }
+}
 
 impl<T> PartialEq for MaybeStrong<T>
 where
