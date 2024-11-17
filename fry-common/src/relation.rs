@@ -12,10 +12,12 @@ pub struct Relation<'a> {
     pub(crate) utterance: MaybeStrong<Utterance<'a>>,
 }
 impl<'a> Relation<'a> {
-	/// Create a new, relation set (with an empty features list)
-	pub fn new(name: &'a str, utterance: MaybeStrong<Utterance<'a>>) -> Self {
-		Relation {
-			name, features: Features::new(), utterance
-		}
-	}
+    /// Create a new, relation set (with an empty features list)
+    pub fn new(name: &'a str, utterance: MaybeStrong<Utterance<'a>>) -> Self {
+        Relation {
+            name,
+            features: Features::new(),
+            utterance,
+        }
+    }
 }

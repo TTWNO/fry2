@@ -2,8 +2,8 @@
 
 use crate::{error::ValueError, Features, Phoneset, Relation, Strong, Utterance};
 use alloc::{boxed::Box, vec::Vec};
-use core::ops::Deref;
 use core::str::FromStr;
+use core::{borrow::Borrow, ops::Deref};
 use indextree::NodeId;
 use strum::{Display, EnumDiscriminants};
 
@@ -22,14 +22,6 @@ pub enum Value<'a> {
     /// Single value
     Atom(ValueAtom<'a>),
 }
-impl<'a, T> From<T> for Value<'a> 
-where T: Into<ValueInner<'a>> {
-	fn from(tvi: T) -> Value<'a> {
-		Value::Atom(ValueAtom(Strong::new(
-			tvi.into()
-		)))
-	}
-}
 impl<'a> core::ops::Deref for Value<'a> {
     type Target = ValueAtom<'a>;
     fn deref(&self) -> &ValueAtom<'a> {
@@ -40,25 +32,11 @@ impl<'a> core::ops::Deref for Value<'a> {
     }
 }
 
-/// Value atom (AKA a `Strong<Value>`)
-#[derive(derive_more::From, derive_more::Deref, PartialEq, Debug)]
-pub struct ValueAtom<'a>(#[deref] Strong<ValueInner<'a>>);
-impl<'a> Clone for ValueAtom<'a> {
-    fn clone(&self) -> ValueAtom<'a> {
-        ValueAtom(Strong::clone(&self.0))
-    }
-}
-impl<'a> ValueAtom<'a> {
-    fn new(vi: ValueInner<'a>) -> Self {
-        ValueAtom(Strong::new(vi))
-    }
-}
-
 #[repr(u8)]
 #[derive(Debug, PartialEq, EnumDiscriminants, derive_more::From)]
 #[strum_discriminants(derive(Display))]
 /// A generic value, which could be a `String`, `Int` (16 bits), or `Float` (32 bits)
-pub enum ValueInner<'a> {
+pub enum ValueAtom<'a> {
     /// A string with a lifetime
     Str(&'a str),
     /// An integer: signed, 32 bits
@@ -67,7 +45,7 @@ pub enum ValueInner<'a> {
     /// A float
     Float(f32),
     /// Utterance
-    Utterance(Utterance<'a>) = 7,
+    Utterance(Strong<Utterance<'a>>) = 7,
     ///// TODO: wave
     //Wave(()) = 9,
     ///// TODO: track
@@ -79,13 +57,13 @@ pub enum ValueInner<'a> {
     ///// TODO: ffunc
     //FFunc(((),(),(),(),())) = 17,
     /// TODO: relation
-    Relation(Relation<'a>) = 19,
+    Relation(Strong<Relation<'a>>) = 19,
     /// TODO: item; encoded as a `NodeId` so that it can grab the Item from the arena
     Item(NodeId) = 21,
     ///// TODO: cart tree
     //Cart(&'a CartTree<'a, 1, 1>) = 23,
     /// TODO: phoneset
-    Phoneset(Phoneset<'a>) = 25,
+    Phoneset(Strong<Phoneset<'a>>) = 25,
     //// TODO: lexicon
     //Lexicon(()) = 27,
     //// TODO: durstats
@@ -103,7 +81,7 @@ pub enum ValueInner<'a> {
     //// TODO: itemfunc
     //ItemFunc(()) = 43,
     /// TODO: features
-    Features(Features<'a>) = 45,
+    Features(Strong<Features<'a>>) = 45,
     //// TODO: breakfunc
     //BreakFunc(()) = 47,
     //// TODO: `cg_db`
@@ -113,19 +91,19 @@ pub enum ValueInner<'a> {
     //// TODO: `audio_streaming_info`
     //AudioStreamingInfo(()) = 53,
 }
-impl<'a> ValueInner<'a> {
+impl<'a> ValueAtom<'a> {
     /// Gets the `Relation` value if exists, `None` otherwise
     #[must_use]
-    pub fn relation(&'a self) -> Option<&'a Relation<'a>> {
-        let ValueInner::Relation(rel) = self else {
+    pub fn relation(&'a self) -> Option<&'a Strong<Relation<'a>>> {
+        let ValueAtom::Relation(rel) = self else {
             return None;
         };
         Some(rel)
     }
     /// Gets the `Phoneset` value if exists, `None` otherwise
     #[must_use]
-    pub fn phoneset(&'a self) -> Option<&'a Phoneset<'a>> {
-        let ValueInner::Phoneset(ph) = self else {
+    pub fn phoneset(&'a self) -> Option<&'a Strong<Phoneset<'a>>> {
+        let ValueAtom::Phoneset(ph) = self else {
             return None;
         };
         Some(ph)
@@ -133,7 +111,7 @@ impl<'a> ValueInner<'a> {
     /// Gets `str` inner value, `None` otherwise
     #[must_use]
     pub fn str(&self) -> Option<&'a str> {
-        let ValueInner::Str(s) = self else {
+        let ValueAtom::Str(s) = self else {
             return None;
         };
         Some(s)
@@ -141,7 +119,7 @@ impl<'a> ValueInner<'a> {
     /// Gets `item` inner value, `None` otherwise
     #[must_use]
     pub fn item(&self) -> Option<NodeId> {
-        let ValueInner::Item(id) = self else {
+        let ValueAtom::Item(id) = self else {
             return None;
         };
         Some(*id)
@@ -151,7 +129,7 @@ impl<'a> ValueInner<'a> {
     ///
     /// # Errors
     ///
-    /// - If the ValueInner is any variant other than:
+    /// - If the ValueAtom is any variant other than:
     ///     - Float
     ///     - Int, or
     ///     - Str
@@ -163,14 +141,14 @@ impl<'a> ValueInner<'a> {
             Self::Str(s) => Ok(f32::from_str(s)?),
             _ => Err(ValueError::InvalidType {
                 orig: self.into(),
-                try_to: ValueInnerDiscriminants::Float,
+                try_to: ValueAtomDiscriminants::Float,
             }),
         }
     }
 }
-impl<'a> Default for ValueInner<'a> {
-    fn default() -> ValueInner<'a> {
-        ValueInner::Int(0)
+impl<'a> Default for ValueAtom<'a> {
+    fn default() -> ValueAtom<'a> {
+        ValueAtom::Int(0)
     }
 }
 impl<'a> PartialEq<Value<'a>> for Value<'a> {
@@ -180,19 +158,16 @@ impl<'a> PartialEq<Value<'a>> for Value<'a> {
 }
 impl<'a, T> PartialEq<T> for Value<'a>
 where
-    ValueInner<'a>: PartialEq<T>,
+    ValueAtom<'a>: PartialEq<T>,
     T: ?Sized,
 {
     fn eq(&self, other: &T) -> bool {
-        let Ok(inner) = self.deref().try_borrow() else {
-            return false;
-        };
-        *inner == *other
+        *self == *other
     }
 }
-impl PartialEq<str> for ValueInner<'_> {
+impl PartialEq<str> for ValueAtom<'_> {
     fn eq(&self, other: &str) -> bool {
-        let ValueInner::Str(s) = &self else {
+        let ValueAtom::Str(s) = &self else {
             return false;
         };
         *s == other

@@ -1,6 +1,6 @@
 use fry_common::{
     cart_tree::{CartNode, CartOperation, CartTree},
-    ValueInner,
+    ValueAtom,
 };
 const CTNODE_US_PHRASING_NO_0000: usize = 2;
 const CTNODE_US_PHRASING_NO_0004: usize = 6;
@@ -10,12 +10,12 @@ const CTNODE_US_PHRASING_NO_0002: usize = 10;
 const CTNODE_US_PHRASING_NO_0010: usize = 12;
 const CTNODE_US_PHRASING_NO_0012: usize = 14;
 
-const VAL_0000: ValueInner<'static> = ValueInner::Str("--");
-const VAL_0001: ValueInner<'static> = ValueInner::Str("BB");
-const VAL_0002: ValueInner<'static> = ValueInner::Str("0");
-const VAL_0003: ValueInner<'static> = ValueInner::Str("");
-const VAL_0004: ValueInner<'static> = ValueInner::Str("1");
-const VAL_0005: ValueInner<'static> = ValueInner::Str("NB");
+const VAL_0000: ValueAtom<'static> = ValueAtom::Str("--");
+const VAL_0001: ValueAtom<'static> = ValueAtom::Str("BB");
+const VAL_0002: ValueAtom<'static> = ValueAtom::Str("0");
+const VAL_0003: ValueAtom<'static> = ValueAtom::Str("");
+const VAL_0004: ValueAtom<'static> = ValueAtom::Str("1");
+const VAL_0005: ValueAtom<'static> = ValueAtom::Str("NB");
 
 fn phrasing_cart_tree() -> CartTree<'static, 15, 6> {
     CartTree::init_unchecked(

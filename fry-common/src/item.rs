@@ -2,7 +2,7 @@
 
 use crate::{
     Content, Feature, Features, MaybeStrong, Path, Phoneset, Relation, Strong, Utterance, Value,
-    ValueInner,
+    ValueAtom,
 };
 use alloc::{rc::Rc, str, vec::Vec};
 use indextree::{Arena, NodeEdge, NodeId};
@@ -163,7 +163,7 @@ impl<'a> ItemTree<'a> {
     fn relation(&self, node: NodeId, name: &str) -> Option<NodeId> {
         self.0
             .get(node)
-            .map(|node| node.get().relations().feature_value(name)?.borrow().item())?
+            .map(|node| node.get().relations().feature_value(name)?.item())?
     }
     fn traverse(&'a self, node: NodeId) -> impl Iterator<Item = (&'a Item<'a>, NodeId)> {
         node.traverse(&self.0)
@@ -237,7 +237,7 @@ impl<'a> ItemTree<'a> {
                 .features()
                 .feature_value(last_path)
                 // then the destination is the right value
-                .map(|_| ValueInner::Item(dest))
+                .map(|_| ValueAtom::Item(dest))
                 // otherwise use the default value (Value::Int(0))
                 .unwrap_or_default()
                 .into(),
@@ -291,8 +291,6 @@ impl<'a> ItemTree<'a> {
         self.get(node)?
             .relations()
             .feature_value("SylStructure")?
-            .try_borrow()
-            .ok()?
             .item()?
             .first_child(self)?
             .in_order_traverse(self)
@@ -300,34 +298,21 @@ impl<'a> ItemTree<'a> {
                 let Some(value_ref) = item.features().feature_value("name") else {
                     return false;
                 };
-                let Ok(value) = value_ref.try_borrow() else {
-                    return false;
-                };
-                let Some(phone_name) = value.str() else {
+                let Some(phone_name) = value_ref.str() else {
                     return false;
                 };
                 let Some(phone_feat) = phone.borrow().phone_feature(phone_name, "vc") else {
                     return false;
                 };
-                let Some(phone_feat_str) = phone_feat.borrow().str() else {
+                let Some(phone_feat_str) = phone_feat.str() else {
                     return false;
                 };
                 "+" == phone_feat_str
             })
             .find_map(|(item, id)| {
                 Some(
-                    (item
-                        .features()
-                        .feature_value("end")?
-                        .try_borrow()
-                        .ok()?
-                        .float()
-                        .ok()?
-                        + id.find_feature(self, "R:Segment.p.end")?
-                            .try_borrow()
-                            .ok()?
-                            .float()
-                            .ok()?)
+                    (item.features().feature_value("end")?.float().ok()?
+                        + id.find_feature(self, "R:Segment.p.end")?.float().ok()?)
                         / 2.0,
                 )
             })

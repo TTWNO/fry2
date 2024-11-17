@@ -2,7 +2,7 @@
 
 use fry_common::{
     cart_tree::{CartNode, CartOperation, CartTree},
-    ValueInner,
+    ValueAtom,
 };
 
 const CTNODE_NO_0000: usize = 2;
@@ -80,27 +80,27 @@ const CTNODE_NO_0142: usize = 144;
 const CTNODE_NO_0145: usize = 147;
 const CTNODE_NO_0144: usize = 148;
 
-const VAL_0000: ValueInner<'static> = ValueInner::Str("1");
-const VAL_0001: ValueInner<'static> = ValueInner::Str("H*");
-const VAL_0002: ValueInner<'static> = ValueInner::Str("NONE");
-const VAL_0003: ValueInner<'static> = ValueInner::Str("10");
-const VAL_0004: ValueInner<'static> = ValueInner::Str("to");
-const VAL_0005: ValueInner<'static> = ValueInner::Str("cc");
-const VAL_0006: ValueInner<'static> = ValueInner::Str("in");
-const VAL_0007: ValueInner<'static> = ValueInner::Str("wp");
-const VAL_0008: ValueInner<'static> = ValueInner::Str("aux");
-const VAL_0009: ValueInner<'static> = ValueInner::Str("det");
-const VAL_0010: ValueInner<'static> = ValueInner::Str("0");
-const VAL_0011: ValueInner<'static> = ValueInner::Str("md");
-const VAL_0012: ValueInner<'static> = ValueInner::Str("3");
-const VAL_0013: ValueInner<'static> = ValueInner::Str("4");
-const VAL_0014: ValueInner<'static> = ValueInner::Str("content");
-const VAL_0015: ValueInner<'static> = ValueInner::Str("2");
-const VAL_0016: ValueInner<'static> = ValueInner::Str("L+H*");
-const VAL_0017: ValueInner<'static> = ValueInner::Str("5");
-const VAL_0018: ValueInner<'static> = ValueInner::Str("!H*");
-const VAL_0019: ValueInner<'static> = ValueInner::Str("7");
-const VAL_0020: ValueInner<'static> = ValueInner::Str("6");
+const VAL_0000: ValueAtom<'static> = ValueAtom::Str("1");
+const VAL_0001: ValueAtom<'static> = ValueAtom::Str("H*");
+const VAL_0002: ValueAtom<'static> = ValueAtom::Str("NONE");
+const VAL_0003: ValueAtom<'static> = ValueAtom::Str("10");
+const VAL_0004: ValueAtom<'static> = ValueAtom::Str("to");
+const VAL_0005: ValueAtom<'static> = ValueAtom::Str("cc");
+const VAL_0006: ValueAtom<'static> = ValueAtom::Str("in");
+const VAL_0007: ValueAtom<'static> = ValueAtom::Str("wp");
+const VAL_0008: ValueAtom<'static> = ValueAtom::Str("aux");
+const VAL_0009: ValueAtom<'static> = ValueAtom::Str("det");
+const VAL_0010: ValueAtom<'static> = ValueAtom::Str("0");
+const VAL_0011: ValueAtom<'static> = ValueAtom::Str("md");
+const VAL_0012: ValueAtom<'static> = ValueAtom::Str("3");
+const VAL_0013: ValueAtom<'static> = ValueAtom::Str("4");
+const VAL_0014: ValueAtom<'static> = ValueAtom::Str("content");
+const VAL_0015: ValueAtom<'static> = ValueAtom::Str("2");
+const VAL_0016: ValueAtom<'static> = ValueAtom::Str("L+H*");
+const VAL_0017: ValueAtom<'static> = ValueAtom::Str("5");
+const VAL_0018: ValueAtom<'static> = ValueAtom::Str("!H*");
+const VAL_0019: ValueAtom<'static> = ValueAtom::Str("7");
+const VAL_0020: ValueAtom<'static> = ValueAtom::Str("6");
 
 fn int_accent_cart_tree() -> CartTree<'static, 149, 18> {
     CartTree::init_unchecked(

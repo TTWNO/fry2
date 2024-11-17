@@ -22,10 +22,10 @@ pub struct Features<'a> {
     inner: Vec<Feature<'a>>,
 }
 impl<'a> Features<'a> {
-		/// Create a new, empty list of features.
-		pub fn new() -> Self {
-			Features { inner: Vec::new() }
-		}
+    /// Create a new, empty list of features.
+    pub fn new() -> Self {
+        Features { inner: Vec::new() }
+    }
     /// Set a feature.
     /// If a feature has the same name, the value will be replaced.
     pub fn set(&mut self, name: &'a str, val: Value<'a>) {

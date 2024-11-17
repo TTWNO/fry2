@@ -51,9 +51,9 @@ impl<T> MaybeStrong<T> {
 }
 
 impl<T> From<Strong<T>> for MaybeStrong<T> {
-	fn from(strong: Strong<T>) -> MaybeStrong<T> {
-		MaybeStrong::Strong(strong)
-	}
+    fn from(strong: Strong<T>) -> MaybeStrong<T> {
+        MaybeStrong::Strong(strong)
+    }
 }
 
 impl<T> PartialEq for MaybeStrong<T>

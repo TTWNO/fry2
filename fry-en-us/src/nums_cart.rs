@@ -1,37 +1,37 @@
 use fry_common::{
     cart_tree::{CartNode, CartOperation, CartTree},
-    ValueInner,
+    ValueAtom,
 };
 
-const VAL_0000: ValueInner<'static> = ValueInner::Float(3.8);
-const VAL_0001: ValueInner<'static> = ValueInner::Str("month");
-const VAL_0002: ValueInner<'static> = ValueInner::Str("0");
-const VAL_0003: ValueInner<'static> = ValueInner::Str("year");
-const VAL_0004: ValueInner<'static> = ValueInner::Str("ordinal");
-const VAL_0005: ValueInner<'static> = ValueInner::Str("cardinal");
-const VAL_0006: ValueInner<'static> = ValueInner::Str("numeric");
-const VAL_0007: ValueInner<'static> = ValueInner::Float(2.000000);
-const VAL_0008: ValueInner<'static> = ValueInner::Str("sym");
-const VAL_0009: ValueInner<'static> = ValueInner::Str("digits");
-const VAL_0010: ValueInner<'static> = ValueInner::Float(302.3);
-const VAL_0011: ValueInner<'static> = ValueInner::Str("flight");
-const VAL_0012: ValueInner<'static> = ValueInner::Str("a");
-const VAL_0013: ValueInner<'static> = ValueInner::Float(669.2);
-const VAL_0014: ValueInner<'static> = ValueInner::Float(373.2);
-const VAL_0015: ValueInner<'static> = ValueInner::Float(436.2);
-const VAL_0016: ValueInner<'static> = ValueInner::Float(392.6);
-const VAL_0017: ValueInner<'static> = ValueInner::Float(716.5);
-const VAL_0018: ValueInner<'static> = ValueInner::Float(773.6);
-const VAL_0019: ValueInner<'static> = ValueInner::Str("_other_");
-const VAL_0020: ValueInner<'static> = ValueInner::Float(4.4);
-const VAL_0021: ValueInner<'static> = ValueInner::Float(2_959.6);
-const VAL_0022: ValueInner<'static> = ValueInner::Float(1_773.4);
-const VAL_0023: ValueInner<'static> = ValueInner::Str("to");
-const VAL_0024: ValueInner<'static> = ValueInner::Float(4.6);
-const VAL_0025: ValueInner<'static> = ValueInner::Float(4.8);
-const VAL_0026: ValueInner<'static> = ValueInner::Float(2880.000000);
-const VAL_0027: ValueInner<'static> = ValueInner::Float(1_633.2);
-const VAL_0028: ValueInner<'static> = ValueInner::Float(1_306.4);
+const VAL_0000: ValueAtom<'static> = ValueAtom::Float(3.8);
+const VAL_0001: ValueAtom<'static> = ValueAtom::Str("month");
+const VAL_0002: ValueAtom<'static> = ValueAtom::Str("0");
+const VAL_0003: ValueAtom<'static> = ValueAtom::Str("year");
+const VAL_0004: ValueAtom<'static> = ValueAtom::Str("ordinal");
+const VAL_0005: ValueAtom<'static> = ValueAtom::Str("cardinal");
+const VAL_0006: ValueAtom<'static> = ValueAtom::Str("numeric");
+const VAL_0007: ValueAtom<'static> = ValueAtom::Float(2.000000);
+const VAL_0008: ValueAtom<'static> = ValueAtom::Str("sym");
+const VAL_0009: ValueAtom<'static> = ValueAtom::Str("digits");
+const VAL_0010: ValueAtom<'static> = ValueAtom::Float(302.3);
+const VAL_0011: ValueAtom<'static> = ValueAtom::Str("flight");
+const VAL_0012: ValueAtom<'static> = ValueAtom::Str("a");
+const VAL_0013: ValueAtom<'static> = ValueAtom::Float(669.2);
+const VAL_0014: ValueAtom<'static> = ValueAtom::Float(373.2);
+const VAL_0015: ValueAtom<'static> = ValueAtom::Float(436.2);
+const VAL_0016: ValueAtom<'static> = ValueAtom::Float(392.6);
+const VAL_0017: ValueAtom<'static> = ValueAtom::Float(716.5);
+const VAL_0018: ValueAtom<'static> = ValueAtom::Float(773.6);
+const VAL_0019: ValueAtom<'static> = ValueAtom::Str("_other_");
+const VAL_0020: ValueAtom<'static> = ValueAtom::Float(4.4);
+const VAL_0021: ValueAtom<'static> = ValueAtom::Float(2_959.6);
+const VAL_0022: ValueAtom<'static> = ValueAtom::Float(1_773.4);
+const VAL_0023: ValueAtom<'static> = ValueAtom::Str("to");
+const VAL_0024: ValueAtom<'static> = ValueAtom::Float(4.6);
+const VAL_0025: ValueAtom<'static> = ValueAtom::Float(4.8);
+const VAL_0026: ValueAtom<'static> = ValueAtom::Float(2880.000000);
+const VAL_0027: ValueAtom<'static> = ValueAtom::Float(1_633.2);
+const VAL_0028: ValueAtom<'static> = ValueAtom::Float(1_306.4);
 
 const CTNODE_US_NUMS_NO_0002: usize = 4;
 const CTNODE_US_NUMS_NO_0001: usize = 5;
