@@ -19,7 +19,7 @@ impl<'a> Utterance<'a> {
     }
 }
 impl<'a> Strong<Utterance<'a>> {
-    fn relation_create(&mut self, name: &'a str, value: Value<'a>) -> Strong<Relation<'a>> {
+    fn relation_create(&mut self, name: &'a str) -> Strong<Relation<'a>> {
         let (rel_val, rel_copy) = Rc::downgrade(self)
             .pipe(MaybeStrong::from)
             .pipe(|mstr_utt| Relation::new(name, mstr_utt))
