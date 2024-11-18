@@ -1,5 +1,6 @@
 //! Voices and their representations.
 
+use crate::Float;
 use serde::{Serialize, Deserialize};
 
 /// This is the header (the first few bytes of a file) that must be present for a file to be
@@ -31,8 +32,8 @@ pub struct ClusterGenDb {
     name: String,
     types: Vec<String>,
     sample_rate: isize,
-    f0_mean: f32,
-    f0_stddev: f32,
+    f0_mean: Float,
+    f0_stddev: Float,
 
 }
 */

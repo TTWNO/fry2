@@ -1,6 +1,6 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
-use crate::{error::ValueError, Features, Phoneset, Relation, Strong, Utterance};
+use crate::{error::ValueError, Features, Float, Phoneset, Relation, Strong, Utterance};
 use alloc::boxed::Box;
 use core::str::FromStr;
 use indextree::NodeId;
@@ -41,7 +41,7 @@ pub enum ValueAtom<'a> {
     /// may need to be 64 bits? idx
     Int(i32),
     /// A float
-    Float(f32),
+    Float(Float),
     /// Utterance
     Utterance(Strong<Utterance<'a>>) = 7,
     ///// TODO: wave
@@ -132,11 +132,11 @@ impl<'a> ValueAtom<'a> {
     ///     - Int, or
     ///     - Str
     #[expect(clippy::cast_precision_loss)]
-    pub fn float(&self) -> Result<f32, ValueError> {
+    pub fn float(&self) -> Result<Float, ValueError> {
         match self {
             Self::Float(f) => Ok(*f),
-            Self::Int(i) => Ok(*i as f32),
-            Self::Str(s) => Ok(f32::from_str(s)?),
+            Self::Int(i) => Ok(*i as Float),
+            Self::Str(s) => Ok(Float::from_str(s)?),
             _ => Err(ValueError::InvalidType {
                 orig: self.into(),
                 try_to: ValueAtomDiscriminants::Float,

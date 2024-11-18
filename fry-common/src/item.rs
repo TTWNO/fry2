@@ -1,14 +1,14 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{Features, Path, Phoneset, Relation, Strong, Utterance, Value, ValueAtom};
+use crate::{Features, Float, Path, Phoneset, Relation, Strong, Utterance, Value, ValueAtom};
 use alloc::{str, vec::Vec};
 use indextree::{Arena, NodeEdge, NodeId};
 use itertools::Itertools;
 
 /// Maigc value in `us_f0_model.c`
-const MODEL_MEAN: f32 = 170.0;
+const MODEL_MEAN: Float = 170.0;
 /// Maigc value in `us_f0_model.c`
-const MODEL_STANDARD_DEVIATION: f32 = 34.0;
+const MODEL_STANDARD_DEVIATION: Float = 34.0;
 
 trait TreeAccess<'a> {
     fn find_feature(&self, tree: &'a ItemTree<'a>, multipath: &'a str) -> Option<Value<'a>>;
@@ -283,7 +283,7 @@ impl<'a> ItemTree<'a> {
             .phoneset()
             */
     }
-    fn vowel_mid(&'a self, node: NodeId) -> Option<f32> {
+    fn vowel_mid(&'a self, node: NodeId) -> Option<Float> {
         let phone = self.phoneset(node)?;
         self.get(node)?
             .relations()
@@ -316,6 +316,6 @@ impl<'a> ItemTree<'a> {
     }
 }
 
-const fn map_f0(v: f32, m: f32, s: f32) -> f32 {
+const fn map_f0(v: Float, m: Float, s: Float) -> Float {
     (((v - MODEL_MEAN) / MODEL_STANDARD_DEVIATION) * s) * m
 }

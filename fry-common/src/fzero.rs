@@ -3,6 +3,7 @@
 //! See also: <https://en.wikipedia.org/wiki/Fundamental_frequency>
 
 use crate::item::ItemTree;
+use crate::Float;
 use core::iter::once;
 use indextree::NodeId;
 use itertools::Itertools;
@@ -12,9 +13,9 @@ use itertools::Itertools;
 #[derive(Debug, PartialEq)]
 pub struct FZero<'a> {
     feature: &'a str,
-    start: f32,
-    mid: f32,
-    end: f32,
+    start: Float,
+    mid: Float,
+    end: Float,
     typ: Option<&'a str>,
 }
 
@@ -23,9 +24,9 @@ impl<'a> FZero<'a> {
     #[must_use]
     pub const fn init(
         feature: &'a str,
-        start: f32,
-        mid: f32,
-        end: f32,
+        start: Float,
+        mid: Float,
+        end: Float,
         typ: Option<&'a str>,
     ) -> Self {
         Self {
@@ -46,7 +47,7 @@ pub fn apply_lr_model<'b>(
     tree: &'b ItemTree<'b>,
     node: NodeId,
     mut f0_lr_terms: impl Iterator<Item = &'b FZero<'b>>,
-) -> Option<(f32, f32, f32)> {
+) -> Option<(Float, Float, Float)> {
     // set interceptors
     let icp = f0_lr_terms.next()?;
     let start = icp.start;
