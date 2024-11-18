@@ -1,9 +1,8 @@
 //! CST Value based on `inclue/cst_val.h` in _Flite_
 
 use crate::{error::ValueError, Features, Phoneset, Relation, Strong, Utterance};
-use alloc::{boxed::Box, vec::Vec};
+use alloc::boxed::Box;
 use core::str::FromStr;
-use core::{borrow::Borrow, ops::Deref};
 use indextree::NodeId;
 use strum::{Display, EnumDiscriminants};
 

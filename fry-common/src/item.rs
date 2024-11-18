@@ -1,10 +1,10 @@
 //! CST Item and a tree containing its nodes.
 
 use crate::{
-    Content, Feature, Features, MaybeStrong, Path, Phoneset, Relation, Strong, Utterance, Value,
+    Features, Path, Phoneset, Relation, Strong, Utterance, Value,
     ValueAtom,
 };
-use alloc::{rc::Rc, str, vec::Vec};
+use alloc::{str, vec::Vec};
 use indextree::{Arena, NodeEdge, NodeId};
 use itertools::Itertools;
 
@@ -136,14 +136,6 @@ impl<'a> Item<'a> {
 /// A full item tree.
 pub struct ItemTree<'a>(pub Arena<Item<'a>>);
 
-/// TODO: use `IntoIterator` on ref, return using a specific `NodeId`
-impl<'a> Iterator for ItemTree<'a> {
-    type Item = Item<'a>;
-    fn next(&mut self) -> Option<Self::Item> {
-        self.next()
-    }
-}
-
 impl<'a> ItemTree<'a> {
     /// Grab an item from the tree.
     #[must_use]
@@ -254,7 +246,7 @@ impl<'a> ItemTree<'a> {
     /// Path to an item via its mulitpath
     // TODO: src/hrg/cst_ffeature.c:154-183
     #[must_use]
-    pub fn path_to_item(&self, node: NodeId, mulitpath: &'a str) -> Option<Item<'a>> {
+    pub fn path_to_item(&self, _node: NodeId, _mulitpath: &'a str) -> Option<Item<'a>> {
         todo!()
     }
     /// TODO: could be optimized by:
@@ -283,7 +275,7 @@ impl<'a> ItemTree<'a> {
                 false
             }
     }
-    fn phoneset(&'a self, node: NodeId) -> Option<Strong<Phoneset<'a>>> {
+    fn phoneset(&'a self, _node: NodeId) -> Option<Strong<Phoneset<'a>>> {
         todo!()
         /*
         self.get(node)?

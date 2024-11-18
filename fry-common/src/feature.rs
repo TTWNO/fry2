@@ -35,7 +35,7 @@ impl<'a> Features<'a> {
             self.inner.push(Feature::new(name, val));
             return;
         };
-        let Some(mut feat) = self.inner.get_mut(idx) else {
+        let Some(feat) = self.inner.get_mut(idx) else {
             // Technically should never happen, but ok.
             return;
         };

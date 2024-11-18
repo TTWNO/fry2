@@ -2,7 +2,6 @@
 
 use crate::{Features, MaybeStrong, Utterance};
 
-use alloc::vec::Vec;
 
 /// Relation.
 #[derive(Debug, PartialEq)]

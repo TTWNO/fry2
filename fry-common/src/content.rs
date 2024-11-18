@@ -2,7 +2,6 @@
 
 use crate::Features;
 
-use alloc::vec::Vec;
 
 /// Content struct containing both features and relations (both are just lists of features)
 #[derive(Debug, PartialEq)]

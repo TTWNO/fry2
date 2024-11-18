@@ -6,8 +6,8 @@
 //! - [flite](https://github.com/festvox/flite)
 //! - [Edinburgh Speech Tools (EST)](https://github.com/festvox/speech_tools)
 #![no_std]
-#![deny(clippy::all, clippy::pedantic, missing_docs)]
-#![allow(clippy::module_name_repetitions)]
+#![deny(clippy::all, clippy::pedantic, clippy::cargo, rustdoc::all, missing_docs)]
+#![allow(clippy::module_name_repetitions, dead_code)]
 
 extern crate alloc;
 
@@ -15,15 +15,13 @@ mod maybe_strong;
 pub use maybe_strong::{MaybeStrong, Strong, Weak};
 
 pub mod item;
-use item::Item;
 pub mod relation;
 use relation::Relation;
 pub mod utterance;
 use utterance::Utterance;
 pub mod feature;
-use feature::{Feature, Features};
+use feature::Features;
 pub mod content;
-use content::Content;
 pub mod path;
 use path::Path;
 pub mod phoneset;

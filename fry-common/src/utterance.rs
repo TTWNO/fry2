@@ -3,8 +3,7 @@
 use crate::{maybe_strong::Strong, Features, MaybeStrong, Relation, Value, ValueAtom};
 use tap::{Pipe, Tap};
 
-use alloc::{collections::BTreeSet, rc::Rc, vec::Vec};
-use core::cell::RefCell;
+use alloc::rc::Rc;
 
 /// An utterance.
 #[derive(Debug, PartialEq)]
@@ -33,7 +32,7 @@ impl<'a> Strong<Utterance<'a>> {
                 )
             });
         self.borrow_mut()
-            .tap_mut(|mut utt| utt.relations.set(name, rel_val));
+            .tap_mut(|utt| utt.relations.set(name, rel_val));
         rel_copy
     }
 }
