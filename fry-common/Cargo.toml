@@ -11,7 +11,8 @@ categories = ["tts"]
 description = "Common data structures used in Fry, the embedded text-to-speech engine."
 
 [features]
-f32 = []
+default = []
+32-bit = []
 
 [dependencies]
 derive_more = { version = "1.0.0", default-features = false, features = ["deref", "from", "display", "error"] }

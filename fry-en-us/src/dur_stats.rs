@@ -1,14 +1,16 @@
 //! Durations lengths for various diphones.
 
+use fry_common::Float;
+
 /// A single duration stat for a given phoneme
 #[derive(Copy, Clone, Debug)]
 pub struct DurationStat<'a> {
     phone: &'a str,
-    mean: f32,
-    stddev: f32,
+    mean: Float,
+    stddev: Float,
 }
 impl<'a> DurationStat<'a> {
-    const fn init(phone: &'a str, mean: f32, stddev: f32) -> Self {
+    const fn init(phone: &'a str, mean: Float, stddev: Float) -> Self {
         Self {
             phone,
             mean,

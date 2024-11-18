@@ -10,6 +10,10 @@ keywords = ["tts"]
 categories = ["tts"]
 description = "English (US) grammar rules used for Fry, the embedded text-to-speech engine."
 
+[features]
+default = []
+32-bit = ["fry-common/32-bit"]
+
 [dependencies]
 fry-common = { version = "0.1.0", path = "../fry-common/", default-features = false }
 num2words = { git = "https://github.com/TTWNO/num2words/", branch = "no-std-support", version = "1.2.0", default-features = false }

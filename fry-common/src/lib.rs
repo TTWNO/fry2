@@ -20,6 +20,8 @@ extern crate alloc;
 mod maybe_strong;
 pub use maybe_strong::{MaybeStrong, Strong, Weak};
 
+pub mod int;
+pub use int::Int;
 pub mod float;
 pub use float::Float;
 pub mod item;
