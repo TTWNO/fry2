@@ -152,7 +152,7 @@ impl<'a> Default for ValueAtom<'a> {
 }
 impl<'a> PartialEq<Value<'a>> for Value<'a> {
     fn eq(&self, other: &Value<'a>) -> bool {
-        self.deref() == other.deref()
+        **self == **other
     }
 }
 impl<'a, T> PartialEq<T> for Value<'a>
