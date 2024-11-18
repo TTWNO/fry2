@@ -2,7 +2,6 @@
 
 use crate::Features;
 
-
 /// Content struct containing both features and relations (both are just lists of features)
 #[derive(Debug, PartialEq)]
 pub struct Content<'a> {

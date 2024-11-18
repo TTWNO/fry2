@@ -1,9 +1,6 @@
 //! CST Item and a tree containing its nodes.
 
-use crate::{
-    Features, Path, Phoneset, Relation, Strong, Utterance, Value,
-    ValueAtom,
-};
+use crate::{Features, Path, Phoneset, Relation, Strong, Utterance, Value, ValueAtom};
 use alloc::{str, vec::Vec};
 use indextree::{Arena, NodeEdge, NodeId};
 use itertools::Itertools;

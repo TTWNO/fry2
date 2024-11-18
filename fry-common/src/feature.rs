@@ -11,7 +11,7 @@ pub struct Feature<'a> {
 }
 impl<'a> Feature<'a> {
     /// Create a new feature pair!
-		#[must_use]
+    #[must_use]
     pub fn new(name: &'a str, value: Value<'a>) -> Self {
         Feature { name, value }
     }

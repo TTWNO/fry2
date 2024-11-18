@@ -2,7 +2,6 @@
 
 use crate::{Features, MaybeStrong, Utterance};
 
-
 /// Relation.
 #[derive(Debug, PartialEq)]
 pub struct Relation<'a> {

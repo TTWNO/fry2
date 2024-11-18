@@ -32,9 +32,9 @@ impl<'a> Phoneset<'a> {
             .position(|s| *s == name)
             .unwrap_or_default()
     }
-		/// Find a `phone)name`/`feat_name` combination.
-		/// Returns `None` if there is any issue finding either the phone or feature index, or the final `feature_value`.
-		#[must_use]
+    /// Find a `phone)name`/`feat_name` combination.
+    /// Returns `None` if there is any issue finding either the phone or feature index, or the final `feature_value`.
+    #[must_use]
     pub fn phone_feature(&self, phone_name: &'a str, feat_name: &'a str) -> Option<&'a Value<'a>> {
         self.feature_values.get(
             *(self
