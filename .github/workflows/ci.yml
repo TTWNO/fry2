@@ -42,7 +42,11 @@ jobs:
         with:
           components: clippy
           toolchain: nightly
-      - name: Clippy
+      - name: Clippy (common)
+        run: cargo clippy --tests -p fry-common --no-deps -- -D warnings 
+      - name: Clippy (en-us)
+        run: cargo clippy --tests -p fry-en-us --no-deps -- -D warnings 
+      - name: Clippy (all)
         run: cargo clippy --tests --workspace --no-deps -- -D warnings 
   tests:
     runs-on: ubuntu-latest
