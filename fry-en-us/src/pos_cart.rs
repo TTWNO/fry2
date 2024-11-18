@@ -1,5 +1,6 @@
 use fry_common::{
-    cart_tree::{CartNode, CartOperation, CartTree}, ValueAtom,
+    cart_tree::{CartNode, CartOperation, CartTree},
+    ValueAtom,
 };
 
 const VAL_0000: ValueAtom<'static> = ValueAtom::Str("content");
