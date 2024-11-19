@@ -25,6 +25,7 @@ pub use int::Int;
 pub mod float;
 pub use float::Float;
 pub mod item;
+pub use item::Item;
 pub mod relation;
 use relation::Relation;
 pub mod utterance;

@@ -18,6 +18,7 @@ impl USFZeroModel for Strong<Utterance<'_>> {
 						.feature_value("f0_shift")
 						.foat().unwrap_or(1.0);
 				let stddev = self.features.feature_value("int_f0_target_stddev").float().unwrap_or(12.0);
+				let syl = self.relation("Syllable").relation().ok()?;
         todo!()
     }
 }
