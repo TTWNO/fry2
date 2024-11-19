@@ -37,6 +37,8 @@ pub mod path;
 use path::Path;
 pub mod phoneset;
 use phoneset::Phoneset;
+pub mod diphone;
+pub use diphone::DiphoneEntry;
 pub mod error;
 pub mod regex;
 pub mod val;
