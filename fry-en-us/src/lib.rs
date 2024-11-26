@@ -2,7 +2,7 @@
 //! engine.
 #![no_std]
 #![deny(clippy::all, clippy::pedantic, clippy::cargo, rustdoc::all)]
-#![allow(clippy::module_name_repetitions, clippy::struct_field_names)]
+#![allow(clippy::module_name_repetitions, clippy::struct_field_names, clippy::too_many_lines)]
 #![forbid(unsafe_code)]
 
 extern crate alloc;
