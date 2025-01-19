@@ -11,7 +11,7 @@
     clippy::pedantic,
     clippy::cargo,
     rustdoc::all,
-    missing_docs
+    //missing_docs
 )]
 #![allow(clippy::module_name_repetitions, dead_code)]
 
@@ -33,8 +33,18 @@ use utterance::Utterance;
 pub mod feature;
 use feature::Features;
 pub mod content;
+mod lex_data;
+use lex_data::LEX_DATA;
+pub mod lexicon;
+use lexicon::Lexicon;
+pub mod lts_rules;
+use lts_rules::LtsRules;
 pub mod path;
 use path::Path;
+mod phone_huff_table;
+use phone_huff_table::LEX_PHONE_HUFF_TABLE;
+pub mod phoneme;
+use phoneme::{Phoneme, Stress};
 pub mod phoneset;
 use phoneset::Phoneset;
 pub mod diphone;

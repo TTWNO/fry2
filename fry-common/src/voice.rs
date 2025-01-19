@@ -46,3 +46,12 @@ fn test_read_file() {
         std::println!("{:?}", first_bytes);
     }
 }
+
+pub struct VoiceData<'a>
+where Self: Voice {
+    name: &'a str,
+}
+pub trait Voice {
+    fn lang_init(vd: VoiceData<'_>);
+    //fn lex_init() -> Lexicon<'_>;
+}
