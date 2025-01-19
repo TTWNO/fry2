@@ -1,5 +1,6 @@
 //! Voices and their representations.
 
+use crate::Float;
 use serde::{Serialize, Deserialize};
 
 /// This is the header (the first few bytes of a file) that must be present for a file to be
@@ -31,8 +32,8 @@ pub struct ClusterGenDb {
     name: String,
     types: Vec<String>,
     sample_rate: isize,
-    f0_mean: f32,
-    f0_stddev: f32,
+    f0_mean: Float,
+    f0_stddev: Float,
 
 }
 */
@@ -44,4 +45,13 @@ fn test_read_file() {
     if first_bytes.starts_with(FLITE_FILE_HEADER.as_bytes()) {
         std::println!("{:?}", first_bytes);
     }
+}
+
+pub struct VoiceData<'a>
+where Self: Voice {
+    name: &'a str,
+}
+pub trait Voice {
+    fn lang_init(vd: VoiceData<'_>);
+    //fn lex_init() -> Lexicon<'_>;
 }

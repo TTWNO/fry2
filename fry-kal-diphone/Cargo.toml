@@ -1,0 +1,14 @@
+[package]
+name = "fry-kal-diphone"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.81.0"
+license = "MIT-Festival"
+repository = "https://github.com/TTWNO/fry2/"
+readme = "README.md"
+keywords = ["tts"]
+categories = ["tts"]
+description = "Kal Diphone voice for Fry TTS engine."
+
+[dependencies]
+fry-common = { path = "../fry-common/", version = "0.1" }

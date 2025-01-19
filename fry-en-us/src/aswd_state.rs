@@ -8,7 +8,10 @@ pub struct State {
 impl State {
     pub const fn const_init_unchecked(state_ref: usize, ascii_chr: char) -> Self {
         match Self::const_init(state_ref, ascii_chr) {
-            Err(FsmStateError::NonAscii(ch)) => const_panic::concat_panic!("NonAscii: the state must contain a valid ASCII char. Invalid char: ", ch),
+            Err(FsmStateError::NonAscii(ch)) => const_panic::concat_panic!(
+                "NonAscii: the state must contain a valid ASCII char. Invalid char: ",
+                ch
+            ),
             Ok(state) => state,
         }
     }
@@ -20,7 +23,7 @@ impl State {
         }
         Ok(Self {
             next_index,
-            character
+            character,
         })
     }
 }
